@@ -19,6 +19,7 @@ UI tool for sending messages to Kafka topics written in Haskell
     https://wiki.haskell.org/Gtk2Hs/Installation
 
 -- Build
+
      cd to cloned dir
      stack init
      stack setup
@@ -27,6 +28,7 @@ UI tool for sending messages to Kafka topics written in Haskell
      ./build.sh
 
 -- Run
+
      stack exec KafkaConsumerProducerTool
 or
      stack install ->  will install it in (~/.local/bin) you need it added  in $PATH
