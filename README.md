@@ -1,5 +1,6 @@
 # KafkaConsumerProducerTool
     -- For now only producer is implemented
+    -- No error handling e.g. will crash on broken url
 
 UI tool for sending messages to Kafka topics written in Haskell
 -- Installation stack & cabal
