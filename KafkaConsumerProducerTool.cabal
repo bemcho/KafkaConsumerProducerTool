@@ -2,12 +2,12 @@ name:                KafkaConsumerProducerTool
 version:             0.1.0.0
 -- synopsis:
 -- description:
-homepage:            https://github.com/githubuser/KafkaConsumerProducerTool#readme
+homepage:            https://github.com/bemcho/KafkaConsumerProducerTool#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Author name here
-maintainer:          example@example.com
-copyright:           2017 Author name here
+maintainer:          bemcho@gmail.com
+copyright:           2017 Emil Tomov
 category:            Web
 build-type:          Simple
 extra-source-files:  README.md
@@ -22,7 +22,7 @@ library
 executable KafkaConsumerProducerTool
   hs-source-dirs:      app
   main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:       base,gtk3,hw-kafka-client,bytestring, time, utf8-string
                      , KafkaConsumerProducerTool
   default-language:    Haskell2010

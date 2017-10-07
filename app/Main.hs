@@ -83,13 +83,14 @@ renderValue (Value x action) =
         Just (Send arg) -> ("Sent", arg)
     f l  = " " ++ l ++ " "
 
-sendToKafkaTopicFromUI :: Entry -> Entry -> Entry -> IO()
+sendToKafkaTopicFromUI :: Entry -> Entry -> Entry -> IO(Either KafkaError ())
 sendToKafkaTopicFromUI kafkaUrlEntry kafkaTopicEntry kafkaMessageEntry = do
     kUrl <- entryGetText kafkaUrlEntry
     kTopic <- entryGetText kafkaTopicEntry
     kMessage <- entryGetText kafkaMessageEntry
     err <- sendToKafkaTopic kUrl kTopic (BU.fromString kMessage)
     forM_ err print
+    return $ Right ()
 
 main :: IO ()
 main = do
