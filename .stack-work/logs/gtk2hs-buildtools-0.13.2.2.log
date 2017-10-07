@@ -1,0 +1,845 @@
+Configuring gtk2hs-buildtools-0.13.2.2...
+Building gtk2hs-buildtools-0.13.2.2...
+Preprocessing library gtk2hs-buildtools-0.13.2.2...
+[ 1 of 46] Compiling Version          ( c2hs/toplevel/Version.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Version.o )
+[ 2 of 46] Compiling Switches         ( c2hs/state/Switches.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Switches.o )
+[ 3 of 46] Compiling Set              ( c2hs/base/general/Set.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Set.o )
+[ 4 of 46] Compiling Paths_gtk2hs_buildtools ( .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Paths_gtk2hs_buildtools.o )
+[ 5 of 46] Compiling TypeGen          ( hierarchyGen/TypeGen.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/TypeGen.o )
+[ 6 of 46] Compiling Map              ( c2hs/base/general/Map.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Map.o )
+[ 7 of 46] Compiling HookGenerator    ( callbackGen/HookGenerator.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/HookGenerator.o )
+[ 8 of 46] Compiling FastMutInt       ( c2hs/base/general/FastMutInt.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/FastMutInt.o )
+[ 9 of 46] Compiling FNameOps         ( c2hs/base/general/FNameOps.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/FNameOps.o )
+[10 of 46] Compiling FileOps          ( c2hs/base/general/FileOps.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/FileOps.o )
+[11 of 46] Compiling DLists           ( c2hs/base/general/DLists.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/DLists.o )
+[12 of 46] Compiling Config           ( c2hs/base/admin/Config.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Config.o )
+[13 of 46] Compiling C2HSConfig       ( c2hs/toplevel/C2HSConfig.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/C2HSConfig.o )
+[14 of 46] Compiling CInfo            ( c2hs/gen/CInfo.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CInfo.o )
+[15 of 46] Compiling Binary           ( c2hs/base/general/Binary.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Binary.o )
+[16 of 46] Compiling Position         ( c2hs/base/general/Position.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Position.o )
+[17 of 46] Compiling Errors           ( c2hs/base/errors/Errors.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Errors.o )
+[18 of 46] Compiling StateTrans       ( c2hs/base/state/StateTrans.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/StateTrans.o )
+[19 of 46] Compiling Lexers           ( c2hs/base/syntax/Lexers.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Lexers.o )
+
+c2hs/base/syntax/Lexers.hs:133:1: warning: [-Wtabs]
+    Tab character found here, and in 172 further locations.
+    Please use spaces instead.
+[20 of 46] Compiling UNames           ( c2hs/base/general/UNames.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/UNames.o )
+[21 of 46] Compiling StateBase        ( c2hs/base/state/StateBase.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/StateBase.o )
+[22 of 46] Compiling CIO              ( c2hs/base/state/CIO.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CIO.o )
+
+c2hs/base/state/CIO.hs:77:1: warning: [-Wdeprecations]
+    Module ‘System.Cmd’ is deprecated: Use "System.Process" instead
+[23 of 46] Compiling BaseVersion      ( c2hs/base/admin/BaseVersion.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/BaseVersion.o )
+[24 of 46] Compiling State            ( c2hs/base/state/State.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/State.o )
+[25 of 46] Compiling C2HSState        ( c2hs/state/C2HSState.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/C2HSState.o )
+[26 of 46] Compiling Attributes       ( c2hs/base/syms/Attributes.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Attributes.o )
+[27 of 46] Compiling Idents           ( c2hs/base/syms/Idents.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Idents.o )
+[28 of 46] Compiling CAST             ( c2hs/c/CAST.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CAST.o )
+[29 of 46] Compiling CHSLexer         ( c2hs/chs/CHSLexer.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CHSLexer.o )
+[30 of 46] Compiling CHS              ( c2hs/chs/CHS.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CHS.o )
+[31 of 46] Compiling CPretty          ( c2hs/c/CPretty.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CPretty.o )
+[32 of 46] Compiling CTokens          ( c2hs/c/CTokens.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CTokens.o )
+[33 of 46] Compiling CParserMonad     ( c2hs/c/CParserMonad.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CParserMonad.o )
+[34 of 46] Compiling CLexer           ( .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CLexer.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CLexer.o )
+
+c2hs/c/CLexer.x:75:14: warning: [-Wtabs]
+    Tab character found here, and in 226 further locations.
+    Please use spaces instead.
+[35 of 46] Compiling GenHeader        ( c2hs/gen/GenHeader.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/GenHeader.o )
+[36 of 46] Compiling NameSpaces       ( c2hs/base/syms/NameSpaces.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/NameSpaces.o )
+[37 of 46] Compiling CAttrs           ( c2hs/c/CAttrs.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CAttrs.o )
+[38 of 46] Compiling CBuiltin         ( c2hs/c/CBuiltin.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CBuiltin.o )
+[39 of 46] Compiling CParser          ( .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CParser.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CParser.o )
+[40 of 46] Compiling CTrav            ( c2hs/c/CTrav.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CTrav.o )
+[41 of 46] Compiling CNames           ( c2hs/c/CNames.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CNames.o )
+[42 of 46] Compiling C                ( c2hs/c/C.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/C.o )
+[43 of 46] Compiling GBMonad          ( c2hs/gen/GBMonad.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/GBMonad.o )
+[44 of 46] Compiling GenBind          ( c2hs/gen/GenBind.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/GenBind.o )
+[45 of 46] Compiling Gtk2HsC2Hs       ( c2hs/toplevel/Gtk2HsC2Hs.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Gtk2HsC2Hs.o )
+[46 of 46] Compiling Gtk2HsSetup      ( src/Gtk2HsSetup.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Gtk2HsSetup.o )
+Preprocessing executable 'gtk2hsTypeGen' for gtk2hs-buildtools-0.13.2.2...
+[1 of 1] Compiling Main             ( exe/gtk2hsTypeGenMain.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/gtk2hsTypeGen/gtk2hsTypeGen-tmp/Main.o )
+Linking .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/gtk2hsTypeGen/gtk2hsTypeGen ...
+Preprocessing executable 'gtk2hsHookGenerator' for
+gtk2hs-buildtools-0.13.2.2...
+[1 of 1] Compiling Main             ( exe/gtk2hsHookGeneratorMain.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/gtk2hsHookGenerator/gtk2hsHookGenerator-tmp/Main.o )
+Linking .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/gtk2hsHookGenerator/gtk2hsHookGenerator ...
+Preprocessing executable 'gtk2hsC2hs' for gtk2hs-buildtools-0.13.2.2...
+[1 of 1] Compiling Main             ( exe/gtk2hsC2hsMain.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/gtk2hsC2hs/gtk2hsC2hs-tmp/Main.o )
+Linking .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/gtk2hsC2hs/gtk2hsC2hs ...
+Running Haddock for gtk2hs-buildtools-0.13.2.2...
+Preprocessing library gtk2hs-buildtools-0.13.2.2...
+
+c2hs/base/syntax/Lexers.hs:133:1: warning: [-Wtabs]
+    Tab character found here, and in 172 further locations.
+    Please use spaces instead.
+Haddock coverage:
+   0% (  0 /  4) in 'Version'
+  Missing documentation for:
+    Module header
+    version (c2hs/toplevel/Version.hs:12)
+    copyright (c2hs/toplevel/Version.hs:13)
+    disclaimer (c2hs/toplevel/Version.hs:14)
+   0% (  0 /  4) in 'Switches'
+  Missing documentation for:
+    Module header
+    SwitchBoard (c2hs/state/Switches.hs:71)
+    Traces (c2hs/state/Switches.hs:112)
+    initialSwitchBoard (c2hs/state/Switches.hs:90)
+  83% (  5 /  6) in 'Set'
+  Missing documentation for:
+    Module header
+   0% (  0 /  9) in 'Paths_gtk2hs_buildtools'
+  Missing documentation for:
+    Module header
+    version (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:28)
+    getBinDir (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:39)
+    getLibDir (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:39)
+    getDynLibDir (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:39)
+    getDataDir (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:39)
+    getLibexecDir (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:39)
+    getDataFileName (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:47)
+    getSysconfDir (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_gtk2hs_buildtools.hs:39)
+   0% (  0 /  2) in 'TypeGen'
+  Missing documentation for:
+    Module header
+    typeGen (hierarchyGen/TypeGen.hs:108)
+  92% ( 11 / 12) in 'Map'
+  Missing documentation for:
+    Module header
+   0% (  0 /  2) in 'HookGenerator'
+  Missing documentation for:
+    Module header
+    hookGen (callbackGen/HookGenerator.hs:514)
+   0% (  0 /  5) in 'FastMutInt'
+  Missing documentation for:
+    Module header
+    FastMutInt (c2hs/base/general/FastMutInt.hs:21)
+    newFastMutInt (c2hs/base/general/FastMutInt.hs:23)
+    readFastMutInt (c2hs/base/general/FastMutInt.hs:29)
+    writeFastMutInt (c2hs/base/general/FastMutInt.hs:34)
+  12% (  1 /  8) in 'FNameOps'
+  Missing documentation for:
+    Module header
+    basename (c2hs/base/general/FNameOps.hs:41)
+    dirname (c2hs/base/general/FNameOps.hs:48)
+    stripDirname (c2hs/base/general/FNameOps.hs:55)
+    suffix (c2hs/base/general/FNameOps.hs:62)
+    stripSuffix (c2hs/base/general/FNameOps.hs:69)
+    addPath (c2hs/base/general/FNameOps.hs:77)
+  33% (  1 /  3) in 'FileOps'
+  Missing documentation for:
+    Module header
+    fileFindIn (c2hs/base/general/FileOps.hs:55)
+   0% (  0 /  8) in 'DLists'
+  Missing documentation for:
+    Module header
+    DList (c2hs/base/general/DLists.hs:36)
+    openDL (c2hs/base/general/DLists.hs:40)
+    zeroDL (c2hs/base/general/DLists.hs:45)
+    unitDL (c2hs/base/general/DLists.hs:50)
+    snocDL (c2hs/base/general/DLists.hs:55)
+    joinDL (c2hs/base/general/DLists.hs:60)
+    closeDL (c2hs/base/general/DLists.hs:65)
+   0% (  0 /  3) in 'Config'
+  Missing documentation for:
+    Module header
+    errorLimit (c2hs/base/admin/Config.hs:45)
+    assertEnabled (c2hs/base/admin/Config.hs:51)
+  21% (  3 / 14) in 'C2HSConfig'
+  Missing documentation for:
+    Module header
+    cpp (c2hs/toplevel/C2HSConfig.hs:57)
+    cppopts (c2hs/toplevel/C2HSConfig.hs:70)
+    cppoptsdef (c2hs/toplevel/C2HSConfig.hs:78)
+    hpaths (c2hs/toplevel/C2HSConfig.hs:83)
+    dlsuffix (c2hs/toplevel/C2HSConfig.hs:88)
+    tmpdir (c2hs/toplevel/C2HSConfig.hs:93)
+    bitfieldDirection (c2hs/toplevel/C2HSConfig.hs:107)
+    bitfieldPadding (c2hs/toplevel/C2HSConfig.hs:119)
+    bitfieldIntSigned (c2hs/toplevel/C2HSConfig.hs:127)
+    bitfieldAlignment (c2hs/toplevel/C2HSConfig.hs:137)
+   0% (  0 /  8) in 'CInfo'
+  Missing documentation for:
+    Module header
+    CPrimType (c2hs/gen/CInfo.hs:83)
+    size (c2hs/gen/CInfo.hs:107)
+    alignment (c2hs/gen/CInfo.hs:132)
+    bitfieldDirection (c2hs/toplevel/C2HSConfig.hs:107)
+    bitfieldPadding (c2hs/toplevel/C2HSConfig.hs:119)
+    bitfieldIntSigned (c2hs/toplevel/C2HSConfig.hs:127)
+    bitfieldAlignment (c2hs/toplevel/C2HSConfig.hs:137)
+   0% (  0 / 21) in 'Binary'
+  Missing documentation for:
+    Module header
+    Bin (c2hs/base/general/Binary.hs:138)
+    Binary (c2hs/base/general/Binary.hs:148)
+    BinHandle (c2hs/base/general/Binary.hs:108)
+    openBinIO (c2hs/base/general/Binary.hs:168)
+    openBinIO_ (c2hs/base/general/Binary.hs:165)
+    openBinMem (c2hs/base/general/Binary.hs:174)
+    seekBin (c2hs/base/general/Binary.hs:190)
+    tellBin (c2hs/base/general/Binary.hs:186)
+    castBin (c2hs/base/general/Binary.hs:141)
+    writeBinMem (c2hs/base/general/Binary.hs:207)
+    readBinMem (c2hs/base/general/Binary.hs:217)
+    isEOFBin (c2hs/base/general/Binary.hs:200)
+    putByte (c2hs/base/general/Binary.hs:291)
+    getByte (c2hs/base/general/Binary.hs:294)
+    putSharedString (c2hs/base/general/Binary.hs:768)
+    getSharedString (c2hs/base/general/Binary.hs:790)
+    lazyGet (c2hs/base/general/Binary.hs:615)
+    lazyPut (c2hs/base/general/Binary.hs:605)
+    getBinFileWithDict (c2hs/base/general/Binary.hs:633)
+    putBinFileWithDict (c2hs/base/general/Binary.hs:659)
+   0% (  0 / 14) in 'Position'
+  Missing documentation for:
+    Module header
+    Position (c2hs/base/general/Position.hs:52)
+    Pos (c2hs/base/general/Position.hs:99)
+    nopos (c2hs/base/general/Position.hs:62)
+    isNopos (c2hs/base/general/Position.hs:65)
+    dontCarePos (c2hs/base/general/Position.hs:71)
+    isDontCarePos (c2hs/base/general/Position.hs:74)
+    builtinPos (c2hs/base/general/Position.hs:80)
+    isBuiltinPos (c2hs/base/general/Position.hs:83)
+    internalPos (c2hs/base/general/Position.hs:89)
+    isInternalPos (c2hs/base/general/Position.hs:92)
+    incPos (c2hs/base/general/Position.hs:104)
+    tabPos (c2hs/base/general/Position.hs:109)
+    retPos (c2hs/base/general/Position.hs:115)
+   0% (  0 /  9) in 'Errors'
+  Missing documentation for:
+    Module header
+    interr (c2hs/base/errors/Errors.hs:52)
+    todo (c2hs/base/errors/Errors.hs:60)
+    ErrorLvl (c2hs/base/errors/Errors.hs:71)
+    Error (c2hs/base/errors/Errors.hs:76)
+    makeError (c2hs/base/errors/Errors.hs:96)
+    errorLvl (c2hs/base/errors/Errors.hs:101)
+    showError (c2hs/base/errors/Errors.hs:124)
+    errorAtPos (c2hs/base/errors/Errors.hs:147)
+   0% (  0 / 20) in 'StateTrans'
+  Missing documentation for:
+    Module header
+    STB (c2hs/base/state/StateTrans.hs:117)
+    fixSTB (c2hs/base/state/StateTrans.hs:159)
+    readBase (c2hs/base/state/StateTrans.hs:186)
+    writeBase (c2hs/base/state/StateTrans.hs:191)
+    transBase (c2hs/base/state/StateTrans.hs:196)
+    readGeneric (c2hs/base/state/StateTrans.hs:207)
+    writeGeneric (c2hs/base/state/StateTrans.hs:212)
+    transGeneric (c2hs/base/state/StateTrans.hs:218)
+    liftIO (c2hs/base/state/StateTrans.hs:230)
+    runSTB (c2hs/base/state/StateTrans.hs:239)
+    interleave (c2hs/base/state/StateTrans.hs:256)
+    throwExc (c2hs/base/state/StateTrans.hs:287)
+    fatal (c2hs/base/state/StateTrans.hs:294)
+    catchExc (c2hs/base/state/StateTrans.hs:306)
+    fatalsHandledBy (c2hs/base/state/StateTrans.hs:336)
+    MVar (c2hs/base/state/StateTrans.hs:360)
+    newMV (c2hs/base/state/StateTrans.hs:362)
+    readMV (c2hs/base/state/StateTrans.hs:365)
+    assignMV (c2hs/base/state/StateTrans.hs:368)
+   0% (  0 / 21) in 'Lexers'
+  Missing documentation for:
+    Module header
+    Regexp (c2hs/base/syntax/Lexers.hs:233)
+    Lexer (c2hs/base/syntax/Lexers.hs:206)
+    Action (c2hs/base/syntax/Lexers.hs:188)
+    epsilon (c2hs/base/syntax/Lexers.hs:241)
+    char (c2hs/base/syntax/Lexers.hs:246)
+    +> (c2hs/base/syntax/Lexers.hs:251)
+    lexaction (c2hs/base/syntax/Lexers.hs:263)
+    lexactionErr (c2hs/base/syntax/Lexers.hs:275)
+    lexmeta (c2hs/base/syntax/Lexers.hs:288)
+    >|< (c2hs/base/syntax/Lexers.hs:293)
+    >||< (c2hs/base/syntax/Lexers.hs:298)
+    ctrlChars (c2hs/base/syntax/Lexers.hs:357)
+    ctrlLexer (c2hs/base/syntax/Lexers.hs:365)
+    star (c2hs/base/syntax/Lexers.hs:383)
+    plus (c2hs/base/syntax/Lexers.hs:402)
+
+c2hs/base/state/CIO.hs:77:1: warning: [-Wdeprecations]
+    Module ‘System.Cmd’ is deprecated: Use "System.Process" instead
+    quest (c2hs/base/syntax/Lexers.hs:407)
+    alt (c2hs/base/syntax/Lexers.hs:412)
+    string (c2hs/base/syntax/Lexers.hs:423)
+    LexerState (c2hs/base/syntax/Lexers.hs:434)
+    execLexer (c2hs/base/syntax/Lexers.hs:445)
+   0% (  0 /  9) in 'UNames'
+  Missing documentation for:
+    Module header
+    NameSupply (c2hs/base/general/UNames.hs:67)
+    Name (c2hs/base/general/UNames.hs:71)
+    rootSupply (c2hs/base/general/UNames.hs:93)
+    splitSupply (c2hs/base/general/UNames.hs:99)
+    names (c2hs/base/general/UNames.hs:104)
+    saveRootNameSupply (c2hs/base/general/UNames.hs:123)
+    restoreRootNameSupply (c2hs/base/general/UNames.hs:131)
+    unsafeResetRootNameSupply (c2hs/base/general/UNames.hs:141)
+   0% (  0 / 14) in 'StateBase'
+  Missing documentation for:
+    Module header
+    PreCST (c2hs/base/state/StateBase.hs:99)
+    ErrorState (c2hs/base/state/StateBase.hs:82)
+    BaseState (c2hs/base/state/StateBase.hs:88)
+    nop (c2hs/base/state/StateBase.hs:140)
+    yield (c2hs/base/state/StateBase.hs:125)
+    +>= (c2hs/base/state/StateBase.hs:130)
+    +> (c2hs/base/state/StateBase.hs:135)
+    fixCST (c2hs/base/state/StateBase.hs:145)
+    unpackCST (c2hs/base/state/StateBase.hs:116)
+    readCST (c2hs/base/state/StateBase.hs:154)
+    writeCST (c2hs/base/state/StateBase.hs:159)
+    transCST (c2hs/base/state/StateBase.hs:165)
+    liftIO (c2hs/base/state/StateBase.hs:173)
+  36% ( 16 / 44) in 'CIO'
+  Missing documentation for:
+    Module header
+    HandlePosn
+    ioeGetErrorString
+    ioeGetHandle
+    ioeGetFileName
+    openFileCIO (c2hs/base/state/CIO.hs:92)
+    hCloseCIO (c2hs/base/state/CIO.hs:100)
+    putCharCIO (c2hs/base/state/CIO.hs:106)
+    putStrCIO (c2hs/base/state/CIO.hs:109)
+    hPutStrCIO (c2hs/base/state/CIO.hs:112)
+    hPutStrLnCIO (c2hs/base/state/CIO.hs:115)
+    writeFileCIO (c2hs/base/state/CIO.hs:118)
+    readFileCIO (c2hs/base/state/CIO.hs:124)
+    printCIO (c2hs/base/state/CIO.hs:132)
+    getCharCIO (c2hs/base/state/CIO.hs:135)
+    hFlushCIO (c2hs/base/state/CIO.hs:138)
+    hPutCharCIO (c2hs/base/state/CIO.hs:141)
+    hGetContentsCIO (c2hs/base/state/CIO.hs:129)
+    hSetBufferingCIO (c2hs/base/state/CIO.hs:144)
+    hGetBufferingCIO (c2hs/base/state/CIO.hs:147)
+    newlineCIO (c2hs/base/state/CIO.hs:153)
+    doesFileExistCIO (c2hs/base/state/CIO.hs:160)
+    removeFileCIO (c2hs/base/state/CIO.hs:163)
+    exitWithCIO (c2hs/base/state/CIO.hs:170)
+    getArgsCIO (c2hs/base/state/CIO.hs:173)
+    getProgNameCIO (c2hs/base/state/CIO.hs:176)
+    fileFindInCIO (c2hs/base/state/CIO.hs:182)
+    mktempCIO (c2hs/base/state/CIO.hs:185)
+   0% (  0 /  4) in 'BaseVersion'
+  Missing documentation for:
+    Module header
+    version (c2hs/base/admin/BaseVersion.hs:11)
+    copyright (c2hs/base/admin/BaseVersion.hs:12)
+    disclaimer (c2hs/base/admin/BaseVersion.hs:13)
+  22% ( 16 / 74) in 'State'
+  Missing documentation for:
+    Module header
+    PreCST (c2hs/base/state/StateBase.hs:99)
+    nop (c2hs/base/state/StateBase.hs:140)
+    yield (c2hs/base/state/StateBase.hs:125)
+    +>= (c2hs/base/state/StateBase.hs:130)
+    +> (c2hs/base/state/StateBase.hs:135)
+    fixCST (c2hs/base/state/StateBase.hs:145)
+    throwExc (c2hs/base/state/State.hs:145)
+    fatal (c2hs/base/state/State.hs:152)
+    catchExc (c2hs/base/state/State.hs:164)
+    fatalsHandledBy (c2hs/base/state/State.hs:179)
+    readCST (c2hs/base/state/StateBase.hs:154)
+    writeCST (c2hs/base/state/StateBase.hs:159)
+    transCST (c2hs/base/state/StateBase.hs:165)
+    run (c2hs/base/state/State.hs:120)
+    runCST (c2hs/base/state/State.hs:136)
+    MVar (c2hs/base/state/StateTrans.hs:360)
+    newMV (c2hs/base/state/State.hs:191)
+    readMV (c2hs/base/state/State.hs:194)
+    assignMV (c2hs/base/state/State.hs:197)
+    HandlePosn
+    ioeGetErrorString
+    ioeGetHandle
+    ioeGetFileName
+    openFileCIO (c2hs/base/state/CIO.hs:92)
+    hCloseCIO (c2hs/base/state/CIO.hs:100)
+    putCharCIO (c2hs/base/state/CIO.hs:106)
+    putStrCIO (c2hs/base/state/CIO.hs:109)
+    hPutStrCIO (c2hs/base/state/CIO.hs:112)
+    hPutStrLnCIO (c2hs/base/state/CIO.hs:115)
+    writeFileCIO (c2hs/base/state/CIO.hs:118)
+    readFileCIO (c2hs/base/state/CIO.hs:124)
+    printCIO (c2hs/base/state/CIO.hs:132)
+    getCharCIO (c2hs/base/state/CIO.hs:135)
+    hFlushCIO (c2hs/base/state/CIO.hs:138)
+    hPutCharCIO (c2hs/base/state/CIO.hs:141)
+    hGetContentsCIO (c2hs/base/state/CIO.hs:129)
+    hSetBufferingCIO (c2hs/base/state/CIO.hs:144)
+    hGetBufferingCIO (c2hs/base/state/CIO.hs:147)
+    newlineCIO (c2hs/base/state/CIO.hs:153)
+    doesFileExistCIO (c2hs/base/state/CIO.hs:160)
+    removeFileCIO (c2hs/base/state/CIO.hs:163)
+    exitWithCIO (c2hs/base/state/CIO.hs:170)
+    getArgsCIO (c2hs/base/state/CIO.hs:173)
+    getProgNameCIO (c2hs/base/state/CIO.hs:176)
+    fileFindInCIO (c2hs/base/state/CIO.hs:182)
+    mktempCIO (c2hs/base/state/CIO.hs:185)
+    liftIO (c2hs/base/state/StateBase.hs:173)
+    getId (c2hs/base/state/State.hs:205)
+    raise (c2hs/base/state/State.hs:223)
+    raiseWarning (c2hs/base/state/State.hs:231)
+    raiseError (c2hs/base/state/State.hs:236)
+    raiseFatal (c2hs/base/state/State.hs:250)
+    showErrors (c2hs/base/state/State.hs:289)
+    errorsPresent (c2hs/base/state/State.hs:304)
+    readExtra (c2hs/base/state/State.hs:316)
+    updExtra (c2hs/base/state/State.hs:323)
+    getNameSupply (c2hs/base/state/State.hs:337)
+  19% ( 16 / 83) in 'C2HSState'
+  Missing documentation for:
+    Module header
+    PreCST (c2hs/base/state/StateBase.hs:99)
+    nop (c2hs/base/state/StateBase.hs:140)
+    yield (c2hs/base/state/StateBase.hs:125)
+    +>= (c2hs/base/state/StateBase.hs:130)
+    +> (c2hs/base/state/StateBase.hs:135)
+    fixCST (c2hs/base/state/StateBase.hs:145)
+    throwExc (c2hs/base/state/State.hs:145)
+    fatal (c2hs/base/state/State.hs:152)
+    catchExc (c2hs/base/state/State.hs:164)
+    fatalsHandledBy (c2hs/base/state/State.hs:179)
+    readCST (c2hs/base/state/StateBase.hs:154)
+    writeCST (c2hs/base/state/StateBase.hs:159)
+    transCST (c2hs/base/state/StateBase.hs:165)
+    run (c2hs/base/state/State.hs:120)
+    runCST (c2hs/base/state/State.hs:136)
+    MVar (c2hs/base/state/StateTrans.hs:360)
+    newMV (c2hs/base/state/State.hs:191)
+    readMV (c2hs/base/state/State.hs:194)
+    assignMV (c2hs/base/state/State.hs:197)
+    HandlePosn
+    ioeGetErrorString
+    ioeGetHandle
+    ioeGetFileName
+    openFileCIO (c2hs/base/state/CIO.hs:92)
+    hCloseCIO (c2hs/base/state/CIO.hs:100)
+    putCharCIO (c2hs/base/state/CIO.hs:106)
+    putStrCIO (c2hs/base/state/CIO.hs:109)
+    hPutStrCIO (c2hs/base/state/CIO.hs:112)
+    hPutStrLnCIO (c2hs/base/state/CIO.hs:115)
+    writeFileCIO (c2hs/base/state/CIO.hs:118)
+    readFileCIO (c2hs/base/state/CIO.hs:124)
+    printCIO (c2hs/base/state/CIO.hs:132)
+    getCharCIO (c2hs/base/state/CIO.hs:135)
+    hFlushCIO (c2hs/base/state/CIO.hs:138)
+    hPutCharCIO (c2hs/base/state/CIO.hs:141)
+    hGetContentsCIO (c2hs/base/state/CIO.hs:129)
+    hSetBufferingCIO (c2hs/base/state/CIO.hs:144)
+    hGetBufferingCIO (c2hs/base/state/CIO.hs:147)
+    newlineCIO (c2hs/base/state/CIO.hs:153)
+    doesFileExistCIO (c2hs/base/state/CIO.hs:160)
+    removeFileCIO (c2hs/base/state/CIO.hs:163)
+    exitWithCIO (c2hs/base/state/CIO.hs:170)
+    getArgsCIO (c2hs/base/state/CIO.hs:173)
+    getProgNameCIO (c2hs/base/state/CIO.hs:176)
+    fileFindInCIO (c2hs/base/state/CIO.hs:182)
+    mktempCIO (c2hs/base/state/CIO.hs:185)
+    liftIO (c2hs/base/state/StateBase.hs:173)
+    getId (c2hs/base/state/State.hs:205)
+    raise (c2hs/base/state/State.hs:223)
+    raiseWarning (c2hs/base/state/State.hs:231)
+    raiseError (c2hs/base/state/State.hs:236)
+    raiseFatal (c2hs/base/state/State.hs:250)
+    showErrors (c2hs/base/state/State.hs:289)
+    errorsPresent (c2hs/base/state/State.hs:304)
+    readExtra (c2hs/base/state/State.hs:316)
+    updExtra (c2hs/base/state/State.hs:323)
+    getNameSupply (c2hs/base/state/State.hs:337)
+    CST (c2hs/state/C2HSState.hs:67)
+    runC2HS (c2hs/state/C2HSState.hs:71)
+    SwitchBoard (c2hs/state/Switches.hs:71)
+    Traces (c2hs/state/Switches.hs:112)
+    setTraces (c2hs/state/C2HSState.hs:80)
+    tr
+c2hs/c/CLexer.x:75:14: warning: [-Wtabs]
+    Tab character found here, and in 226 further locations.
+    Please use spaces instead.
+aceSet (c2hs/state/C2HSState.hs:85)
+    putTraceStr (c2hs/state/C2HSState.hs:91)
+    setSwitch (c2hs/state/C2HSState.hs:99)
+    getSwitch (c2hs/state/C2HSState.hs:104)
+   0% (  0 / 26) in 'Attributes'
+  Missing documentation for:
+    Module header
+    Attrs (c2hs/base/syms/Attributes.hs:110)
+    newAttrsOnlyPos (c2hs/base/syms/Attributes.hs:155)
+    newAttrs (c2hs/base/syms/Attributes.hs:161)
+    Attributed (c2hs/base/syms/Attributes.hs:136)
+    eqOfAttrsOf (c2hs/base/syms/Attributes.hs:141)
+    posOfAttrsOf (c2hs/base/syms/Attributes.hs:146)
+    Attr (c2hs/base/syms/Attributes.hs:181)
+    AttrTable (c2hs/base/syms/Attributes.hs:206)
+    newAttrTable (c2hs/base/syms/Attributes.hs:227)
+    getAttr (c2hs/base/syms/Attributes.hs:232)
+    setAttr (c2hs/base/syms/Attributes.hs:244)
+    updAttr (c2hs/base/syms/Attributes.hs:257)
+    copyAttr (c2hs/base/syms/Attributes.hs:270)
+    freezeAttrTable (c2hs/base/syms/Attributes.hs:295)
+    softenAttrTable (c2hs/base/syms/Attributes.hs:311)
+    StdAttr (c2hs/base/syms/Attributes.hs:324)
+    getStdAttr (c2hs/base/syms/Attributes.hs:344)
+    getStdAttrDft (c2hs/base/syms/Attributes.hs:353)
+    isDontCareStdAttr (c2hs/base/syms/Attributes.hs:363)
+    isUndefStdAttr (c2hs/base/syms/Attributes.hs:370)
+    setStdAttr (c2hs/base/syms/Attributes.hs:375)
+    updStdAttr (c2hs/base/syms/Attributes.hs:380)
+    getGenAttr (c2hs/base/syms/Attributes.hs:387)
+    setGenAttr (c2hs/base/syms/Attributes.hs:390)
+    updGenAttr (c2hs/base/syms/Attributes.hs:394)
+   0% (  0 / 16) in 'Idents'
+  Missing documentation for:
+    Module header
+    Ident (c2hs/base/syms/Idents.hs:80)
+    noARNum (c2hs/base/syms/Idents.hs:146)
+    isLegalIdent (c2hs/base/syms/Idents.hs:161)
+    lexemeToIdent (c2hs/base/syms/Idents.hs:204)
+    internalIdent (c2hs/base/syms/Idents.hs:212)
+    onlyPosIdent (c2hs/base/syms/Idents.hs:218)
+    cloneIdent (c2hs/base/syms/Idents.hs:309)
+    identToLexeme (c2hs/base/syms/Idents.hs:315)
+    isIdentSimple (c2hs/base/syms/Idents.hs:329)
+    isIdentPrim (c2hs/base/syms/Idents.hs:334)
+    stripIdentARNum (c2hs/base/syms/Idents.hs:341)
+    getIdentARNum (c2hs/base/syms/Idents.hs:349)
+    newIdentARNum (c2hs/base/syms/Idents.hs:359)
+    getIdentAttrs (c2hs/base/syms/Idents.hs:369)
+    dumpIdent (c2hs/base/syms/Idents.hs:375)
+   0% (  0 / 23) in 'CAST'
+  Missing documentation for:
+    Module header
+    CHeader (c2hs/c/CAST.hs:58)
+    CExtDecl (c2hs/c/CAST.hs:69)
+    CFunDef (c2hs/c/CAST.hs:95)
+    CStat (c2hs/c/CAST.hs:109)
+    CBlockItem (c2hs/c/CAST.hs:190)
+    CDecl (c2hs/c/CAST.hs:247)
+    CDeclSpec (c2hs/c/CAST.hs:261)
+    CStorageSpec (c2hs/c/CAST.hs:273)
+    CTypeSpec (c2hs/c/CAST.hs:298)
+    CTypeQual (c2hs/c/CAST.hs:360)
+    CStructUnion (c2hs/c/CAST.hs:382)
+    CStructTag (c2hs/c/CAST.hs:395)
+    CEnum (c2hs/c/CAST.hs:401)
+    CDeclr (c2hs/c/CAST.hs:438)
+    CInit (c2hs/c/CAST.hs:466)
+    CInitList (c2hs/c/CAST.hs:471)
+    CDesignator (c2hs/c/CAST.hs:483)
+    CExpr (c2hs/c/CAST.hs:508)
+    CAssignOp (c2hs/c/CAST.hs:603)
+    CBinaryOp (c2hs/c/CAST.hs:618)
+    CUnaryOp (c2hs/c/CAST.hs:640)
+    CConst (c2hs/c/CAST.hs:656)
+   0% (  0 /  3) in 'CHSLexer'
+  Missing documentation for:
+    Module header
+    CHSToken (c2hs/chs/CHSLexer.hs:193)
+    lexCHS (c2hs/chs/CHSLexer.hs:784)
+   0% (  0 / 21) in 'CHS'
+  Missing documentation for:
+    Module header
+    CHSModule (c2hs/chs/CHS.hs:121)
+    CHSFrag (c2hs/chs/CHS.hs:138)
+    CHSHook (c2hs/chs/CHS.hs:165)
+    CHSTrans (c2hs/chs/CHS.hs:256)
+    CHSParm (c2hs/chs/CHS.hs:264)
+    CHSArg (c2hs/chs/CHS.hs:272)
+    CHSAccess (c2hs/chs/CHS.hs:279)
+    CHSAPath (c2hs/chs/CHS.hs:285)
+    CHSPtrType (c2hs/chs/CHS.hs:293)
+    skipToLangPragma (c2hs/chs/CHS.hs:317)
+    hasCPP (c2hs/chs/CHS.hs:325)
+    loadCHS (c2hs/chs/CHS.hs:341)
+    dumpCHS (c2hs/chs/CHS.hs:384)
+    hssuffix (c2hs/chs/CHS.hs:332)
+    chssuffix (c2hs/chs/CHS.hs:332)
+    loadAllCHI (c2hs/chs/CHS.hs:617)
+    loadCHI (c2hs/chs/CHS.hs:635)
+    dumpCHI (c2hs/chs/CHS.hs:697)
+    chisuffix (c2hs/chs/CHS.hs:610)
+    showCHSParm (c2hs/chs/CHS.hs:556)
+   0% (  0 /  1) in 'CPretty'
+  Missing documentation for:
+    Module header
+   0% (  0 /  3) in 'CTokens'
+  Missing documentation for:
+    Module header
+    CToken (c2hs/c/CTokens.hs:37)
+    GnuCTok (c2hs/c/CTokens.hs:150)
+   0% (  0 / 16) in 'CParserMonad'
+  Missing documentation for:
+    Module header
+    P (c2hs/c/CParserMonad.hs:84)
+    execParser (c2hs/c/CParserMonad.hs:98)
+    failP (c2hs/c/CParserMonad.hs:124)
+    getNewName (c2hs/c/CParserMonad.hs:127)
+    addTypedef (c2hs/c/CParserMonad.hs:136)
+    shadowTypedef (c2hs/c/CParserMonad.hs:140)
+    isTypeIdent (c2hs/c/CParserMonad.hs:149)
+    enterScope (c2hs/c/CParserMonad.hs:153)
+    leaveScope (c2hs/c/CParserMonad.hs:157)
+    setPos (c2hs/c/CParserMonad.hs:130)
+    getPos (c2hs/c/CParserMonad.hs:133)
+    getInput (c2hs/c/CParserMonad.hs:163)
+    setInput (c2hs/c/CParserMonad.hs:166)
+    getLastToken (c2hs/c/CParserMonad.hs:169)
+    setLastToken (c2hs/c/CParserMonad.hs:172)
+   0% (  0 /  3) in 'CLexer'
+  Missing documentation for:
+    Module header
+    lexC (c2hs/c/CLexer.x:446)
+    parseError (c2hs/c/CLexer.x:421)
+  50% (  1 /  2) in 'GenHeader'
+  Missing documentation for:
+    Module header
+   0% (  0 /  9) in 'NameSpaces'
+  Missing documentation for:
+    Module header
+    NameSpace (c2hs/base/syms/NameSpaces.hs:69)
+    nameSpace (c2hs/base/syms/NameSpaces.hs:74)
+    defGlobal (c2hs/base/syms/NameSpaces.hs:86)
+    enterNewRange (c2hs/base/syms/NameSpaces.hs:92)
+    leaveRange (c2hs/base/syms/NameSpaces.hs:97)
+    defLocal (c2hs/base/syms/NameSpaces.hs:113)
+    find (c2hs/base/syms/NameSpaces.hs:127)
+    nameSpaceToList (c2hs/base/syms/NameSpaces.hs:146)
+   0% (  0 / 23) in 'CAttrs'
+  Missing documentation for:
+    Module header
+    AttrC (c2hs/c/CAttrs.hs:93)
+    attrC (c2hs/c/CAttrs.hs:103)
+    getCHeader (c2hs/c/CAttrs.hs:114)
+    enterNewRangeC (c2hs/c/CAttrs.hs:123)
+    enterNewObjRangeC (c2hs/c/CAttrs.hs:131)
+    leaveRangeC (c2hs/c/CAttrs.hs:138)
+    leaveObjRangeC (c2hs/c/CAttrs.hs:146)
+    addDefObjC (c2hs/c/CAttrs.hs:155)
+    lookupDefObjC (c2hs/c/CAttrs.hs:163)
+    lookupDefObjCShadow (c2hs/c/CAttrs.hs:171)
+    addDefTagC (c2hs/c/CAttrs.hs:185)
+    lookupDefTagC (c2hs/c/CAttrs.hs:193)
+    lookupDefTagCShadow (c2hs/c/CAttrs.hs:201)
+    applyPrefix (c2hs/c/CAttrs.hs:220)
+    getDefOfIdentC (c2hs/c/CAttrs.hs:251)
+    setDefOfIdentC (c2hs/c/CAttrs.hs:254)
+    updDefOfIdentC (c2hs/c/CAttrs.hs:260)
+    freezeDefOfIdentsAttrC (c2hs/c/CAttrs.hs:266)
+    softenDefOfIdentsAttrC (c2hs/c/CAttrs.hs:269)
+    CObj (c2hs/c/CAttrs.hs:278)
+    CTag (c2hs/c/CAttrs.hs:305)
+    CDef (c2hs/c/CAttrs.hs:327)
+   0% (  0 /  2) in 'CBuiltin'
+  Missing documentation for:
+    Module header
+    builtinTypeNames (c2hs/c/CBuiltin.hs:46)
+   0% (  0 /  2) in 'CParser'
+  Missing documentation for:
+    Module header
+    parseC (.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/CParser.hs:5929)
+   0% (  0 / 53) in 'CTrav'
+  Missing documentation for:
+    Module header
+    CT (c2hs/c/CTrav.hs:110)
+    readCT (c2hs/c/CTrav.hs:130)
+    transCT (c2hs/c/CTrav.hs:135)
+    getCHeaderCT (c2hs/c/CTrav.hs:146)
+    runCT (c2hs/c/CTrav.hs:154)
+    throwCTExc (c2hs/c/CTrav.hs:173)
+    ifCTExc (c2hs/c/CTrav.hs:178)
+    raiseErrorCTExc (c2hs/c/CTrav.hs:183)
+    enter (c2hs/c/CTrav.hs:195)
+    enterObjs (c2hs/c/CTrav.hs:200)
+    leave (c2hs/c/CTrav.hs:205)
+    leaveObjs (c2hs/c/CTrav.hs:210)
+    defObj (c2hs/c/CTrav.hs:217)
+    findObj (c2hs/c/CTrav.hs:222)
+    findObjShadow (c2hs/c/CTrav.hs:228)
+    defTag (c2hs/c/CTrav.hs:243)
+    findTag (c2hs/c/CTrav.hs:285)
+    findTagShadow (c2hs/c/CTrav.hs:291)
+    applyPrefixToNameSpaces (c2hs/c/CTrav.hs:301)
+    getDefOf (c2hs/c/CTrav.hs:313)
+    refersToDef (c2hs/c/CTrav.hs:321)
+    refersToNewDef (c2hs/c/CTrav.hs:326)
+    getDeclOf (c2hs/c/CTrav.hs:332)
+    findTypeObjMaybe (c2hs/c/CTrav.hs:372)
+    findTypeObj (c2hs/c/CTrav.hs:389)
+    findValueObj (c2hs/c/CTrav.hs:401)
+    findFunObj (c2hs/c/CTrav.hs:418)
+    isTypedef (c2hs/c/CTrav.hs:435)
+    simplifyDecl (c2hs/c/CTrav.hs:444)
+    declrFromDecl (c2hs/c/CTrav.hs:461)
+    declrNamed (c2hs/c/CTrav.hs:469)
+    declaredDeclr (c2hs/c/CTrav.hs:475)
+    declaredName (c2hs/c/CTrav.hs:485)
+    structMembers (c2hs/c/CTrav.hs:492)
+    expandDecl (c2hs/c/CTrav.hs:499)
+    structName (c2hs/c/CTrav.hs:505)
+    enumName (c2hs/c/CTrav.hs:510)
+    tagName (c2hs/c/CTrav.hs:517)
+    isArrDeclr (c2hs/c/CTrav.hs:544)
+    isPtrDeclr (c2hs/c/CTrav.hs:530)
+    dropPtrDeclr (c2hs/c/CTrav.hs:556)
+    isPtrDecl (c2hs/c/CTrav.hs:578)
+    isFunDeclr (c2hs/c/CTrav.hs:586)
+    structFromDecl (c2hs/c/CTrav.hs:595)
+    funResultAndArgs (c2hs/c/CTrav.hs:607)
+    chaseDecl (c2hs/c/CTrav.hs:644)
+    findAndChaseDecl (c2hs/c/CTrav.hs:672)
+    checkForAlias (c2hs/c/CTrav.hs:683)
+    checkForOneAliasName (c2hs/c/CTrav.hs:692)
+    lookupEnum (c2hs/c/CTrav.hs:705)
+    lookupStructUnion (c2hs/c/CTrav.hs:735)
+    lookupDeclOrTag (c2hs/c/CTrav.hs:759)
+   0% (  0 /  2) in 'CNames'
+  Missing documentation for:
+    Module header
+    nameAnalysis (c2hs/c/CNames.hs:63)
+   0% (  0 / 91) in 'C'
+  Missing documentation for:
+    Module header
+    Pos (c2hs/base/general/Position.hs:99)
+    CHeader (c2hs/c/CAST.hs:58)
+    CExtDecl (c2hs/c/CAST.hs:69)
+    CFunDef (c2hs/c/CAST.hs:95)
+    CStat (c2hs/c/CAST.hs:109)
+    CBlockItem (c2hs/c/CAST.hs:190)
+    CDecl (c2hs/c/CAST.hs:247)
+    CDeclSpec (c2hs/c/CAST.hs:261)
+    CStorageSpec (c2hs/c/CAST.hs:273)
+    CTypeSpec (c2hs/c/CAST.hs:298)
+    CTypeQual (c2hs/c/CAST.hs:360)
+    CStructUnion (c2hs/c/CAST.hs:382)
+    CStructTag (c2hs/c/CAST.hs:395)
+    CEnum (c2hs/c/CAST.hs:401)
+    CDeclr (c2hs/c/CAST.hs:438)
+    CInit (c2hs/c/CAST.hs:466)
+    CInitList (c2hs/c/CAST.hs:471)
+    CDesignator (c2hs/c/CAST.hs:483)
+    CExpr (c2hs/c/CAST.hs:508)
+    CAssignOp (c2hs/c/CAST.hs:603)
+    CBinaryOp (c2hs/c/CAST.hs:618)
+    CUnaryOp (c2hs/c/CAST.hs:640)
+    CConst (c2hs/c/CAST.hs:656)
+    AttrC (c2hs/c/CAttrs.hs:93)
+    getCHeader (c2hs/c/CAttrs.hs:114)
+    CObj (c2hs/c/CAttrs.hs:278)
+    CTag (c2hs/c/CAttrs.hs:305)
+    CDef (c2hs/c/CAttrs.hs:327)
+    lookupDefObjC (c2hs/c/CAttrs.hs:163)
+    lookupDefTagC (c2hs/c/CAttrs.hs:193)
+    getDefOfIdentC (c2hs/c/CAttrs.hs:251)
+    CT (c2hs/c/CTrav.hs:110)
+    readCT (c2hs/c/CTrav.hs:130)
+    transCT (c2hs/c/CTrav.hs:135)
+    getCHeaderCT (c2hs/c/CTrav.hs:146)
+    runCT (c2hs/c/CTrav.hs:154)
+    throwCTExc (c2hs/c/CTrav.hs:173)
+    ifCTExc (c2hs/c/CTrav.hs:178)
+    raiseErrorCTExc (c2hs/c/CTrav.hs:183)
+    enter (c2hs/c/CTrav.hs:195)
+    enterObjs (c2hs/c/CTrav.hs:200)
+    leave (c2hs/c/CTrav.hs:205)
+    leaveObjs (c2hs/c/CTrav.hs:210)
+    defObj (c2hs/c/CTrav.hs:217)
+    findObj (c2hs/c/CTrav.hs:222)
+    findObjShadow (c2hs/c/CTrav.hs:228)
+    defTag (c2hs/c/CTrav.hs:243)
+    findTag (c2hs/c/CTrav.hs:285)
+    findTagShadow (c2hs/c/CTrav.hs:291)
+    applyPrefixToNameSpaces (c2hs/c/CTrav.hs:301)
+    getDefOf (c2hs/c/CTrav.hs:313)
+    refersToDef (c2hs/c/CTrav.hs:321)
+    refersToNewDef (c2hs/c/CTrav.hs:326)
+    getDeclOf (c2hs/c/CTrav.hs:332)
+    findTypeObjMaybe (c2hs/c/CTrav.hs:372)
+    findTypeObj (c2hs/c/CTrav.hs:389)
+    findValueObj (c2hs/c/CTrav.hs:401)
+    findFunObj (c2hs/c/CTrav.hs:418)
+    isTypedef (c2hs/c/CTrav.hs:435)
+    simplifyDecl (c2hs/c/CTrav.hs:444)
+    declrFromDecl (c2hs/c/CTrav.hs:461)
+    declrNamed (c2hs/c/CTrav.hs:469)
+    declaredDeclr (c2hs/c/CTrav.hs:475)
+    declaredName (c2hs/c/CTrav.hs:485)
+    structMembers (c2hs/c/CTrav.hs:492)
+    expandDecl (c2hs/c/CTrav.hs:499)
+    structName (c2hs/c/CTrav.hs:505)
+    enumName (c2hs/c/CTrav.hs:510)
+    tagName (c2hs/c/CTrav.hs:517)
+    isArrDeclr (c2hs/c/CTrav.hs:544)
+    isPtrDeclr (c2hs/c/CTrav.hs:530)
+    dropPtrDeclr (c2hs/c/CTrav.hs:556)
+    isPtrDecl (c2hs/c/CTrav.hs:578)
+    isFunDeclr (c2hs/c/CTrav.hs:586)
+    structFromDecl (c2hs/c/CTrav.hs:595)
+    funResultAndArgs (c2hs/c/CTrav.hs:607)
+    chaseDecl (c2hs/c/CTrav.hs:644)
+    findAndChaseDecl (c2hs/c/CTrav.hs:672)
+    checkForAlias (c2hs/c/CTrav.hs:683)
+    checkForOneAliasName (c2hs/c/CTrav.hs:692)
+    lookupEnum (c2hs/c/CTrav.hs:705)
+    lookupStructUnion (c2hs/c/CTrav.hs:735)
+    lookupDeclOrTag (c2hs/c/CTrav.hs:759)
+    loadAttrC (c2hs/c/C.hs:102)
+    Ident (c2hs/base/syms/Idents.hs:80)
+    Attrs (c2hs/base/syms/Attributes.hs:110)
+    Attr (c2hs/base/syms/Attributes.hs:181)
+    csuffix (c2hs/c/C.hs:90)
+    hsuffix (c2hs/c/C.hs:90)
+    isuffix (c2hs/c/C.hs:90)
+   0% (  0 / 21) in 'GBMonad'
+  Missing documentation for:
+    Module header
+    TransFun (c2hs/gen/GBMonad.hs:100)
+    transTabToTransFun (c2hs/gen/GBMonad.hs:126)
+    HsObject (c2hs/gen/GBMonad.hs:193)
+    GB (c2hs/gen/GBMonad.hs:246)
+    HsPtrRep (c2hs/gen/GBMonad.hs:184)
+    initialGBState (c2hs/gen/GBMonad.hs:248)
+    setContext (c2hs/gen/GBMonad.hs:260)
+    getLibrary (c2hs/gen/GBMonad.hs:272)
+    getPrefix (c2hs/gen/GBMonad.hs:277)
+    getLock (c2hs/gen/GBMonad.hs:281)
+    delayCode (c2hs/gen/GBMonad.hs:292)
+    getDelayedCode (c2hs/gen/GBMonad.hs:316)
+    ptrMapsTo (c2hs/gen/GBMonad.hs:321)
+    queryPtr (c2hs/gen/GBMonad.hs:329)
+    objIs (c2hs/gen/GBMonad.hs:336)
+    queryObj (c2hs/gen/GBMonad.hs:344)
+    queryClass (c2hs/gen/GBMonad.hs:353)
+    queryPointer (c2hs/gen/GBMonad.hs:366)
+    mergeMaps (c2hs/gen/GBMonad.hs:389)
+    dumpMaps (c2hs/gen/GBMonad.hs:404)
+   0% (  0 /  2) in 'GenBind'
+  Missing documentation for:
+    Module header
+    expandHooks (c2hs/gen/GenBind.hs:295)
+   0% (  0 /  2) in 'Gtk2HsC2Hs'
+  Missing documentation for:
+    Module header
+    c2hsMain (c2hs/toplevel/Gtk2HsC2Hs.hs:179)
+  14% (  1 /  7) in 'Gtk2HsSetup'
+  Missing documentation for:
+    gtk2hsUserHooks (src/Gtk2HsSetup.hs:82)
+    getPkgConfigPackages (src/Gtk2HsSetup.hs:369)
+    checkGtk2hsBuildtools (src/Gtk2HsSetup.hs:464)
+    typeGenProgram (src/Gtk2HsSetup.hs:478)
+    signalGenProgram (src/Gtk2HsSetup.hs:482)
+    c2hsLocal (src/Gtk2HsSetup.hs:487)
+Documentation created:
+.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/doc/html/gtk2hs-buildtools/index.html
+Preprocessing executable 'gtk2hsTypeGen' for gtk2hs-buildtools-0.13.2.2...
+Preprocessing executable 'gtk2hsHookGenerator' for
+gtk2hs-buildtools-0.13.2.2...
+Preprocessing executable 'gtk2hsC2hs' for gtk2hs-buildtools-0.13.2.2...
+Installing library in
+/home/bemcho/.stack/snapshots/x86_64-linux-nopie/lts-9.6/8.0.2/lib/x86_64-linux-ghc-8.0.2/gtk2hs-buildtools-0.13.2.2-DC7EhhNBypD3fEbBVOg8Is
+Installing executable(s) in
+/home/bemcho/.stack/snapshots/x86_64-linux-nopie/lts-9.6/8.0.2/bin
+Registering gtk2hs-buildtools-0.13.2.2...

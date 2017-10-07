@@ -1,0 +1,10 @@
+*.Rout
+*.class
+*.o
+
+dist/
+gitignore/
+
+.stack-work/
+.idea/
+out/

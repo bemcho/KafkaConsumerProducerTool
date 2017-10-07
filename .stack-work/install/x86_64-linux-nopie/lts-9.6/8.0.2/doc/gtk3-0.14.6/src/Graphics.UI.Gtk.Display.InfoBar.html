@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) Widget InfoBar</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Andy Stewart</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 27 Mar 2010</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 2010 Andy Stewart</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- The following varargs functions can't bound:</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- gtk_info_bar_new_with_buttons</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- gtk_info_bar_add_buttons</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- Use 'infoBarAddButton' replace.</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-33"></a><span class="hs-comment">--</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- Report important messages to the user</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Display</span><span class="hs-operator">.</span><span class="hs-identifier">InfoBar</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-37"></a><span>
+</span><a name="line-38"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- | 'InfoBar' is a widget that can be used to show messages to the user</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- without showing a dialog. It is often temporarily shown at the top or bottom</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- of a document. In contrast to 'Dialog', which has a horizontal action area</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- at the bottom, 'InfoBar' has a vertical action area at the side.</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- The API of 'InfoBar' is very similar to 'Dialog', allowing you to add</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- buttons to the action area with 'infoBarAddButton'.</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- The sensitivity of action widgets can be controlled</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- with 'infoBarSetResponseSensitive'. To add widgets to the main content area</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- of a 'InfoBar', use 'infoBarGetContentArea' and add your widgets to the</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- container.</span><span>
+</span><a name="line-51"></a><span class="hs-comment">--</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- Similar to 'MessageDialog', the contents of a 'InfoBar' can by classified</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- as error message, warning, informational message, etc, by using</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- 'infoBarSetMessageType'. Gtk+ uses the message type to determine the</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- background color of the message area.</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-58"></a><span class="hs-comment">--</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-60"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-62"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- | +----'Widget'</span><span>
+</span><a name="line-64"></a><span class="hs-comment">-- | +----'Container'</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-- | +----'Box'</span><span>
+</span><a name="line-66"></a><span class="hs-comment">-- | +----'HBox'</span><span>
+</span><a name="line-67"></a><span class="hs-comment">-- | +----InfoBar</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span>
+</span><a name="line-71"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-72"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#InfoBarClass"><span class="hs-identifier hs-type">InfoBar</span></a><span class="hs-special">,</span><span>
+</span><a name="line-73"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToInfoBar"><span class="hs-identifier hs-var">InfoBarClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-74"></a><span>  </span><span class="hs-identifier">castToInfoBar</span><span class="hs-special">,</span><span>
+</span><a name="line-75"></a><span>  </span><span class="hs-identifier">toInfoBar</span><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span>
+</span><a name="line-77"></a><span class="hs-comment">-- * Constructors</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-identifier">infoBarNew</span><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>
+</span><a name="line-80"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-identifier">infoBarAddActionWidget</span><span class="hs-special">,</span><span>
+</span><a name="line-82"></a><span>  </span><a href="Graphics.UI.Gtk.Display.InfoBar.html#infoBarSetResponseSensitive"><span class="hs-identifier hs-var">infoBarAddButton</span></a><span class="hs-special">,</span><span>
+</span><a name="line-83"></a><span>  </span><span class="hs-identifier">infoBarSetResponseSensitive</span><span class="hs-special">,</span><span>
+</span><a name="line-84"></a><span>  </span><span class="hs-identifier">infoBarSetDefaultResponse</span><span class="hs-special">,</span><span>
+</span><a name="line-85"></a><span>  </span><a href="Graphics.UI.Gtk.Display.InfoBar.html#infoBarGetActionArea"><span class="hs-identifier hs-var">infoBarEmitResponse</span></a><span class="hs-special">,</span><span>
+</span><a name="line-86"></a><span>  </span><a href="Graphics.UI.Gtk.Display.InfoBar.html#infoBarGetContentArea"><span class="hs-identifier hs-var">infoBarGetActionArea</span></a><span class="hs-special">,</span><span>
+</span><a name="line-87"></a><span>  </span><span class="hs-identifier">infoBarGetContentArea</span><span class="hs-special">,</span><span>
+</span><a name="line-88"></a><span>
+</span><a name="line-89"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-90"></a><span>  </span><span class="hs-identifier">infoBarMessageType</span><span class="hs-special">,</span><span>
+</span><a name="line-91"></a><span>
+</span><a name="line-92"></a><span class="hs-comment">-- * Signals</span><span>
+</span><a name="line-93"></a><span>  </span><span class="hs-identifier">infoBarResponse</span><span class="hs-special">,</span><span>
+</span><a name="line-94"></a><span>  </span><span class="hs-identifier">infoBarClose</span><span class="hs-special">,</span><span>
+</span><a name="line-95"></a><span>
+</span><a name="line-96"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-99"></a><span>
+</span><a name="line-100"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-101"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">UTFString</span><span>
+</span><a name="line-102"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span>
+</span><a name="line-103"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Properties</span></a><span>
+</span><a name="line-104"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Windows.MessageDialog.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Object</span></a><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-105"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span></a><span class="hs-identifier">Windows</span><span class="hs-operator">.</span><span class="hs-identifier">MessageDialog</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">MessageType</span><span class="hs-special">)</span><span>
+</span><a name="line-106"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Signals.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span></a><span>
+</span><a name="line-107"></a><span class="hs-pragma">{-# LINE 106 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-108"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Signals</span><span>
+</span><a name="line-109"></a><span class="hs-pragma">{-# LINE 107 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-110"></a><span>
+</span><a name="line-111"></a><span>
+</span><a name="line-112"></a><span class="hs-pragma">{-# LINE 109 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-113"></a><span>
+</span><a name="line-114"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- Interfaces</span><span>
+</span><a name="line-116"></a><span>
+</span><a name="line-117"></a><span class="hs-comment">-- instance BuildableClass InfoBar</span><span>
+</span><a name="line-118"></a><span>
+</span><a name="line-119"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-120"></a><span class="hs-comment">-- Constructors</span><span>
+</span><a name="line-121"></a><span>
+</span><a name="line-122"></a><span>
+</span><a name="line-123"></a><span class="hs-comment">-- | Creates a new 'InfoBar' object.</span><span>
+</span><a name="line-124"></a><span class="hs-comment">--</span><span>
+</span><a name="line-125"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-126"></a><span class="hs-comment">--</span><span>
+</span><a name="line-127"></a><span class="hs-identifier">infoBarNew</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Graphics.UI.Gtk.Display.InfoBar.html#gtk_info_bar_new"><span class="hs-identifier hs-var">IO</span></a><span> </span><span class="hs-identifier">InfoBar</span><span>
+</span><a name="line-128"></a><span class="hs-identifier">infoBarNew</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-129"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkInfoBar</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-130"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-131"></a><span>  </span><span class="hs-identifier">gtk_info_bar_new</span><span>
+</span><a name="line-132"></a><span class="hs-pragma">{-# LINE 128 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-133"></a><span>
+</span><a name="line-134"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-135"></a><span class="hs-comment">-- Methods</span><span>
+</span><a name="line-136"></a><span>
+</span><a name="line-137"></a><span class="hs-comment">-- | Add an activatable widget to the action area of a 'InfoBar', connecting a signal handler that will</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- emit the &quot;response&quot; signal on the message area when the widget is activated. The widget is appended</span><span>
+</span><a name="line-139"></a><span class="hs-comment">-- to the end of the message areas action area.</span><span>
+</span><a name="line-140"></a><span class="hs-comment">--</span><span>
+</span><a name="line-141"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-142"></a><span class="hs-comment">--</span><span>
+</span><a name="line-143"></a><span class="hs-identifier">infoBarAddActionWidget</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-144"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-comment">-- ^ @child@ - an activatable widget</span><span>
+</span><a name="line-145"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @responseId@ - response ID for @child@</span><span>
+</span><a name="line-146"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-147"></a><span class="hs-identifier">infoBarAddActionWidget</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-identifier">responseId</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-148"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">InfoBar</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Widget</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_info_bar_add_action_widget</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-identifier">arg3</span><span class="hs-special">)</span><span>
+</span><a name="line-149"></a><span class="hs-pragma">{-# LINE 144 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-150"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toInfoBar</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-151"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toWidget</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span>
+</span><a name="line-152"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">responseId</span><span class="hs-special">)</span><span>
+</span><a name="line-153"></a><span>
+</span><a name="line-154"></a><span class="hs-comment">-- | Adds a button with the given text (or a stock button, if buttonText is a</span><span>
+</span><a name="line-155"></a><span class="hs-comment">-- stock ID) and sets things up so that clicking the button will emit the</span><span>
+</span><a name="line-156"></a><span class="hs-comment">-- \&quot;response\&quot; signal with the given responseId. The button is appended to</span><span>
+</span><a name="line-157"></a><span class="hs-comment">-- the end of the info bars's action area. The button widget is returned, but</span><span>
+</span><a name="line-158"></a><span class="hs-comment">-- usually you don't need it.</span><span>
+</span><a name="line-159"></a><span class="hs-comment">--</span><span>
+</span><a name="line-160"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-161"></a><span class="hs-comment">--</span><span>
+</span><a name="line-162"></a><span class="hs-identifier">infoBarAddButton</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">InfoBarClass</span><span> </span><a name="local-6989586621679365427"><a href="#local-6989586621679365427"><span class="hs-identifier">self</span></a></a><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-163"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">string</span><span> </span><span class="hs-comment">-- ^ @buttonText@ - text of button, or stock ID</span><span>
+</span><a name="line-164"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @responseId@ - response ID for the button</span><span>
+</span><a name="line-165"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Button</span><span> </span><span class="hs-comment">-- ^ returns the button widget that was added</span><span>
+</span><a name="line-166"></a><span class="hs-identifier">infoBarAddButton</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">buttonText</span><span> </span><span class="hs-identifier">responseId</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-167"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkButton</span><span> </span><a href="#local-6989586621679365426"><span class="hs-operator hs-var">$</span></a><span>
+</span><a name="line-168"></a><span>  </span><span class="hs-identifier">withUTFString</span><span> </span><span class="hs-identifier">buttonText</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">buttonTextPtr</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-169"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Button</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-170"></a><span>     </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">InfoBar</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_info_bar_add_button</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span class="hs-special">)</span><span>
+</span><a name="line-171"></a><span class="hs-pragma">{-# LINE 165 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-172"></a><span>       </span><span class="hs-special">(</span><span class="hs-identifier">toInfoBar</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-173"></a><span>       </span><span class="hs-identifier">buttonTextPtr</span><span>
+</span><a name="line-174"></a><span>       </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">responseId</span><span class="hs-special">)</span><span>
+</span><a name="line-175"></a><span>
+</span><a name="line-176"></a><span class="hs-comment">-- | Calls 'widgetSetSensitive' for each widget in the</span><span>
+</span><a name="line-177"></a><span class="hs-comment">-- info bars's action area with the given responseId. A convenient way to</span><span>
+</span><a name="line-178"></a><span class="hs-comment">-- sensitize\/desensitize dialog buttons.</span><span>
+</span><a name="line-179"></a><span class="hs-comment">--</span><span>
+</span><a name="line-180"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-181"></a><span class="hs-comment">--</span><span>
+</span><a name="line-182"></a><span class="hs-identifier">infoBarSetResponseSensitive</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-183"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @responseId@ - a response ID</span><span>
+</span><a name="line-184"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ @setting@ - @True@ for sensitive</span><span>
+</span><a name="line-185"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-186"></a><span class="hs-identifier">infoBarSetResponseSensitive</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">responseId</span><span> </span><span class="hs-identifier">setting</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-187"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">InfoBar</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_info_bar_set_response_sensitive</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span class="hs-special">)</span><span>
+</span><a name="line-188"></a><span class="hs-pragma">{-# LINE 181 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-189"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toInfoBar</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-190"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">responseId</span><span class="hs-special">)</span><span>
+</span><a name="line-191"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">setting</span><span class="hs-special">)</span><span>
+</span><a name="line-192"></a><span>
+</span><a name="line-193"></a><span class="hs-comment">-- | Sets the last widget in the info bar's action area with the given</span><span>
+</span><a name="line-194"></a><span class="hs-comment">-- responseId as the default widget for the dialog. Pressing \&quot;Enter\&quot;</span><span>
+</span><a name="line-195"></a><span class="hs-comment">-- normally activates the default widget.</span><span>
+</span><a name="line-196"></a><span class="hs-comment">--</span><span>
+</span><a name="line-197"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-198"></a><span class="hs-comment">--</span><span>
+</span><a name="line-199"></a><span class="hs-identifier">infoBarSetDefaultResponse</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-200"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @responseId@ - a response ID</span><span>
+</span><a name="line-201"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-202"></a><span class="hs-identifier">infoBarSetDefaultResponse</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">responseId</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-203"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">InfoBar</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><a href="#local-6989586621679365409"><span class="hs-operator hs-type">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_info_bar_set_default_response</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-204"></a><span class="hs-pragma">{-# LINE 196 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-205"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toInfoBar</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-206"></a><span>    </span><span class="hs-special">(</span><a name="infoBarEmitResponse"><a href="Graphics.UI.Gtk.Display.InfoBar.html#infoBarEmitResponse"><span class="hs-identifier">fromIntegral</span></a></a><span> </span><span class="hs-identifier">responseId</span><span class="hs-special">)</span><span>
+</span><a name="line-207"></a><span>
+</span><a name="line-208"></a><span class="hs-comment">-- | Emits the \'response\' signal with the given @responseId@.</span><span>
+</span><a name="line-209"></a><span class="hs-comment">--</span><span>
+</span><a name="line-210"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-211"></a><span class="hs-comment">--</span><span>
+</span><a name="line-212"></a><span class="hs-identifier">infoBarEmitResponse</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-213"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @responseId@ - a response ID</span><span>
+</span><a name="line-214"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-215"></a><span class="hs-identifier">infoBarEmitResponse</span><span> </span><span class="hs-identifier">self</span><span> </span><a href="Graphics.UI.Gtk.Types.html#InfoBarClass"><span class="hs-identifier hs-type">responseId</span></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-216"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">InfoBar</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_info_bar_response</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-217"></a><span class="hs-pragma">{-# LINE 208 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-218"></a><span>    </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Abstract.Object.html#makeNewObject"><span class="hs-identifier hs-var">toInfoBar</span></a><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-219"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">responseId</span><span class="hs-special">)</span><span>
+</span><a name="line-220"></a><span>
+</span><a name="line-221"></a><span class="hs-comment">-- | Returns the action area of @infoBar@.</span><span>
+</span><a name="line-222"></a><span class="hs-comment">--</span><span>
+</span><a name="line-223"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-224"></a><span class="hs-comment">--</span><span>
+</span><a name="line-225"></a><span class="hs-identifier">infoBarGetActionArea</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-226"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-comment">-- ^ returns the action area.</span><span>
+</span><a name="line-227"></a><span class="hs-identifier">infoBarGetActionArea</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-228"></a><span>  </span><a name="infoBarGetContentArea"><a href="Graphics.UI.Gtk.Display.InfoBar.html#infoBarGetContentArea"><span class="hs-identifier">makeNewObject</span></a></a><span> </span><span class="hs-identifier">mkWidget</span><span> </span><a name="local-6989586621679365452"><a href="#local-6989586621679365452"><span class="hs-operator">$</span></a></a><span>
+</span><a name="line-229"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Abstract.Object.html#makeNewObject"><span class="hs-identifier hs-var">InfoBar</span></a><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_info_bar_get_action_area</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-230"></a><span class="hs-pragma">{-# LINE 220 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-231"></a><span>    </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Types.html#toInfoBar"><span class="hs-identifier hs-var">toInfoBar</span></a><span> </span><a href="#local-6989586621679365452"><span class="hs-identifier hs-var">self</span></a><span class="hs-special">)</span><span>
+</span><a name="line-232"></a><span>
+</span><a name="line-233"></a><span class="hs-comment">-- | Returns the content area of @infoBar@.</span><span>
+</span><a name="line-234"></a><span class="hs-comment">--</span><span>
+</span><a name="line-235"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-236"></a><span class="hs-comment">--</span><span>
+</span><a name="line-237"></a><span class="hs-identifier">infoBarGetContentArea</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-238"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-comment">-- ^ returns the content area.</span><span>
+</span><a name="line-239"></a><span class="hs-identifier">infoBarGetContentArea</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-240"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkWidget</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-241"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">InfoBar</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_info_bar_get_content_area</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-242"></a><span class="hs-pragma">{-# LINE 231 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-243"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toInfoBar</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-244"></a><span>
+</span><a name="line-245"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-246"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-247"></a><span>
+</span><a name="line-248"></a><span class="hs-comment">-- | The type of the message.</span><span>
+</span><a name="line-249"></a><span class="hs-comment">--</span><span>
+</span><a name="line-250"></a><span class="hs-comment">-- The type is used to determine the colors to use in the info bar.</span><span>
+</span><a name="line-251"></a><span class="hs-comment">--</span><span>
+</span><a name="line-252"></a><span class="hs-comment">-- If the type is 'MessageOther', no info bar is painted but the colors are still set.</span><span>
+</span><a name="line-253"></a><span class="hs-comment">--</span><span>
+</span><a name="line-254"></a><span class="hs-comment">-- Default value: 'MessageInfo'</span><span>
+</span><a name="line-255"></a><span class="hs-comment">--</span><span>
+</span><a name="line-256"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-257"></a><span class="hs-comment">--</span><span>
+</span><a name="line-258"></a><span class="hs-identifier">infoBarMessageType</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">MessageType</span><span>
+</span><a name="line-259"></a><span class="hs-identifier">infoBarMessageType</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;message-type&quot;</span><span>
+</span><a name="line-260"></a><span>                       </span><span class="hs-identifier">gtk_message_type_get_type</span><span>
+</span><a name="line-261"></a><span class="hs-pragma">{-# LINE 249 &quot;./Graphics/UI/Gtk/Display/InfoBar.chs&quot; #-}</span><span>
+</span><a name="line-262"></a><span>
+</span><a name="line-263"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-264"></a><span class="hs-comment">-- Signals</span><span>
+</span><a name="line-265"></a><span>
+</span><a name="line-266"></a><span class="hs-comment">-- | The 'close' signal is a keybinding signal which gets emitted when the user uses a keybinding to</span><span>
+</span><a name="line-267"></a><span class="hs-comment">-- dismiss the info bar.</span><span>
+</span><a name="line-268"></a><span class="hs-comment">--</span><span>
+</span><a name="line-269"></a><span class="hs-comment">-- The default binding for this signal is the Escape key.</span><span>
+</span><a name="line-270"></a><span class="hs-comment">--</span><span>
+</span><a name="line-271"></a><span class="hs-comment">-- Since 2.18</span><span>
+</span><a name="line-272"></a><span class="hs-identifier">infoBarClose</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-273"></a><span class="hs-identifier">infoBarClose</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">connect_NONE__NONE</span><span> </span><span class="hs-string">&quot;close&quot;</span><span class="hs-special">)</span><span>
+</span><a name="line-274"></a><span>
+</span><a name="line-275"></a><span>
+</span><a name="line-276"></a><span class="hs-comment">-- | Emitted when an action widget is clicked or the application programmer</span><span>
+</span><a name="line-277"></a><span class="hs-comment">-- calls 'dialogResponse'. The @responseId@ depends on which action widget was</span><span>
+</span><a name="line-278"></a><span class="hs-comment">-- clicked.</span><span>
+</span><a name="line-279"></a><span class="hs-comment">--</span><span>
+</span><a name="line-280"></a><span class="hs-comment">-- * Available since Gtk+ version 2.18</span><span>
+</span><a name="line-281"></a><span class="hs-comment">--</span><span>
+</span><a name="line-282"></a><span class="hs-identifier">infoBarResponse</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">InfoBarClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Signal</span><span> </span><a href="Graphics.UI.Gtk.Types.html#InfoBar"><span class="hs-identifier hs-type">self</span></a><span> </span><span class="hs-special">(</span><span class="hs-identifier">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-283"></a><span class="hs-identifier">infoBarResponse</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">connect_INT__NONE</span><span> </span><span class="hs-string">&quot;response&quot;</span><span class="hs-special">)</span><span>
+</span><a name="line-284"></a><span>
+</span><a name="line-285"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_new&quot;</span><span>
+</span><a name="line-286"></a><span>  </span><span class="hs-identifier">gtk_info_bar_new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-287"></a><span>
+</span><a name="line-288"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_add_action_widget&quot;</span><span>
+</span><a name="line-289"></a><span>  </span><span class="hs-identifier">gtk_info_bar_add_action_widget</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-290"></a><span>
+</span><a name="line-291"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_add_button&quot;</span><span>
+</span><a name="line-292"></a><span>  </span><span class="hs-identifier">gtk_info_bar_add_button</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CChar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-293"></a><span>
+</span><a name="line-294"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_set_response_sensitive&quot;</span><span>
+</span><a name="line-295"></a><span>  </span><span class="hs-identifier">gtk_info_bar_set_response_sensitive</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-296"></a><span>
+</span><a name="line-297"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_set_default_response&quot;</span><span>
+</span><a name="line-298"></a><span>  </span><span class="hs-identifier">gtk_info_bar_set_default_response</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-299"></a><span>
+</span><a name="line-300"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_response&quot;</span><span>
+</span><a name="line-301"></a><span>  </span><span class="hs-identifier">gtk_info_bar_response</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-302"></a><span>
+</span><a name="line-303"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_get_action_area&quot;</span><span>
+</span><a name="line-304"></a><span>  </span><span class="hs-identifier">gtk_info_bar_get_action_area</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-305"></a><span>
+</span><a name="line-306"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_info_bar_get_content_area&quot;</span><span>
+</span><a name="line-307"></a><span>  </span><span class="hs-identifier">gtk_info_bar_get_content_area</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">InfoBar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-308"></a><span>
+</span><a name="line-309"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_message_type_get_type&quot;</span><span>
+</span><a name="line-310"></a><span>  </span><span class="hs-identifier">gtk_message_type_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-311"></a></pre></body></html>

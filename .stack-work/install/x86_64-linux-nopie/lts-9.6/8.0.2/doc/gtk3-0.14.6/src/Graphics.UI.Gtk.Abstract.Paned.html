@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) Widget Paned</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 15 May 2001</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 1999-2005 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- Base class for widgets with two adjustable panes</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | 'Paned' is the base class for widgets with two panes, arranged either</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- horizontally ('HPaned') or vertically ('VPaned'). Child widgets are added to</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- the panes of the widget with 'panedPack1' and 'panedPack2'. The division</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- beween the two children is set by default from the size requests of the</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- children, but it can be adjusted by the user.</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- A paned widget draws a separator between the two child widgets and a</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- small handle that the user can drag to adjust the division. It does not draw</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- any relief around the children or around the separator. (The space in which</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- the separator is called the gutter.) Often, it is useful to put each child</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- inside a 'Frame' with the shadow type set to</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.General.Enums.ShadowIn' so that the gutter appears as a</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- ridge.</span><span>
+</span><a name="line-45"></a><span class="hs-comment">--</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- Each child has two options that can be set, @resize@ and @shrink@. If</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- @resize@ is true, then when the 'Paned' is resized, that child will expand</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- or shrink along with the paned widget. If @shrink@ is true, then when that</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- child can be made smaller than its requisition by the user. Setting @shrink@</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- to @False@ allows the application to set a minimum size. If @resize@ is</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- false for both children, then this is treated as if @resize@ is true for</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- both children.</span><span>
+</span><a name="line-53"></a><span class="hs-comment">--</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- The application can set the position of the slider as if it were set by</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- the user, by calling 'panedSetPosition'.</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-60"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-62"></a><span class="hs-comment">-- | +----'Widget'</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- | +----'Container'</span><span>
+</span><a name="line-64"></a><span class="hs-comment">-- | +----Paned</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-- | +----'HPaned'</span><span>
+</span><a name="line-66"></a><span class="hs-comment">-- | +----'VPaned'</span><span>
+</span><a name="line-67"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-68"></a><span>
+</span><a name="line-69"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-70"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#PanedClass"><span class="hs-identifier hs-type">Paned</span></a><span class="hs-special">,</span><span>
+</span><a name="line-71"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToPaned"><span class="hs-identifier hs-var">PanedClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-72"></a><span>  </span><span class="hs-identifier">castToPaned</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">gTypePaned</span><span class="hs-special">,</span><span>
+</span><a name="line-73"></a><span>  </span><span class="hs-identifier">toPaned</span><span class="hs-special">,</span><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-76"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedAdd2"><span class="hs-identifier hs-var">panedAdd1</span></a><span class="hs-special">,</span><span>
+</span><a name="line-77"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedPack1"><span class="hs-identifier hs-var">panedAdd2</span></a><span class="hs-special">,</span><span>
+</span><a name="line-78"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedPack2"><span class="hs-identifier hs-var">panedPack1</span></a><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedSetPosition"><span class="hs-identifier hs-var">panedPack2</span></a><span class="hs-special">,</span><span>
+</span><a name="line-80"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedGetPosition"><span class="hs-identifier hs-var">panedSetPosition</span></a><span class="hs-special">,</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-identifier">panedGetPosition</span><span class="hs-special">,</span><span>
+</span><a name="line-82"></a><span>
+</span><a name="line-83"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedGetChild2"><span class="hs-identifier hs-var">panedGetChild1</span></a><span class="hs-special">,</span><span>
+</span><a name="line-84"></a><span>  </span><span class="hs-identifier">panedGetChild2</span><span class="hs-special">,</span><span>
+</span><a name="line-85"></a><span>
+</span><a name="line-86"></a><span>
+</span><a name="line-87"></a><span>  </span><span class="hs-identifier">panedGetHandleWindow</span><span class="hs-special">,</span><span>
+</span><a name="line-88"></a><span>
+</span><a name="line-89"></a><span>
+</span><a name="line-90"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-91"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedPositionSet"><span class="hs-identifier hs-var">panedPosition</span></a><span class="hs-special">,</span><span>
+</span><a name="line-92"></a><span>  </span><span class="hs-identifier">panedPositionSet</span><span class="hs-special">,</span><span>
+</span><a name="line-93"></a><span>
+</span><a name="line-94"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedMaxPosition"><span class="hs-identifier hs-var">panedMinPosition</span></a><span class="hs-special">,</span><span>
+</span><a name="line-95"></a><span>  </span><span class="hs-identifier">panedMaxPosition</span><span class="hs-special">,</span><span>
+</span><a name="line-96"></a><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span class="hs-comment">-- * Child Attributes</span><span>
+</span><a name="line-99"></a><span>
+</span><a name="line-100"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedChildShrink"><span class="hs-identifier hs-var">panedChildResize</span></a><span class="hs-special">,</span><span>
+</span><a name="line-101"></a><span>  </span><span class="hs-identifier">panedChildShrink</span><span class="hs-special">,</span><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span>
+</span><a name="line-105"></a><span class="hs-comment">-- * Deprecated Signals</span><span>
+</span><a name="line-106"></a><span class="hs-pragma">{-# LINE 119 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-107"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-108"></a><span>
+</span><a name="line-109"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-110"></a><span>
+</span><a name="line-111"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-112"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span>
+</span><a name="line-113"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Properties</span><span>
+</span><a name="line-114"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Object</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-115"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-116"></a><span class="hs-pragma">{-# LINE 128 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-117"></a><span>
+</span><a name="line-118"></a><span>
+</span><a name="line-119"></a><span>
+</span><a name="line-120"></a><span>
+</span><a name="line-121"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator hs-var">.</span><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">ContainerChildProperties</span><span>
+</span><a name="line-122"></a><span>
+</span><a name="line-123"></a><span>
+</span><a name="line-124"></a><span class="hs-pragma">{-# LINE 135 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-125"></a><span>
+</span><a name="line-126"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-127"></a><span class="hs-comment">-- Methods</span><span>
+</span><a name="line-128"></a><span>
+</span><a name="line-129"></a><span class="hs-comment">-- | Adds a child to the top or left pane with default parameters. This is</span><span>
+</span><a name="line-130"></a><span class="hs-comment">-- equivalent to @'panedPack1' paned child False True@.</span><span>
+</span><a name="line-131"></a><span class="hs-comment">--</span><span>
+</span><a name="line-132"></a><span class="hs-identifier">panedAdd1</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Abstract.ContainerChildProperties.html"><span class="hs-identifier">PanedClass</span></a><span> </span><a href="Graphics.UI.Gtk.Abstract.ContainerChildProperties.html"><span class="hs-identifier">self</span></a><span class="hs-special">,</span><span> </span><a href="Graphics.UI.Gtk.Abstract.ContainerChildProperties.html"><span class="hs-identifier">WidgetClass</span></a><span> </span><a href="Graphics.UI.Gtk.Abstract.ContainerChildProperties.html"><span class="hs-identifier">child</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-133"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-comment">-- ^ @child@ - the child to add</span><span>
+</span><a name="line-134"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-135"></a><span class="hs-identifier">panedAdd1</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-136"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Widget</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_add1</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">argPtr2</span><span class="hs-special">)</span><span>
+</span><a name="line-137"></a><span class="hs-pragma">{-# LINE 147 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-138"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-139"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toWidget</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span>
+</span><a name="line-140"></a><span>
+</span><a name="line-141"></a><span class="hs-comment">-- | Adds a child to the bottom or right pane with default parameters. This is</span><span>
+</span><a name="line-142"></a><span class="hs-comment">-- equivalent to @'panedPack2' paned child True True@.</span><span>
+</span><a name="line-143"></a><span class="hs-comment">--</span><span>
+</span><a name="line-144"></a><span class="hs-identifier">panedAdd2</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-145"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a name="panedAdd1"><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedAdd1"><span class="hs-identifier">child</span></a></a><span> </span><span class="hs-comment">-- ^ @child@ - the child to add</span><span>
+</span><a name="line-146"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-147"></a><span class="hs-identifier">panedAdd2</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-148"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Types.html#toWidget"><span class="hs-identifier hs-var">Paned</span></a><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Widget</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_add2</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">argPtr2</span><span class="hs-special">)</span><span>
+</span><a name="line-149"></a><span class="hs-pragma">{-# LINE 158 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-150"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-151"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toWidget</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span>
+</span><a name="line-152"></a><span>
+</span><a name="line-153"></a><span class="hs-comment">-- | Adds a child to the top or left pane.</span><span>
+</span><a name="line-154"></a><span class="hs-comment">--</span><span>
+</span><a name="line-155"></a><span class="hs-identifier">panedPack1</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-156"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a name="panedAdd2"><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedAdd2"><span class="hs-identifier">child</span></a></a><span> </span><span class="hs-comment">-- ^ @child@ - the child to add</span><span>
+</span><a name="line-157"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ @resize@ - should this child expand when the paned widget is</span><span>
+</span><a name="line-158"></a><span>          </span><span class="hs-comment">-- resized.</span><span>
+</span><a name="line-159"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ @shrink@ - can this child be made smaller than its requsition.</span><span>
+</span><a name="line-160"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-161"></a><span class="hs-identifier">panedPack1</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-identifier">resize</span><span> </span><span class="hs-identifier">shrink</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-162"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Widget</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-identifier">arg4</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_pack1</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-identifier">arg4</span><span class="hs-special">)</span><span>
+</span><a name="line-163"></a><span class="hs-pragma">{-# LINE 171 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-164"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-165"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toWidget</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span>
+</span><a name="line-166"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">resize</span><span class="hs-special">)</span><span>
+</span><a name="line-167"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">shrink</span><span class="hs-special">)</span><span>
+</span><a name="line-168"></a><span>
+</span><a name="line-169"></a><span class="hs-comment">-- | Adds a child to the bottom or right pane.</span><span>
+</span><a name="line-170"></a><span class="hs-comment">--</span><span>
+</span><a name="line-171"></a><span class="hs-identifier">panedPack2</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-172"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-comment">-- ^ @child@ - the child to add</span><span>
+</span><a name="line-173"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ @resize@ - should this child expand when the paned widget is</span><span>
+</span><a name="line-174"></a><span>          </span><span class="hs-comment">-- resized.</span><span>
+</span><a name="line-175"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ @shrink@ - can this child be made smaller than its requsition.</span><span>
+</span><a name="line-176"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-177"></a><span class="hs-identifier">panedPack2</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-identifier">resize</span><span> </span><span class="hs-identifier">shrink</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-178"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Types.html#PanedClass"><span class="hs-identifier hs-type">Widget</span></a><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg3</span><span> </span><a href="Graphics.UI.Gtk.Types.html#WidgetClass"><span class="hs-identifier hs-type">arg4</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_pack2</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">argPtr2</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-identifier">arg4</span><span class="hs-special">)</span><span>
+</span><a name="line-179"></a><span class="hs-pragma">{-# LINE 186 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-180"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-181"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toWidget</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span>
+</span><a name="line-182"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">resize</span><span class="hs-special">)</span><span>
+</span><a name="line-183"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">shrink</span><span class="hs-special">)</span><span>
+</span><a name="line-184"></a><span>
+</span><a name="line-185"></a><span class="hs-comment">-- | Sets the position of the divider between the two panes.</span><span>
+</span><a name="line-186"></a><span class="hs-comment">--</span><span>
+</span><a name="line-187"></a><span class="hs-identifier">panedSetPosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-188"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @position@ - pixel position of divider, a negative value means</span><span>
+</span><a name="line-189"></a><span>          </span><span class="hs-comment">-- that the position is unset.</span><span>
+</span><a name="line-190"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-191"></a><span class="hs-identifier">panedSetPosition</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">position</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-192"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_set_position</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-193"></a><span class="hs-pragma">{-# LINE 199 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-194"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-195"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">position</span><span class="hs-special">)</span><span>
+</span><a name="line-196"></a><span>
+</span><a name="line-197"></a><span class="hs-comment">-- | Obtains the position of the divider between the two panes.</span><span>
+</span><a name="line-198"></a><span class="hs-comment">--</span><span>
+</span><a name="line-199"></a><span class="hs-identifier">panedGetPosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-200"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier hs-var">Int</span><span> </span><span class="hs-comment">-- ^ returns position of the divider</span><span>
+</span><a name="line-201"></a><span class="hs-identifier">panedGetPosition</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-202"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-203"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_get_position</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-204"></a><span class="hs-pragma">{-# LINE 209 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-205"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-206"></a><span>
+</span><a name="line-207"></a><span>
+</span><a name="line-208"></a><span class="hs-comment">-- | Obtains the first child of the paned widget.</span><span>
+</span><a name="line-209"></a><span class="hs-comment">--</span><span>
+</span><a name="line-210"></a><span class="hs-comment">-- * Available since Gtk+ version 2.4</span><span>
+</span><a name="line-211"></a><span class="hs-comment">--</span><span>
+</span><a name="line-212"></a><span class="hs-identifier">panedGetChild1</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-213"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- ^ returns first child, or @Nothing@ if it is not set.</span><span>
+</span><a name="line-214"></a><span class="hs-identifier">panedGetChild1</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-215"></a><span>  </span><span class="hs-identifier">maybeNull</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkWidget</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-216"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><a href="#local-6989586621679375769"><span class="hs-operator hs-type">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_get_child1</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-217"></a><span class="hs-pragma">{-# LINE 221 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-218"></a><span>    </span><span class="hs-special">(</span><a name="panedGetChild1"><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedGetChild1"><span class="hs-identifier">toPaned</span></a></a><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-219"></a><span>
+</span><a name="line-220"></a><span class="hs-comment">-- | Obtains the second child of the paned widget.</span><span>
+</span><a name="line-221"></a><span class="hs-comment">--</span><span>
+</span><a name="line-222"></a><span class="hs-comment">-- * Available since Gtk+ version 2.4</span><span>
+</span><a name="line-223"></a><span class="hs-comment">--</span><span>
+</span><a name="line-224"></a><span class="hs-identifier">panedGetChild2</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-225"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- ^ returns second child, or @Nothing@ if it is not</span><span>
+</span><a name="line-226"></a><span>                      </span><span class="hs-comment">-- set.</span><span>
+</span><a name="line-227"></a><span class="hs-identifier">panedGetChild2</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-228"></a><span>  </span><span class="hs-identifier">maybeNull</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkWidget</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-229"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Paned</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_get_child2</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-230"></a><span class="hs-pragma">{-# LINE 233 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-231"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html#makeNewObject"><span class="hs-identifier hs-var">self</span></a><span class="hs-special">)</span><span>
+</span><a name="line-232"></a><span>
+</span><a name="line-233"></a><span>
+</span><a name="line-234"></a><span>
+</span><a name="line-235"></a><span class="hs-comment">-- | Returns the 'Window' of the handle. This function is useful when handling button or motion events</span><span>
+</span><a name="line-236"></a><span class="hs-comment">-- because it enables the callback to distinguish between the window of the paned, a child and the</span><span>
+</span><a name="line-237"></a><span class="hs-comment">-- handle.</span><span>
+</span><a name="line-238"></a><span class="hs-identifier">panedGetHandleWindow</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-239"></a><span>                     </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">DrawWindow</span><span>
+</span><a name="line-240"></a><span class="hs-identifier">panedGetHandleWindow</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-241"></a><span>    </span><span class="hs-identifier">makeNewGObject</span><span> </span><span class="hs-identifier">mkDrawWindow</span><span> </span><a href="Graphics.UI.Gtk.Types.html#DrawWindow"><span class="hs-operator hs-type">$</span></a><span>
+</span><a name="line-242"></a><span>    </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><a name="panedGetHandleWindow"><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedGetHandleWindow"><span class="hs-identifier">Paned</span></a></a><span> </span><a name="panedGetHandleWindow"><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedGetHandleWindow"><span class="hs-identifier">arg1</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_paned_get_handle_window</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-243"></a><span class="hs-pragma">{-# LINE 245 &quot;./Graphics/UI/Gtk/Abstract/Paned.chs&quot; #-}</span><span>
+</span><a name="line-244"></a><span>      </span><span class="hs-special">(</span><span class="hs-identifier">toPaned</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-245"></a><span>
+</span><a name="line-246"></a><span>
+</span><a name="line-247"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-248"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-249"></a><span>
+</span><a name="line-250"></a><span class="hs-comment">-- | Position of paned separator in pixels (0 means all the way to the</span><span>
+</span><a name="line-251"></a><span class="hs-comment">-- left\/top).</span><span>
+</span><a name="line-252"></a><span class="hs-comment">--</span><span>
+</span><a name="line-253"></a><span class="hs-comment">-- Allowed values: &gt;= 0</span><span>
+</span><a name="line-254"></a><span class="hs-comment">--</span><span>
+</span><a name="line-255"></a><span class="hs-comment">-- Default value: 0</span><span>
+</span><a name="line-256"></a><span class="hs-comment">--</span><span>
+</span><a name="line-257"></a><span class="hs-identifier">panedPosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-258"></a><span class="hs-identifier">panedPosition</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttr</span><span>
+</span><a name="line-259"></a><span>  </span><span class="hs-identifier">panedGetPosition</span><span>
+</span><a name="line-260"></a><span>  </span><a href="Graphics.UI.Gtk.Abstract.Paned.html#panedGetPosition"><span class="hs-identifier hs-var">panedSetPosition</span></a><span>
+</span><a name="line-261"></a><span>
+</span><a name="line-262"></a><span class="hs-comment">-- | @True@ if the Position property should be used.</span><span>
+</span><a name="line-263"></a><span class="hs-comment">--</span><span>
+</span><a name="line-264"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-265"></a><span class="hs-comment">--</span><span>
+</span><a name="line-266"></a><span class="hs-identifier">panedPositionSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-267"></a><span class="hs-identifier">panedPositionSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;position-set&quot;</span><span>
+</span><a name="line-268"></a><span>
+</span><a name="line-269"></a><span>
+</span><a name="line-270"></a><span class="hs-comment">-- | The smallest possible value for the position property. This property is</span><span>
+</span><a name="line-271"></a><span class="hs-comment">-- derived from the size and shrinkability of the widget's children.</span><span>
+</span><a name="line-272"></a><span class="hs-comment">--</span><span>
+</span><a name="line-273"></a><span class="hs-comment">-- Allowed values: &gt;= 0</span><span>
+</span><a name="line-274"></a><span class="hs-comment">--</span><span>
+</span><a name="line-275"></a><span class="hs-comment">-- Default value: 0</span><span>
+</span><a name="line-276"></a><span class="hs-comment">--</span><span>
+</span><a name="line-277"></a><span class="hs-identifier">panedMinPosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">ReadAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-278"></a><span class="hs-identifier">panedMinPosition</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">readAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;min-position&quot;</span><span>
+</span><a name="line-279"></a><span>
+</span><a name="line-280"></a><span class="hs-comment">-- | The largest possible value for the position property. This property is</span><span>
+</span><a name="line-281"></a><span class="hs-comment">-- derived from the size and shrinkability of the widget's children.</span><span>
+</span><a name="line-282"></a><span class="hs-comment">--</span><span>
+</span><a name="line-283"></a><span class="hs-comment">-- Allowed values: &gt;= 0</span><span>
+</span><a name="line-284"></a><span class="hs-comment">--</span><span>
+</span><a name="line-285"></a><span class="hs-comment">-- Default value: 2147483647</span><span>
+</span><a name="line-286"></a><span class="hs-comment">--</span><span>
+</span><a name="line-287"></a><span class="hs-identifier">panedMaxPosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">ReadAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-288"></a><span class="hs-identifier">panedMaxPosition</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">readAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;max-position&quot;</span><span>
+</span><a name="line-289"></a><span>
+</span><a name="line-290"></a><span>
+</span><a name="line-291"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-292"></a><span class="hs-comment">-- Child Attributes</span><span>
+</span><a name="line-293"></a><span>
+</span><a name="line-294"></a><span>
+</span><a name="line-295"></a><span class="hs-comment">-- | The \&quot;resize\&quot; child property determines whether the child expands and</span><span>
+</span><a name="line-296"></a><span class="hs-comment">-- shrinks along with the paned widget.</span><span>
+</span><a name="line-297"></a><span class="hs-comment">--</span><span>
+</span><a name="line-298"></a><span class="hs-comment">-- Default value: @True@</span><span>
+</span><a name="line-299"></a><span class="hs-comment">--</span><span>
+</span><a name="line-300"></a><span class="hs-identifier">panedChildResize</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-301"></a><span class="hs-identifier">panedChildResize</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromContainerChildBoolProperty</span><span> </span><span class="hs-string">&quot;resize&quot;</span><span>
+</span><a name="line-302"></a><span>
+</span><a name="line-303"></a><span class="hs-comment">-- | The \&quot;shrink\&quot; child property determines whether the child can be made</span><span>
+</span><a name="line-304"></a><span class="hs-comment">-- smaller than its requisition.</span><span>
+</span><a name="line-305"></a><span class="hs-comment">--</span><span>
+</span><a name="line-306"></a><span class="hs-comment">-- Default value: @True@</span><span>
+</span><a name="line-307"></a><span class="hs-comment">--</span><span>
+</span><a name="line-308"></a><span class="hs-identifier">panedChildShrink</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">PanedClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">child</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">child</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-309"></a><span class="hs-identifier">panedChildShrink</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromContainerChildBoolProperty</span><span> </span><span class="hs-string">&quot;shrink&quot;</span><span>
+</span><a name="line-310"></a><span>
+</span><a name="line-311"></a><span>
+</span><a name="line-312"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-313"></a><span class="hs-comment">-- Deprecated Signals</span><span>
+</span><a name="line-314"></a><span>
+</span><a name="line-315"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_paned_add1&quot;</span><span>
+</span><a name="line-316"></a><span>  </span><span class="hs-identifier">gtk_paned_add1</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-317"></a><span>
+</span><a name="line-318"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_paned_add2&quot;</span><span>
+</span><a name="line-319"></a><span>  </span><span class="hs-identifier">gtk_paned_add2</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-320"></a><span>
+</span><a name="line-321"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_paned_pack1&quot;</span><span>
+</span><a name="line-322"></a><span>  </span><span class="hs-identifier">gtk_paned_pack1</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-323"></a><span>
+</span><a name="line-324"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_paned_pack2&quot;</span><span>
+</span><a name="line-325"></a><span>  </span><span class="hs-identifier">gtk_paned_pack2</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-326"></a><span>
+</span><a name="line-327"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_paned_set_position&quot;</span><span>
+</span><a name="line-328"></a><span>  </span><span class="hs-identifier">gtk_paned_set_position</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-329"></a><span>
+</span><a name="line-330"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_paned_get_position&quot;</span><span>
+</span><a name="line-331"></a><span>  </span><span class="hs-identifier">gtk_paned_get_position</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-332"></a><span>
+</span><a name="line-333"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_paned_get_child1&quot;</span><span>
+</span><a name="line-334"></a><span>  </span><span class="hs-identifier">gtk_paned_get_child1</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-335"></a><span>
+</span><a name="line-336"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_paned_get_child2&quot;</span><span>
+</span><a name="line-337"></a><span>  </span><span class="hs-identifier">gtk_paned_get_child2</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-338"></a><span>
+</span><a name="line-339"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_paned_get_handle_window&quot;</span><span>
+</span><a name="line-340"></a><span>  </span><span class="hs-identifier">gtk_paned_get_handle_window</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Paned</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">DrawWindow</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-341"></a></pre></body></html>

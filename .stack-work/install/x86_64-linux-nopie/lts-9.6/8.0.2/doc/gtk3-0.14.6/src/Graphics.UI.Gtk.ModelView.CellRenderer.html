@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) CellRenderer TreeView</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 23 May 2001</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 1999-2006 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- An object for rendering a cell in a list, icon or combo box widget.</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">ModelView</span><span class="hs-operator">.</span><span class="hs-identifier">CellRenderer</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | The 'CellRenderer' is a base class of a set of objects used for rendering</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- a cell to a 'Drawable'. These objects are used primarily by the 'TreeView'</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- widget, though they aren't tied to them in any specific way. It is worth</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- noting that 'CellRenderer' is not a 'Widget' and cannot be treated as such.</span><span>
+</span><a name="line-36"></a><span class="hs-comment">--</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- The primary use of a 'CellRenderer' is for drawing a certain graphical</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- elements on a 'Drawable'. Typically, one cell renderer is used to draw many</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- cells on the screen. To this extent, it isn't expected that a</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- 'CellRenderer' keep any permanent state around. Instead, any state is set</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- just prior to use by changing the attributes of the cell. Then, the cell is</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- measured and rendered in the correct location.</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- Beyond merely rendering a cell, cell renderers can optionally provide</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- active user interface elements. A cell renderer can be activatable like</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.CellRendererToggle', which toggles when it gets</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- activated by a mouse click, or it can be editable like</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.CellRendererText', which allows the user to edit</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- the text using a 'Graphics.UI.Gtk.Entry.Entry'.</span><span>
+</span><a name="line-50"></a><span>
+</span><a name="line-51"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-56"></a><span class="hs-comment">-- | +----CellRenderer</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- | +----'CellRendererText'</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- | +----'CellRendererPixbuf'</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- | +----'CellRendererProgress'</span><span>
+</span><a name="line-60"></a><span class="hs-comment">-- | +----'CellRendererCombo'</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- | +----'CellRendererToggle'</span><span>
+</span><a name="line-62"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-63"></a><span>
+</span><a name="line-64"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-65"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#CellRendererClass"><span class="hs-identifier hs-type">CellRenderer</span></a><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToCellRenderer"><span class="hs-identifier hs-var">CellRendererClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span>  </span><span class="hs-identifier">castToCellRenderer</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">gTypeCellRenderer</span><span class="hs-special">,</span><span>
+</span><a name="line-68"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#CellRendererMode"><span class="hs-identifier hs-type">toCellRenderer</span></a><span class="hs-special">,</span><span>
+</span><a name="line-69"></a><span>  </span><span class="hs-identifier">CellRendererMode</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-70"></a><span>
+</span><a name="line-71"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-72"></a><span>
+</span><a name="line-73"></a><span>  </span><span class="hs-identifier">cellRendererStopEditing</span><span class="hs-special">,</span><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellRendererSetFixedSize"><span class="hs-identifier hs-var">cellRendererGetFixedSize</span></a><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span>  </span><span class="hs-identifier">cellRendererSetFixedSize</span><span class="hs-special">,</span><span>
+</span><a name="line-77"></a><span>
+</span><a name="line-78"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-79"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellVisible"><span class="hs-identifier hs-var">cellMode</span></a><span class="hs-special">,</span><span>
+</span><a name="line-80"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellSensitive"><span class="hs-identifier hs-var">cellVisible</span></a><span class="hs-special">,</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-identifier">cellSensitive</span><span class="hs-special">,</span><span>
+</span><a name="line-82"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellYAlign"><span class="hs-identifier hs-var">cellXAlign</span></a><span class="hs-special">,</span><span>
+</span><a name="line-83"></a><span>  </span><span class="hs-identifier">cellYAlign</span><span class="hs-special">,</span><span>
+</span><a name="line-84"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellYPad"><span class="hs-identifier hs-var">cellXPad</span></a><span class="hs-special">,</span><span>
+</span><a name="line-85"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellWidth"><span class="hs-identifier hs-var">cellYPad</span></a><span class="hs-special">,</span><span>
+</span><a name="line-86"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellHeight"><span class="hs-identifier hs-var">cellWidth</span></a><span class="hs-special">,</span><span>
+</span><a name="line-87"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellIsExpander"><span class="hs-identifier hs-var">cellHeight</span></a><span class="hs-special">,</span><span>
+</span><a name="line-88"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellIsExpanded"><span class="hs-identifier hs-var">cellIsExpander</span></a><span class="hs-special">,</span><span>
+</span><a name="line-89"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellBackground"><span class="hs-identifier hs-var">cellIsExpanded</span></a><span class="hs-special">,</span><span>
+</span><a name="line-90"></a><span>  </span><span class="hs-identifier">cellBackground</span><span class="hs-special">,</span><span>
+</span><a name="line-91"></a><span>
+</span><a name="line-92"></a><span>
+</span><a name="line-93"></a><span>
+</span><a name="line-94"></a><span>  </span><span class="hs-identifier">cellBackgroundSet</span><span class="hs-special">,</span><span>
+</span><a name="line-95"></a><span>
+</span><a name="line-96"></a><span class="hs-comment">-- * Signals</span><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span>  </span><span class="hs-identifier">editingStarted</span><span class="hs-special">,</span><span>
+</span><a name="line-99"></a><span>
+</span><a name="line-100"></a><span>
+</span><a name="line-101"></a><span>  </span><span class="hs-identifier">editingCanceled</span><span class="hs-special">,</span><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span class="hs-comment">-- * Deprecated</span><span>
+</span><a name="line-105"></a><span class="hs-pragma">{-# LINE 114 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-106"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-109"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">UTFString</span><span>
+</span><a name="line-110"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span> </span><span class="hs-special">(</span><span> </span><span class="hs-identifier">Attr</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">WriteAttr</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-111"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Properties</span><span>
+</span><a name="line-112"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-113"></a><span class="hs-pragma">{-# LINE 121 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-114"></a><span>
+</span><a name="line-115"></a><span>
+</span><a name="line-116"></a><span>
+</span><a name="line-117"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Signals</span><span>
+</span><a name="line-118"></a><span class="hs-pragma">{-# LINE 125 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-119"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">ModelView</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-120"></a><span class="hs-pragma">{-# LINE 126 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-121"></a><span>
+</span><a name="line-122"></a><span>
+</span><a name="line-123"></a><span class="hs-pragma">{-# LINE 128 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-124"></a><span>
+</span><a name="line-125"></a><span class="hs-keyword">data</span><span> </span><span class="hs-identifier">CellRendererMode</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">CellRendererModeInert</span><span>
+</span><a name="line-126"></a><span>                      </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">CellRendererModeActivatable</span><span>
+</span><a name="line-127"></a><span>                      </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">CellRendererModeEditable</span><span>
+</span><a name="line-128"></a><span>                      </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Enum</span><span class="hs-special">,</span><span class="hs-identifier">Eq</span><span class="hs-special">)</span><span>
+</span><a name="line-129"></a><span>
+</span><a name="line-130"></a><span class="hs-pragma">{-# LINE 130 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-131"></a><span>
+</span><a name="line-132"></a><span>
+</span><a name="line-133"></a><span>
+</span><a name="line-134"></a><span class="hs-comment">-- %hash c:75b3 d:45ca</span><span>
+</span><a name="line-135"></a><span class="hs-comment">-- | Informs the cell renderer that the editing is stopped. If @canceled@ is</span><span>
+</span><a name="line-136"></a><span class="hs-comment">-- @True@, the cell renderer will emit the 'editingCanceled' signal.</span><span>
+</span><a name="line-137"></a><span class="hs-comment">--</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- * Available since Gtk+ version 2.6</span><span>
+</span><a name="line-139"></a><span class="hs-comment">--</span><span>
+</span><a name="line-140"></a><span class="hs-identifier">cellRendererStopEditing</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-141"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ @canceled@ - @True@ if the editing has been canceled</span><span>
+</span><a name="line-142"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a name="cellRendererStopEditing"><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellRendererStopEditing"><span class="hs-identifier">IO</span></a></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-143"></a><span class="hs-identifier">cellRendererStopEditing</span><span> </span><a name="local-6989586621679142783"><a href="#local-6989586621679142783"><span class="hs-identifier">self</span></a></a><span> </span><span class="hs-identifier">canceled</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-144"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Types.html#toCellRenderer"><span class="hs-identifier hs-var">CellRenderer</span></a><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_cell_renderer_stop_editing</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-145"></a><span class="hs-pragma">{-# LINE 144 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-146"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toCellRenderer</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-147"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">canceled</span><span class="hs-special">)</span><span>
+</span><a name="line-148"></a><span>
+</span><a name="line-149"></a><span>
+</span><a name="line-150"></a><span class="hs-comment">-- %hash c:6d51 d:dc3e</span><span>
+</span><a name="line-151"></a><span class="hs-comment">-- | Returns @(width, height)@ denoting the size of the fixed size of</span><span>
+</span><a name="line-152"></a><span class="hs-comment">-- @cell@. If no fixed size is set, returns @-1@ for that value.</span><span>
+</span><a name="line-153"></a><span class="hs-comment">--</span><span>
+</span><a name="line-154"></a><a name="cellRendererGetFixedSize"><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellRendererGetFixedSize"><span class="hs-identifier">cellRendererGetFixedSize</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-155"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-var">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Int</span><span class="hs-special">,</span><span> </span><a name="local-6989586621679142786"><a href="#local-6989586621679142786"><span class="hs-identifier">Int</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-comment">-- ^ @(width, height)@</span><span>
+</span><a name="line-156"></a><span class="hs-identifier">cellRendererGetFixedSize</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-157"></a><span>  </span><span class="hs-identifier">alloca</span><span> </span><a href="Graphics.UI.Gtk.Types.html#CellRenderer"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">widthPtr</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-158"></a><span>  </span><span class="hs-identifier">alloca</span><span> </span><a href="Graphics.UI.Gtk.Types.html#toCellRenderer"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">heightPtr</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-159"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">CellRenderer</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_cell_renderer_get_fixed_size</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span class="hs-special">)</span><span>
+</span><a name="line-160"></a><span class="hs-pragma">{-# LINE 158 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-161"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toCellRenderer</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-162"></a><span>    </span><span class="hs-identifier">widthPtr</span><span>
+</span><a name="line-163"></a><span>    </span><span class="hs-identifier">heightPtr</span><span> </span><span class="hs-operator hs-var">&gt;&gt;</span><span>
+</span><a name="line-164"></a><span>  </span><span class="hs-identifier">peek</span><span> </span><span class="hs-identifier">widthPtr</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">width</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-165"></a><span>  </span><span class="hs-identifier">peek</span><span> </span><span class="hs-identifier">heightPtr</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">height</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-166"></a><span>  </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">width</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">height</span><span class="hs-special">)</span><span>
+</span><a name="line-167"></a><span>
+</span><a name="line-168"></a><span class="hs-comment">-- %hash c:85dc d:5fd4</span><span>
+</span><a name="line-169"></a><span class="hs-comment">-- | Sets the renderer size to be explicit, independent of the properties set.</span><span>
+</span><a name="line-170"></a><span class="hs-comment">--</span><span>
+</span><a name="line-171"></a><span class="hs-identifier">cellRendererSetFixedSize</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-172"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a name="cellRendererSetFixedSize"><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#cellRendererSetFixedSize"><span class="hs-identifier">Int</span></a></a><span> </span><span class="hs-comment">-- ^ @width@ - the width of the cell renderer, or -1</span><span>
+</span><a name="line-173"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @height@ - the height of the cell renderer, or -1</span><span>
+</span><a name="line-174"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-175"></a><span class="hs-identifier">cellRendererSetFixedSize</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">width</span><span> </span><span class="hs-identifier">height</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-176"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier hs-var">CellRenderer</span><span> </span><a href="#local-6989586621679142796"><span class="hs-identifier hs-var">arg1</span></a><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_cell_renderer_set_fixed_size</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-identifier">arg3</span><span class="hs-special">)</span><span>
+</span><a name="line-177"></a><span class="hs-pragma">{-# LINE 174 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-178"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toCellRenderer</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-179"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">width</span><span class="hs-special">)</span><span>
+</span><a name="line-180"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">height</span><span class="hs-special">)</span><span>
+</span><a name="line-181"></a><span>
+</span><a name="line-182"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-183"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-184"></a><span>
+</span><a name="line-185"></a><span class="hs-comment">-- | Editable mode of the CellRenderer.</span><span>
+</span><a name="line-186"></a><span class="hs-comment">--</span><span>
+</span><a name="line-187"></a><span class="hs-comment">-- Default value: 'CellRendererModeInert'</span><span>
+</span><a name="line-188"></a><span class="hs-comment">--</span><span>
+</span><a name="line-189"></a><span class="hs-identifier">cellMode</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">CellRendererMode</span><span>
+</span><a name="line-190"></a><span class="hs-identifier">cellMode</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;mode&quot;</span><span>
+</span><a name="line-191"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_mode_get_type</span><span>
+</span><a name="line-192"></a><span class="hs-pragma">{-# LINE 188 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-193"></a><span>
+</span><a name="line-194"></a><span class="hs-comment">-- | Display the cell.</span><span>
+</span><a name="line-195"></a><span class="hs-comment">--</span><span>
+</span><a name="line-196"></a><span class="hs-comment">-- Default value: @True@</span><span>
+</span><a name="line-197"></a><span class="hs-comment">--</span><span>
+</span><a name="line-198"></a><span class="hs-identifier">cellVisible</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-199"></a><span class="hs-identifier">cellVisible</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;visible&quot;</span><span>
+</span><a name="line-200"></a><span>
+</span><a name="line-201"></a><span class="hs-comment">-- | Display the cell sensitive.</span><span>
+</span><a name="line-202"></a><span class="hs-comment">--</span><span>
+</span><a name="line-203"></a><span class="hs-comment">-- Default value: @True@</span><span>
+</span><a name="line-204"></a><span class="hs-comment">--</span><span>
+</span><a name="line-205"></a><span class="hs-identifier">cellSensitive</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-206"></a><span class="hs-identifier">cellSensitive</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;sensitive&quot;</span><span>
+</span><a name="line-207"></a><span>
+</span><a name="line-208"></a><span class="hs-comment">-- | The x-align.</span><span>
+</span><a name="line-209"></a><span class="hs-comment">--</span><span>
+</span><a name="line-210"></a><span class="hs-comment">-- Allowed values: @[0,1]@</span><span>
+</span><a name="line-211"></a><span class="hs-comment">--</span><span>
+</span><a name="line-212"></a><span class="hs-comment">-- Default value: @0.5@</span><span>
+</span><a name="line-213"></a><span class="hs-comment">--</span><span>
+</span><a name="line-214"></a><span class="hs-identifier">cellXAlign</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Float</span><span>
+</span><a name="line-215"></a><span class="hs-identifier">cellXAlign</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromFloatProperty</span><span> </span><span class="hs-string">&quot;xalign&quot;</span><span>
+</span><a name="line-216"></a><span>
+</span><a name="line-217"></a><span class="hs-comment">-- | The y-align.</span><span>
+</span><a name="line-218"></a><span class="hs-comment">--</span><span>
+</span><a name="line-219"></a><span class="hs-comment">-- Allowed values: @[0,1]@</span><span>
+</span><a name="line-220"></a><span class="hs-comment">--</span><span>
+</span><a name="line-221"></a><span class="hs-comment">-- Default value: @0.5@</span><span>
+</span><a name="line-222"></a><span class="hs-comment">--</span><span>
+</span><a name="line-223"></a><span class="hs-identifier">cellYAlign</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Float</span><span>
+</span><a name="line-224"></a><span class="hs-identifier">cellYAlign</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromFloatProperty</span><span> </span><span class="hs-string">&quot;yalign&quot;</span><span>
+</span><a name="line-225"></a><span>
+</span><a name="line-226"></a><span class="hs-comment">-- | The xpad.</span><span>
+</span><a name="line-227"></a><span class="hs-comment">--</span><span>
+</span><a name="line-228"></a><span class="hs-comment">-- Default value: @0@</span><span>
+</span><a name="line-229"></a><span class="hs-comment">--</span><span>
+</span><a name="line-230"></a><span class="hs-identifier">cellXPad</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-231"></a><span class="hs-identifier">cellXPad</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromUIntProperty</span><span> </span><span class="hs-string">&quot;xpad&quot;</span><span>
+</span><a name="line-232"></a><span>
+</span><a name="line-233"></a><span class="hs-comment">-- | The ypad.</span><span>
+</span><a name="line-234"></a><span class="hs-comment">--</span><span>
+</span><a name="line-235"></a><span class="hs-comment">-- Default value: @0@</span><span>
+</span><a name="line-236"></a><span class="hs-comment">--</span><span>
+</span><a name="line-237"></a><span class="hs-identifier">cellYPad</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-238"></a><span class="hs-identifier">cellYPad</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromUIntProperty</span><span> </span><span class="hs-string">&quot;ypad&quot;</span><span>
+</span><a name="line-239"></a><span>
+</span><a name="line-240"></a><span class="hs-comment">-- | The fixed width.</span><span>
+</span><a name="line-241"></a><span class="hs-comment">--</span><span>
+</span><a name="line-242"></a><span class="hs-comment">-- Allowed values: @&gt;= -1@</span><span>
+</span><a name="line-243"></a><span class="hs-comment">--</span><span>
+</span><a name="line-244"></a><span class="hs-comment">-- Default value: @-1@</span><span>
+</span><a name="line-245"></a><span class="hs-comment">--</span><span>
+</span><a name="line-246"></a><span class="hs-identifier">cellWidth</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-247"></a><span class="hs-identifier">cellWidth</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;width&quot;</span><span>
+</span><a name="line-248"></a><span>
+</span><a name="line-249"></a><span class="hs-comment">-- | The fixed height.</span><span>
+</span><a name="line-250"></a><span class="hs-comment">--</span><span>
+</span><a name="line-251"></a><span class="hs-comment">-- Allowed values: @&gt;= -1@</span><span>
+</span><a name="line-252"></a><span class="hs-comment">--</span><span>
+</span><a name="line-253"></a><span class="hs-comment">-- Default value: @-1@</span><span>
+</span><a name="line-254"></a><span class="hs-comment">--</span><span>
+</span><a name="line-255"></a><span class="hs-identifier">cellHeight</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-256"></a><span class="hs-identifier">cellHeight</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;height&quot;</span><span>
+</span><a name="line-257"></a><span>
+</span><a name="line-258"></a><span class="hs-comment">-- | Row has children.</span><span>
+</span><a name="line-259"></a><span class="hs-comment">--</span><span>
+</span><a name="line-260"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-261"></a><span class="hs-comment">--</span><span>
+</span><a name="line-262"></a><span class="hs-identifier">cellIsExpander</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-263"></a><span class="hs-identifier">cellIsExpander</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;is-expander&quot;</span><span>
+</span><a name="line-264"></a><span>
+</span><a name="line-265"></a><span class="hs-comment">-- | Row is an expander row, and is expanded.</span><span>
+</span><a name="line-266"></a><span class="hs-comment">--</span><span>
+</span><a name="line-267"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-268"></a><span class="hs-comment">--</span><span>
+</span><a name="line-269"></a><span class="hs-identifier">cellIsExpanded</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-270"></a><span class="hs-identifier">cellIsExpanded</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;is-expanded&quot;</span><span>
+</span><a name="line-271"></a><span>
+</span><a name="line-272"></a><span class="hs-comment">-- | Cell background color as a string.</span><span>
+</span><a name="line-273"></a><span class="hs-comment">--</span><span>
+</span><a name="line-274"></a><span class="hs-comment">-- Default value: @\&quot;\&quot;@</span><span>
+</span><a name="line-275"></a><span class="hs-comment">--</span><span>
+</span><a name="line-276"></a><span class="hs-identifier">cellBackground</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">WriteAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">string</span><span>
+</span><a name="line-277"></a><span class="hs-identifier">cellBackground</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">writeAttrFromStringProperty</span><span> </span><span class="hs-string">&quot;cell-background&quot;</span><span>
+</span><a name="line-278"></a><span class="hs-pragma">{-# LINE 283 &quot;./Graphics/UI/Gtk/ModelView/CellRenderer.chs&quot; #-}</span><span>
+</span><a name="line-279"></a><span class="hs-comment">-- | Whether the 'cellBackground' \/ 'cellBackgroundColor' attribute is set.</span><span>
+</span><a name="line-280"></a><span class="hs-comment">--</span><span>
+</span><a name="line-281"></a><span class="hs-comment">-- You can use this to reset the attribute to its default.</span><span>
+</span><a name="line-282"></a><span class="hs-comment">--</span><span>
+</span><a name="line-283"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-284"></a><span class="hs-comment">--</span><span>
+</span><a name="line-285"></a><span class="hs-identifier">cellBackgroundSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-286"></a><span class="hs-identifier">cellBackgroundSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;cell-background-set&quot;</span><span>
+</span><a name="line-287"></a><span>
+</span><a name="line-288"></a><span>
+</span><a name="line-289"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-290"></a><span class="hs-comment">-- Signals</span><span>
+</span><a name="line-291"></a><span>
+</span><a name="line-292"></a><span>
+</span><a name="line-293"></a><span class="hs-comment">-- %hash c:eff4 d:fc12</span><span>
+</span><a name="line-294"></a><span class="hs-comment">-- | This signal gets emitted when the user cancels the process of editing a</span><span>
+</span><a name="line-295"></a><span class="hs-comment">-- cell. For example, an editable cell renderer could be written to cancel</span><span>
+</span><a name="line-296"></a><span class="hs-comment">-- editing when the user presses Escape.</span><span>
+</span><a name="line-297"></a><span class="hs-comment">--</span><span>
+</span><a name="line-298"></a><span class="hs-comment">-- * Available since Gtk+ version 2.4</span><span>
+</span><a name="line-299"></a><span class="hs-comment">--</span><span>
+</span><a name="line-300"></a><span class="hs-identifier">editingCanceled</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-301"></a><span class="hs-identifier">editingCanceled</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">connect_NONE__NONE</span><span> </span><span class="hs-string">&quot;editing-canceled&quot;</span><span class="hs-special">)</span><span>
+</span><a name="line-302"></a><span>
+</span><a name="line-303"></a><span>
+</span><a name="line-304"></a><span class="hs-comment">-- %hash c:41f0 d:49f</span><span>
+</span><a name="line-305"></a><span class="hs-comment">-- | This signal gets emitted when a cell starts to be edited. The indended</span><span>
+</span><a name="line-306"></a><span class="hs-comment">-- use of this signal is to do special setup on @editable@, e.g. adding a</span><span>
+</span><a name="line-307"></a><span class="hs-comment">-- 'EntryCompletion' or setting up additional columns in a 'ComboBox'.</span><span>
+</span><a name="line-308"></a><span class="hs-comment">--</span><span>
+</span><a name="line-309"></a><span class="hs-comment">-- * The widget that is passed to the handler contains the widget that is used</span><span>
+</span><a name="line-310"></a><span class="hs-comment">-- by the 'CellRenderer' to interact with the user. The widget must be</span><span>
+</span><a name="line-311"></a><span class="hs-comment">-- casted to the appropriate widget. For instance, a</span><span>
+</span><a name="line-312"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.CellRendererText' uses an</span><span>
+</span><a name="line-313"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.Entry.Entry' widget, while a</span><span>
+</span><a name="line-314"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.CellRendererCombo' uses a</span><span>
+</span><a name="line-315"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.ComboBox.ComboBox' (if</span><span>
+</span><a name="line-316"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.CellRendererCombo.cellComboHasEntry' is</span><span>
+</span><a name="line-317"></a><span class="hs-comment">-- @False@) or a 'Graphics.UI.Gtk.ModelView.ComboBoxEntry.ComboBoxEntry' (if</span><span>
+</span><a name="line-318"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.CellRendererCombo.cellComboHasEntry' is</span><span>
+</span><a name="line-319"></a><span class="hs-comment">-- @True@).</span><span>
+</span><a name="line-320"></a><span class="hs-comment">--</span><span>
+</span><a name="line-321"></a><span class="hs-comment">-- * Available since Gtk+ version 2.6</span><span>
+</span><a name="line-322"></a><span class="hs-comment">--</span><span>
+</span><a name="line-323"></a><span class="hs-identifier">editingStarted</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span>
+</span><a name="line-324"></a><span>                  </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Widget</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">TreePath</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-325"></a><span class="hs-identifier">editingStarted</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-identifier">editingStartedInternal</span><span>
+</span><a name="line-326"></a><span>
+</span><a name="line-327"></a><span class="hs-identifier">editingStartedInternal</span><span> </span><a href="Graphics.UI.Gtk.Types.html#CellRendererClass"><span class="hs-identifier hs-type">after</span></a><span> </span><a href="Graphics.UI.Gtk.Types.html#CellRendererClass"><span class="hs-identifier hs-type">cr</span></a><span> </span><a href="Graphics.UI.Gtk.Types.html#CellRendererClass"><span class="hs-identifier hs-type">act</span></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-328"></a><span> </span><span class="hs-identifier">connect_OBJECT_GLIBSTRING__NONE</span><span> </span><span class="hs-string">&quot;editing-started&quot;</span><span> </span><span class="hs-identifier">after</span><span> </span><span class="hs-identifier">cr</span><span>
+</span><a name="line-329"></a><span> </span><a name="editingStarted"><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#editingStarted"><span class="hs-operator">$</span></a></a><span> </span><span class="hs-glyph">\</span><a name="editingStarted"><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#editingStarted"><span class="hs-identifier">ce</span></a></a><span> </span><a name="editingStarted"><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#editingStarted"><span class="hs-identifier">path</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">act</span><span> </span><span class="hs-identifier hs-var">ce</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">stringToTreePath</span><span> </span><a href="Graphics.UI.Gtk.ModelView.CellRenderer.html#editingStartedInternal"><span class="hs-identifier hs-var">path</span></a><span class="hs-special">)</span><span>
+</span><a name="line-330"></a><span>
+</span><a name="line-331"></a><span>
+</span><a name="line-332"></a><span>
+</span><a name="line-333"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-334"></a><span class="hs-comment">-- Deprecated Signals</span><span>
+</span><a name="line-335"></a><span>
+</span><a name="line-336"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_cell_renderer_stop_editing&quot;</span><span>
+</span><a name="line-337"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_stop_editing</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRenderer</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-338"></a><span>
+</span><a name="line-339"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_cell_renderer_get_fixed_size&quot;</span><span>
+</span><a name="line-340"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_get_fixed_size</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRenderer</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-341"></a><span>
+</span><a name="line-342"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_cell_renderer_set_fixed_size&quot;</span><span>
+</span><a name="line-343"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_set_fixed_size</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRenderer</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-344"></a><span>
+</span><a name="line-345"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_cell_renderer_mode_get_type&quot;</span><span>
+</span><a name="line-346"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_mode_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-347"></a></pre></body></html>

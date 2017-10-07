@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) Widget HandleBox</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 23 May 2001</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 1999-2005 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- a widget for detachable window portions</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Misc</span><span class="hs-operator">.</span><span class="hs-identifier">HandleBox</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | The 'HandleBox' widget allows a portion of a window to be \&quot;torn off\&quot;.</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- It is a bin widget which displays its child and a handle that the user can</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- drag to tear off a separate window (the float window) containing the child</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- widget. A thin ghost is drawn in the original location of the handlebox. By</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- dragging the separate window back to its original location, it can be</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- reattached.</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- When reattaching, the ghost and float window, must be aligned along one</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- of the edges, the snap edge. This either can be specified by the application</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- programmer explicitely, or Gtk+ will pick a reasonable default based on the</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- handle position.</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- To make detaching and reattaching the handlebox as minimally confusing as</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- possible to the user, it is important to set the snap edge so that the snap</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- edge does not move when the handlebox is deattached. For instance, if the</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- handlebox is packed at the bottom of a VBox, then when the handlebox is</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- detached, the bottom edge of the handlebox's allocation will remain fixed as</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- the height of the handlebox shrinks, so the snap edge should be set to</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- 'PosBottom'.</span><span>
+</span><a name="line-51"></a><span>
+</span><a name="line-52"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-56"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- | +----'Widget'</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- | +----'Container'</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- | +----'Bin'</span><span>
+</span><a name="line-60"></a><span class="hs-comment">-- | +----HandleBox</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-62"></a><span>
+</span><a name="line-63"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-64"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#HandleBoxClass"><span class="hs-identifier hs-type">HandleBox</span></a><span class="hs-special">,</span><span>
+</span><a name="line-65"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToHandleBox"><span class="hs-identifier hs-var">HandleBoxClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>  </span><span class="hs-identifier">castToHandleBox</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">gTypeHandleBox</span><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span>  </span><span class="hs-identifier">toHandleBox</span><span class="hs-special">,</span><span>
+</span><a name="line-68"></a><span>
+</span><a name="line-69"></a><span class="hs-comment">-- * Constructors</span><span>
+</span><a name="line-70"></a><span>  </span><span class="hs-identifier">handleBoxNew</span><span class="hs-special">,</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-73"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxSetShadowType"><span class="hs-identifier hs-var">ShadowType</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-74"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetShadowType"><span class="hs-identifier hs-var">handleBoxSetShadowType</span></a><span class="hs-special">,</span><span>
+</span><a name="line-75"></a><span>  </span><span class="hs-identifier">handleBoxGetShadowType</span><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxSetHandlePosition"><span class="hs-identifier hs-var">PositionType</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-77"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetHandlePosition"><span class="hs-identifier hs-var">handleBoxSetHandlePosition</span></a><span class="hs-special">,</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-identifier">handleBoxGetHandlePosition</span><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetSnapEdge"><span class="hs-identifier hs-var">handleBoxSetSnapEdge</span></a><span class="hs-special">,</span><span>
+</span><a name="line-80"></a><span>  </span><span class="hs-identifier">handleBoxGetSnapEdge</span><span class="hs-special">,</span><span>
+</span><a name="line-81"></a><span>
+</span><a name="line-82"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-83"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxHandlePosition"><span class="hs-identifier hs-var">handleBoxShadowType</span></a><span class="hs-special">,</span><span>
+</span><a name="line-84"></a><span>  </span><span class="hs-identifier">handleBoxHandlePosition</span><span class="hs-special">,</span><span>
+</span><a name="line-85"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxSnapEdgeSet"><span class="hs-identifier hs-var">handleBoxSnapEdge</span></a><span class="hs-special">,</span><span>
+</span><a name="line-86"></a><span>  </span><span class="hs-identifier">handleBoxSnapEdgeSet</span><span class="hs-special">,</span><span>
+</span><a name="line-87"></a><span>
+</span><a name="line-88"></a><span class="hs-comment">-- * Signals</span><span>
+</span><a name="line-89"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#afterChildAttached"><span class="hs-identifier hs-var">onChildAttached</span></a><span class="hs-special">,</span><span>
+</span><a name="line-90"></a><span>  </span><span class="hs-identifier">afterChildAttached</span><span class="hs-special">,</span><span>
+</span><a name="line-91"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#afterChildDetached"><span class="hs-identifier hs-var">onChildDetached</span></a><span class="hs-special">,</span><span>
+</span><a name="line-92"></a><span>  </span><span class="hs-identifier">afterChildDetached</span><span class="hs-special">,</span><span>
+</span><a name="line-93"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-94"></a><span>
+</span><a name="line-95"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-96"></a><span>
+</span><a name="line-97"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-98"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span>
+</span><a name="line-99"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Properties</span></a><span>
+</span><a name="line-100"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span></a><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Object</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-101"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Signals.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span></a><span>
+</span><a name="line-102"></a><span class="hs-pragma">{-# LINE 101 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-103"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Signals</span><span>
+</span><a name="line-104"></a><span class="hs-pragma">{-# LINE 102 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-105"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">General</span><span class="hs-operator">.</span><span class="hs-identifier">Enums</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">ShadowType</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">PositionType</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-106"></a><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-pragma">{-# LINE 105 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-109"></a><span>
+</span><a name="line-110"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-111"></a><span class="hs-comment">-- Constructors</span><span>
+</span><a name="line-112"></a><span>
+</span><a name="line-113"></a><span class="hs-comment">-- | Create a new handle box.</span><span>
+</span><a name="line-114"></a><span class="hs-comment">--</span><span>
+</span><a name="line-115"></a><span class="hs-identifier">handleBoxNew</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#gtk_handle_box_new"><span class="hs-identifier hs-var">IO</span></a><span> </span><span class="hs-identifier">HandleBox</span><span>
+</span><a name="line-116"></a><span class="hs-identifier">handleBoxNew</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-117"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkHandleBox</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-118"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">HandleBox</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-119"></a><span>  </span><span class="hs-identifier">gtk_handle_box_new</span><span>
+</span><a name="line-120"></a><span class="hs-pragma">{-# LINE 116 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-121"></a><span>
+</span><a name="line-122"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-123"></a><span class="hs-comment">-- Methods</span><span>
+</span><a name="line-124"></a><span>
+</span><a name="line-125"></a><span class="hs-comment">-- | Sets the type of shadow to be drawn around the border of the handle box.</span><span>
+</span><a name="line-126"></a><span class="hs-comment">--</span><span>
+</span><a name="line-127"></a><span class="hs-identifier">handleBoxSetShadowType</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">ShadowType</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-128"></a><span class="hs-identifier">handleBoxSetShadowType</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">type_</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-129"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">HandleBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_handle_box_set_shadow_type</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-130"></a><span class="hs-pragma">{-# LINE 125 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-131"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toHandleBox</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-132"></a><span>    </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-identifier">fromEnum</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">type_</span><span class="hs-special">)</span><span>
+</span><a name="line-133"></a><span>
+</span><a name="line-134"></a><span class="hs-comment">-- | Gets the type of shadow drawn around the handle box. See</span><span>
+</span><a name="line-135"></a><span class="hs-comment">-- 'handleBoxSetShadowType'.</span><span>
+</span><a name="line-136"></a><span class="hs-comment">--</span><span>
+</span><a name="line-137"></a><span class="hs-identifier">handleBoxGetShadowType</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-138"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">ShadowType</span><span> </span><span class="hs-comment">-- ^ returns the type of shadow currently drawn around the</span><span>
+</span><a name="line-139"></a><span>                  </span><span class="hs-comment">-- handle box.</span><span>
+</span><a name="line-140"></a><span class="hs-identifier">handleBoxGetShadowType</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-141"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">toEnum</span><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-identifier">fromIntegral</span><span class="hs-special">)</span><span> </span><a href="Graphics.UI.Gtk.Types.html#HandleBoxClass"><span class="hs-operator hs-type">$</span></a><span>
+</span><a name="line-142"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.General.Enums.html#PositionType"><span class="hs-identifier hs-type">HandleBox</span></a><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_handle_box_get_shadow_type</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-143"></a><span class="hs-pragma">{-# LINE 137 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-144"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toHandleBox</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-145"></a><span>
+</span><a name="line-146"></a><span class="hs-comment">-- | Sets the side of the handlebox where the handle is drawn.</span><span>
+</span><a name="line-147"></a><span class="hs-comment">--</span><span>
+</span><a name="line-148"></a><span class="hs-identifier">handleBoxSetHandlePosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-149"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">PositionType</span><span> </span><span class="hs-comment">-- ^ @position@ - the side of the handlebox where the handle</span><span>
+</span><a name="line-150"></a><span>                 </span><span class="hs-comment">-- should be drawn.</span><span>
+</span><a name="line-151"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-152"></a><span class="hs-identifier">handleBoxSetHandlePosition</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">position</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-153"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">HandleBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_handle_box_set_handle_position</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-154"></a><span class="hs-pragma">{-# LINE 147 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-155"></a><span>    </span><span class="hs-special">(</span><a name="handleBoxGetHandlePosition"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetHandlePosition"><span class="hs-identifier">toHandleBox</span></a></a><span> </span><a name="handleBoxGetHandlePosition"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetHandlePosition"><span class="hs-identifier">self</span></a></a><span class="hs-special">)</span><span>
+</span><a name="line-156"></a><span>    </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-operator hs-var">.</span><span> </span><span class="hs-identifier hs-var">fromEnum</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">position</span><span class="hs-special">)</span><span>
+</span><a name="line-157"></a><span>
+</span><a name="line-158"></a><span class="hs-comment">-- | Gets the handle position of the handle box. See</span><span>
+</span><a name="line-159"></a><span class="hs-comment">-- 'handleBoxSetHandlePosition'.</span><span>
+</span><a name="line-160"></a><span class="hs-comment">--</span><span>
+</span><a name="line-161"></a><span class="hs-identifier">handleBoxGetHandlePosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-162"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">PositionType</span><span> </span><span class="hs-comment">-- ^ returns the current handle position.</span><span>
+</span><a name="line-163"></a><span class="hs-identifier">handleBoxGetHandlePosition</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-164"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">toEnum</span><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-identifier">fromIntegral</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-165"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">HandleBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_handle_box_get_handle_position</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-166"></a><span class="hs-pragma">{-# LINE 158 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-167"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toHandleBox</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-168"></a><span>
+</span><a name="line-169"></a><span class="hs-comment">-- | Sets the snap edge of the HandleBox. The snap edge is the edge of the</span><span>
+</span><a name="line-170"></a><span class="hs-comment">-- detached child that must be aligned with the corresponding edge of the</span><span>
+</span><a name="line-171"></a><span class="hs-comment">-- \&quot;ghost\&quot; left behind when the child was detached to reattach the torn-off</span><span>
+</span><a name="line-172"></a><span class="hs-comment">-- window. Usually, the snap edge should be chosen so that it stays in the same</span><span>
+</span><a name="line-173"></a><span class="hs-comment">-- place on the screen when the handlebox is torn off.</span><span>
+</span><a name="line-174"></a><span class="hs-comment">--</span><span>
+</span><a name="line-175"></a><span class="hs-comment">-- If the snap edge is not set, then an appropriate value will be guessed</span><span>
+</span><a name="line-176"></a><span class="hs-comment">-- from the handle position. If the handle position is 'PosRight' or 'PosLeft',</span><span>
+</span><a name="line-177"></a><span class="hs-comment">-- then the snap edge will be 'PosTop', otherwise it will be 'PosLeft'.</span><span>
+</span><a name="line-178"></a><span class="hs-comment">--</span><span>
+</span><a name="line-179"></a><span class="hs-identifier">handleBoxSetSnapEdge</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-180"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">PositionType</span><span>
+</span><a name="line-181"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-182"></a><span class="hs-identifier">handleBoxSetSnapEdge</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">edge</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-183"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><a name="handleBoxGetSnapEdge"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetSnapEdge"><span class="hs-identifier">HandleBox</span></a></a><span> </span><a name="handleBoxGetSnapEdge"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetSnapEdge"><span class="hs-identifier">arg1</span></a></a><span class="hs-special">)</span><span> </span><a name="local-6989586621679316232"><a href="#local-6989586621679316232"><span class="hs-identifier">arg2</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_handle_box_set_snap_edge</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-184"></a><span class="hs-pragma">{-# LINE 175 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-185"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toHandleBox</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-186"></a><span>    </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><a href="#local-6989586621679316232"><span class="hs-operator hs-var">.</span></a><span> </span><span class="hs-identifier">fromEnum</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">edge</span><span class="hs-special">)</span><span>
+</span><a name="line-187"></a><span>
+</span><a name="line-188"></a><span class="hs-comment">-- | Gets the edge used for determining reattachment of the handle box. See</span><span>
+</span><a name="line-189"></a><span class="hs-comment">-- 'handleBoxSetSnapEdge'.</span><span>
+</span><a name="line-190"></a><span class="hs-comment">--</span><span>
+</span><a name="line-191"></a><span class="hs-identifier">handleBoxGetSnapEdge</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-192"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">PositionType</span><span>
+</span><a name="line-193"></a><span class="hs-identifier">handleBoxGetSnapEdge</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-194"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">toEnum</span><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-identifier">fromIntegral</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-195"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">HandleBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_handle_box_get_snap_edge</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-196"></a><span class="hs-pragma">{-# LINE 186 &quot;./Graphics/UI/Gtk/Misc/HandleBox.chs&quot; #-}</span><span>
+</span><a name="line-197"></a><span>    </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetShadowType"><span class="hs-identifier hs-var">toHandleBox</span></a><span> </span><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxGetShadowType"><span class="hs-identifier hs-var">self</span></a><span class="hs-special">)</span><span>
+</span><a name="line-198"></a><span>
+</span><a name="line-199"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-200"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-201"></a><span>
+</span><a name="line-202"></a><span class="hs-comment">-- | Appearance of the shadow that surrounds the container.</span><span>
+</span><a name="line-203"></a><span class="hs-comment">--</span><span>
+</span><a name="line-204"></a><span class="hs-comment">-- Default value: 'ShadowEtchedOut'</span><span>
+</span><a name="line-205"></a><span class="hs-comment">--</span><span>
+</span><a name="line-206"></a><span class="hs-identifier">handleBoxShadowType</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">ShadowType</span><span>
+</span><a name="line-207"></a><span class="hs-identifier">handleBoxShadowType</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttr</span><span>
+</span><a name="line-208"></a><span>  </span><span class="hs-identifier">handleBoxGetShadowType</span><span>
+</span><a name="line-209"></a><span>  </span><span class="hs-identifier">handleBoxSetShadowType</span><span>
+</span><a name="line-210"></a><span>
+</span><a name="line-211"></a><span class="hs-comment">-- | Position of the handle relative to the child widget.</span><span>
+</span><a name="line-212"></a><span class="hs-comment">--</span><span>
+</span><a name="line-213"></a><span class="hs-comment">-- Default value: 'PosLeft'</span><span>
+</span><a name="line-214"></a><span class="hs-comment">--</span><span>
+</span><a name="line-215"></a><span class="hs-identifier">handleBoxHandlePosition</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">PositionType</span><span>
+</span><a name="line-216"></a><span class="hs-identifier">handleBoxHandlePosition</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttr</span><span>
+</span><a name="line-217"></a><span>  </span><span class="hs-identifier">handleBoxGetHandlePosition</span><span>
+</span><a name="line-218"></a><span>  </span><span class="hs-identifier">handleBoxSetHandlePosition</span><span>
+</span><a name="line-219"></a><span>
+</span><a name="line-220"></a><span class="hs-comment">-- | Side of the handlebox that's lined up with the docking point to dock the</span><span>
+</span><a name="line-221"></a><span class="hs-comment">-- handlebox.</span><span>
+</span><a name="line-222"></a><span class="hs-comment">--</span><span>
+</span><a name="line-223"></a><span class="hs-comment">-- Default value: 'PosTop'</span><span>
+</span><a name="line-224"></a><span class="hs-comment">--</span><span>
+</span><a name="line-225"></a><a name="handleBoxSnapEdgeSet"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#handleBoxSnapEdgeSet"><span class="hs-identifier">handleBoxSnapEdge</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier hs-var">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">PositionType</span><span>
+</span><a name="line-226"></a><span class="hs-identifier">handleBoxSnapEdge</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttr</span><span>
+</span><a name="line-227"></a><span>  </span><span class="hs-identifier">handleBoxGetSnapEdge</span><span>
+</span><a name="line-228"></a><span>  </span><span class="hs-identifier">handleBoxSetSnapEdge</span><span>
+</span><a name="line-229"></a><span>
+</span><a name="line-230"></a><span class="hs-comment">-- | Whether to use the value from the snap_edge property or a value derived</span><span>
+</span><a name="line-231"></a><span class="hs-comment">-- from handle_position.</span><span>
+</span><a name="line-232"></a><span class="hs-comment">--</span><span>
+</span><a name="line-233"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-234"></a><span class="hs-comment">--</span><span>
+</span><a name="line-235"></a><span class="hs-identifier">handleBoxSnapEdgeSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><a href="Graphics.UI.Gtk.Types.html#HandleBoxClass"><span class="hs-identifier hs-type">self</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="Graphics.UI.Gtk.Types.html#HandleBoxClass"><span class="hs-identifier hs-type">Attr</span></a><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-236"></a><span class="hs-identifier">handleBoxSnapEdgeSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;snap-edge-set&quot;</span><span>
+</span><a name="line-237"></a><span>
+</span><a name="line-238"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-239"></a><span class="hs-comment">-- Signals</span><span>
+</span><a name="line-240"></a><span>
+</span><a name="line-241"></a><span class="hs-comment">-- Note: for these two signales we ignore the given Widget in the handler.</span><span>
+</span><a name="line-242"></a><span>
+</span><a name="line-243"></a><span class="hs-comment">-- | This signal is emitted when the contents of the handlebox are reattached</span><span>
+</span><a name="line-244"></a><span class="hs-comment">-- to the main window.</span><span>
+</span><a name="line-245"></a><span class="hs-comment">--</span><span>
+</span><a name="line-246"></a><span class="hs-identifier">onChildAttached</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">afterChildAttached</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-247"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a name="onChildDetached"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#onChildDetached"><span class="hs-identifier">IO</span></a></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-248"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a name="afterChildDetached"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#afterChildDetached"><span class="hs-identifier">IO</span></a></a><span> </span><span class="hs-special">(</span><a name="afterChildDetached"><a href="Graphics.UI.Gtk.Misc.HandleBox.html#afterChildDetached"><span class="hs-identifier">ConnectId</span></a></a><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-249"></a><span class="hs-identifier">onChildAttached</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">connect_NONE__NONE</span><span> </span><span class="hs-string">&quot;child-attached&quot;</span><span> </span><span class="hs-identifier">False</span><span>
+</span><a name="line-250"></a><span class="hs-identifier">afterChildAttached</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">connect_NONE__NONE</span><span> </span><span class="hs-string">&quot;child-attached&quot;</span><span> </span><span class="hs-identifier">True</span><span>
+</span><a name="line-251"></a><span>
+</span><a name="line-252"></a><span class="hs-comment">-- | This signal is emitted when the contents of the handlebox are detached</span><span>
+</span><a name="line-253"></a><span class="hs-comment">-- from the main window.</span><span>
+</span><a name="line-254"></a><span class="hs-comment">--</span><span>
+</span><a name="line-255"></a><span class="hs-identifier">onChildDetached</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">afterChildDetached</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">HandleBoxClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-256"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-257"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">ConnectId</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-258"></a><span class="hs-identifier">onChildDetached</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">connect_NONE__NONE</span><span> </span><span class="hs-string">&quot;child-detached&quot;</span><span> </span><span class="hs-identifier">False</span><span>
+</span><a name="line-259"></a><span class="hs-identifier">afterChildDetached</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">connect_NONE__NONE</span><span> </span><span class="hs-string">&quot;child-detached&quot;</span><span> </span><span class="hs-identifier">True</span><span>
+</span><a name="line-260"></a><span>
+</span><a name="line-261"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_handle_box_new&quot;</span><span>
+</span><a name="line-262"></a><span>  </span><span class="hs-identifier">gtk_handle_box_new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-263"></a><span>
+</span><a name="line-264"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_handle_box_set_shadow_type&quot;</span><span>
+</span><a name="line-265"></a><span>  </span><span class="hs-identifier">gtk_handle_box_set_shadow_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">HandleBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-266"></a><span>
+</span><a name="line-267"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_handle_box_get_shadow_type&quot;</span><span>
+</span><a name="line-268"></a><span>  </span><span class="hs-identifier">gtk_handle_box_get_shadow_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">HandleBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-269"></a><span>
+</span><a name="line-270"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_handle_box_set_handle_position&quot;</span><span>
+</span><a name="line-271"></a><span>  </span><span class="hs-identifier">gtk_handle_box_set_handle_position</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">HandleBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-272"></a><span>
+</span><a name="line-273"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_handle_box_get_handle_position&quot;</span><span>
+</span><a name="line-274"></a><span>  </span><span class="hs-identifier">gtk_handle_box_get_handle_position</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">HandleBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-275"></a><span>
+</span><a name="line-276"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_handle_box_set_snap_edge&quot;</span><span>
+</span><a name="line-277"></a><span>  </span><span class="hs-identifier">gtk_handle_box_set_snap_edge</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">HandleBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-278"></a><span>
+</span><a name="line-279"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_handle_box_get_snap_edge&quot;</span><span>
+</span><a name="line-280"></a><span>  </span><span class="hs-identifier">gtk_handle_box_get_snap_edge</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">HandleBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-281"></a></pre></body></html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) CellRendererText TreeView</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 23 May 2001</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 1999-2006 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- A 'CellRenderer' which displays a single-line text.</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">ModelView</span><span class="hs-operator">.</span><span class="hs-identifier">CellRendererText</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | A 'CellRendererText' renders a given text in its cell, using the font,</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- color and style information provided by its attributes. The text will be</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- ellipsized if it is too long and the ellipsize property allows it.</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- If the 'cellMode' is 'CellRendererModeEditable', the 'CellRendererText'</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- allows the user to edit its text using an 'Entry' widget.</span><span>
+</span><a name="line-38"></a><span>
+</span><a name="line-39"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- | +----'CellRenderer'</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- | +----CellRendererText</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- | +----'CellRendererCombo'</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-50"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#CellRendererTextClass"><span class="hs-identifier hs-type">CellRendererText</span></a><span class="hs-special">,</span><span>
+</span><a name="line-51"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToCellRendererText"><span class="hs-identifier hs-var">CellRendererTextClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-52"></a><span>  </span><span class="hs-identifier">castToCellRendererText</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">gTypeCellRendererText</span><span class="hs-special">,</span><span>
+</span><a name="line-53"></a><span>  </span><span class="hs-identifier">toCellRendererText</span><span class="hs-special">,</span><span>
+</span><a name="line-54"></a><span>
+</span><a name="line-55"></a><span class="hs-comment">-- * Constructors</span><span>
+</span><a name="line-56"></a><span>  </span><span class="hs-identifier">cellRendererTextNew</span><span class="hs-special">,</span><span>
+</span><a name="line-57"></a><span>
+</span><a name="line-58"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-59"></a><span>  </span><span class="hs-identifier">cellRendererTextSetFixedHeightFromFont</span><span class="hs-special">,</span><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-62"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextMarkup"><span class="hs-identifier hs-var">cellText</span></a><span class="hs-special">,</span><span>
+</span><a name="line-63"></a><span>  </span><span class="hs-identifier">cellTextMarkup</span><span class="hs-special">,</span><span>
+</span><a name="line-64"></a><span>  </span><span class="hs-comment">--cellTextAttributes,</span><span>
+</span><a name="line-65"></a><span>  </span><span class="hs-identifier">cellTextSingleParagraphMode</span><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextBackgroundColor"><span class="hs-identifier hs-var">cellTextBackground</span></a><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span>  </span><span class="hs-identifier">cellTextBackgroundColor</span><span class="hs-special">,</span><span>
+</span><a name="line-68"></a><span>  </span><span class="hs-identifier">cellTextBackgroundSet</span><span class="hs-special">,</span><span>
+</span><a name="line-69"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextForegroundColor"><span class="hs-identifier hs-var">cellTextForeground</span></a><span class="hs-special">,</span><span>
+</span><a name="line-70"></a><span>  </span><span class="hs-identifier">cellTextForegroundColor</span><span class="hs-special">,</span><span>
+</span><a name="line-71"></a><span>  </span><span class="hs-identifier">cellTextForegroundSet</span><span class="hs-special">,</span><span>
+</span><a name="line-72"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextEditableSet"><span class="hs-identifier hs-var">cellTextEditable</span></a><span class="hs-special">,</span><span>
+</span><a name="line-73"></a><span>  </span><span class="hs-identifier">cellTextEditableSet</span><span class="hs-special">,</span><span>
+</span><a name="line-74"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextFontDesc"><span class="hs-identifier hs-var">cellTextFont</span></a><span class="hs-special">,</span><span>
+</span><a name="line-75"></a><span>  </span><span class="hs-identifier">cellTextFontDesc</span><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextFamilySet"><span class="hs-identifier hs-var">cellTextFamily</span></a><span class="hs-special">,</span><span>
+</span><a name="line-77"></a><span>  </span><span class="hs-identifier">cellTextFamilySet</span><span class="hs-special">,</span><span>
+</span><a name="line-78"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextStyleSet"><span class="hs-identifier hs-var">cellTextStyle</span></a><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>  </span><span class="hs-identifier">cellTextStyleSet</span><span class="hs-special">,</span><span>
+</span><a name="line-80"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextVariantSet"><span class="hs-identifier hs-var">cellTextVariant</span></a><span class="hs-special">,</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-identifier">cellTextVariantSet</span><span class="hs-special">,</span><span>
+</span><a name="line-82"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextWeightSet"><span class="hs-identifier hs-var">cellTextWeight</span></a><span class="hs-special">,</span><span>
+</span><a name="line-83"></a><span>  </span><span class="hs-identifier">cellTextWeightSet</span><span class="hs-special">,</span><span>
+</span><a name="line-84"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextStretchSet"><span class="hs-identifier hs-var">cellTextStretch</span></a><span class="hs-special">,</span><span>
+</span><a name="line-85"></a><span>  </span><span class="hs-identifier">cellTextStretchSet</span><span class="hs-special">,</span><span>
+</span><a name="line-86"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextSizePoints"><span class="hs-identifier hs-var">cellTextSize</span></a><span class="hs-special">,</span><span>
+</span><a name="line-87"></a><span>  </span><span class="hs-identifier">cellTextSizePoints</span><span class="hs-special">,</span><span>
+</span><a name="line-88"></a><span>  </span><span class="hs-identifier">cellTextSizeSet</span><span class="hs-special">,</span><span>
+</span><a name="line-89"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextScaleSet"><span class="hs-identifier hs-var">cellTextScale</span></a><span class="hs-special">,</span><span>
+</span><a name="line-90"></a><span>  </span><span class="hs-identifier">cellTextScaleSet</span><span class="hs-special">,</span><span>
+</span><a name="line-91"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextRiseSet"><span class="hs-identifier hs-var">cellTextRise</span></a><span class="hs-special">,</span><span>
+</span><a name="line-92"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextStrikethrough"><span class="hs-identifier hs-var">cellTextRiseSet</span></a><span class="hs-special">,</span><span>
+</span><a name="line-93"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextStrikethroughSet"><span class="hs-identifier hs-var">cellTextStrikethrough</span></a><span class="hs-special">,</span><span>
+</span><a name="line-94"></a><span>  </span><span class="hs-identifier">cellTextStrikethroughSet</span><span class="hs-special">,</span><span>
+</span><a name="line-95"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextUnderlineSet"><span class="hs-identifier hs-var">cellTextUnderline</span></a><span class="hs-special">,</span><span>
+</span><a name="line-96"></a><span>  </span><span class="hs-identifier">cellTextUnderlineSet</span><span class="hs-special">,</span><span>
+</span><a name="line-97"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextLanguageSet"><span class="hs-identifier hs-var">cellTextLanguage</span></a><span class="hs-special">,</span><span>
+</span><a name="line-98"></a><span>  </span><span class="hs-identifier">cellTextLanguageSet</span><span class="hs-special">,</span><span>
+</span><a name="line-99"></a><span>
+</span><a name="line-100"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextEllipsizeSet"><span class="hs-identifier hs-var">cellTextEllipsize</span></a><span class="hs-special">,</span><span>
+</span><a name="line-101"></a><span>  </span><span class="hs-identifier">cellTextEllipsizeSet</span><span class="hs-special">,</span><span>
+</span><a name="line-102"></a><span>  </span><span class="hs-identifier">cellTextWidthChars</span><span class="hs-special">,</span><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span>
+</span><a name="line-105"></a><span>  </span><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextWrapWidth"><span class="hs-identifier hs-var">cellTextWrapMode</span></a><span class="hs-special">,</span><span>
+</span><a name="line-106"></a><span>  </span><span class="hs-identifier">cellTextWrapWidth</span><span class="hs-special">,</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span>
+</span><a name="line-109"></a><span>  </span><span class="hs-identifier">cellTextAlignment</span><span class="hs-special">,</span><span>
+</span><a name="line-110"></a><span>
+</span><a name="line-111"></a><span>
+</span><a name="line-112"></a><span class="hs-comment">-- * Signals</span><span>
+</span><a name="line-113"></a><span>  </span><span class="hs-identifier">edited</span><span class="hs-special">,</span><span>
+</span><a name="line-114"></a><span>
+</span><a name="line-115"></a><span class="hs-comment">-- * Deprecated</span><span>
+</span><a name="line-116"></a><span>
+</span><a name="line-117"></a><span>
+</span><a name="line-118"></a><span>
+</span><a name="line-119"></a><span>
+</span><a name="line-120"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-121"></a><span>
+</span><a name="line-122"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-123"></a><span>
+</span><a name="line-124"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-125"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">UTFString</span><span>
+</span><a name="line-126"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Properties</span><span>
+</span><a name="line-127"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span></a><span> </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">Attr</span></a><span class="hs-special">,</span><span> </span><span class="hs-identifier">WriteAttr</span><span class="hs-special">)</span><span>
+</span><a name="line-128"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span></a><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Object</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-129"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Signals.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span></a><span>
+</span><a name="line-130"></a><span class="hs-pragma">{-# LINE 129 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-131"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.General.Structs.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Signals</span></a><span>
+</span><a name="line-132"></a><span class="hs-pragma">{-# LINE 130 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-133"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">ModelView</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-134"></a><span class="hs-pragma">{-# LINE 131 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-135"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">General</span><span class="hs-operator">.</span><span class="hs-identifier">Structs</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-136"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">Rendering</span><span class="hs-operator">.</span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Enums</span><span>
+</span><a name="line-137"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">Rendering</span><span class="hs-operator">.</span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">BasicTypes</span><span> </span><span class="hs-special">(</span><span> </span><span class="hs-identifier">FontDescription</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-138"></a><span>                                         </span><span class="hs-identifier">makeNewFontDescription</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-139"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">Rendering</span><span class="hs-operator">.</span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Layout</span><span> </span><span class="hs-special">(</span><span> </span><span class="hs-identifier">LayoutAlignment</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">LayoutWrapMode</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-140"></a><span>
+</span><a name="line-141"></a><span>
+</span><a name="line-142"></a><span class="hs-pragma">{-# LINE 138 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-143"></a><span>
+</span><a name="line-144"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-145"></a><span class="hs-comment">-- Constructors</span><span>
+</span><a name="line-146"></a><span>
+</span><a name="line-147"></a><span class="hs-comment">-- | Create a new CellRendererText object.</span><span>
+</span><a name="line-148"></a><span class="hs-comment">--</span><span>
+</span><a name="line-149"></a><span class="hs-identifier">cellRendererTextNew</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CellRendererText</span><span>
+</span><a name="line-150"></a><span class="hs-identifier">cellRendererTextNew</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-151"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkCellRendererText</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-152"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRenderer</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRendererText</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-153"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_text_new</span><span>
+</span><a name="line-154"></a><span class="hs-pragma">{-# LINE 149 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-155"></a><span>
+</span><a name="line-156"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-157"></a><span class="hs-comment">-- Methods</span><span>
+</span><a name="line-158"></a><span>
+</span><a name="line-159"></a><span class="hs-comment">-- | Sets the height of a renderer to explicitly be determined by the</span><span>
+</span><a name="line-160"></a><span class="hs-comment">-- 'cellTextFont' and 'Graphics.UI.Gtk.ModelView.CellRenderer.cellYPad'</span><span>
+</span><a name="line-161"></a><span class="hs-comment">-- attribute set on it. Further changes in these properties do not affect the</span><span>
+</span><a name="line-162"></a><span class="hs-comment">-- height, so they must be accompanied by a subsequent call to this function.</span><span>
+</span><a name="line-163"></a><span class="hs-comment">-- Using this function is unflexible, and should really only be used if</span><span>
+</span><a name="line-164"></a><span class="hs-comment">-- calculating the size of a cell is too slow (ie, a massive number of cells</span><span>
+</span><a name="line-165"></a><span class="hs-comment">-- displayed). If @numberOfRows@ is -1, then the fixed height is unset, and</span><span>
+</span><a name="line-166"></a><span class="hs-comment">-- the height is determined by the properties again.</span><span>
+</span><a name="line-167"></a><span class="hs-comment">--</span><span>
+</span><a name="line-168"></a><span class="hs-identifier">cellRendererTextSetFixedHeightFromFont</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-169"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-comment">-- ^ @numberOfRows@ - Number of rows of text each cell renderer is</span><span>
+</span><a name="line-170"></a><span>          </span><span class="hs-comment">-- allocated, or -1</span><span>
+</span><a name="line-171"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-172"></a><span class="hs-identifier">cellRendererTextSetFixedHeightFromFont</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">numberOfRows</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-173"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">CellRendererText</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_cell_renderer_text_set_fixed_height_from_font</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-174"></a><span class="hs-pragma">{-# LINE 168 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-175"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toCellRendererText</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-176"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">numberOfRows</span><span class="hs-special">)</span><span>
+</span><a name="line-177"></a><span>
+</span><a name="line-178"></a><span>
+</span><a name="line-179"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-180"></a><span class="hs-comment">-- Properties</span><span>
+</span><a name="line-181"></a><span>
+</span><a name="line-182"></a><span class="hs-comment">-- | Text background color as a string.</span><span>
+</span><a name="line-183"></a><span class="hs-comment">--</span><span>
+</span><a name="line-184"></a><span class="hs-comment">-- Default value: @\&quot;\&quot;@</span><span>
+</span><a name="line-185"></a><span class="hs-comment">--</span><span>
+</span><a name="line-186"></a><span class="hs-identifier">cellTextBackground</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">WriteAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">string</span><span>
+</span><a name="line-187"></a><span class="hs-identifier">cellTextBackground</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">writeAttrFromStringProperty</span><span> </span><span class="hs-string">&quot;background&quot;</span><span>
+</span><a name="line-188"></a><span>
+</span><a name="line-189"></a><span class="hs-comment">-- | Text background color as a 'Color'.</span><span>
+</span><a name="line-190"></a><span class="hs-comment">--</span><span>
+</span><a name="line-191"></a><span class="hs-identifier">cellTextBackgroundColor</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Color</span><span>
+</span><a name="line-192"></a><span class="hs-identifier">cellTextBackgroundColor</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoxedStorableProperty</span><span> </span><span class="hs-string">&quot;background-gdk&quot;</span><span>
+</span><a name="line-193"></a><span>  </span><a name="cellTextBackgroundSet"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextBackgroundSet"><span class="hs-identifier">gdk_color_get_type</span></a></a><span>
+</span><a name="line-194"></a><span class="hs-pragma">{-# LINE 187 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-195"></a><span>
+</span><a name="line-196"></a><span class="hs-comment">-- | Whether the 'cellTextBackground'\/'cellTextBackgroundColor' attribute is set.</span><span>
+</span><a name="line-197"></a><span class="hs-comment">--</span><span>
+</span><a name="line-198"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-199"></a><span class="hs-comment">--</span><span>
+</span><a name="line-200"></a><span class="hs-identifier">cellTextBackgroundSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-201"></a><span class="hs-identifier">cellTextBackgroundSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;background-set&quot;</span><span>
+</span><a name="line-202"></a><span>
+</span><a name="line-203"></a><span class="hs-comment">-- | Whether the text can be modified by the user.</span><span>
+</span><a name="line-204"></a><span class="hs-comment">--</span><span>
+</span><a name="line-205"></a><span class="hs-identifier">cellTextEditable</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-206"></a><span class="hs-identifier">cellTextEditable</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;editable&quot;</span><span>
+</span><a name="line-207"></a><span>
+</span><a name="line-208"></a><span class="hs-comment">-- | Whether the 'cellTextEditable' flag affects text editability.</span><span>
+</span><a name="line-209"></a><span class="hs-comment">--</span><span>
+</span><a name="line-210"></a><span class="hs-identifier">cellTextEditableSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-211"></a><span class="hs-identifier">cellTextEditableSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;editable-set&quot;</span><span>
+</span><a name="line-212"></a><span>
+</span><a name="line-213"></a><span>
+</span><a name="line-214"></a><span class="hs-comment">-- | Specifies the preferred place to ellipsize the string, if the cell</span><span>
+</span><a name="line-215"></a><span class="hs-comment">-- renderer does not have enough room to display the entire string.</span><span>
+</span><a name="line-216"></a><span class="hs-comment">-- Setting it to 'Graphics.Rendering.Pango.Enums.EllipsizeNone' turns off</span><span>
+</span><a name="line-217"></a><span class="hs-comment">-- ellipsizing. See the 'cellTextWrapWidth' property for another way of</span><span>
+</span><a name="line-218"></a><span class="hs-comment">-- making the text fit into a given width.</span><span>
+</span><a name="line-219"></a><span class="hs-comment">--</span><span>
+</span><a name="line-220"></a><span class="hs-comment">-- * Available in Gtk 2.6 or higher.</span><span>
+</span><a name="line-221"></a><span class="hs-comment">--</span><span>
+</span><a name="line-222"></a><span class="hs-identifier">cellTextEllipsize</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">EllipsizeMode</span><span>
+</span><a name="line-223"></a><a name="cellTextEllipsizeSet"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextEllipsizeSet"><span class="hs-identifier">cellTextEllipsize</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;ellipsize&quot;</span><span>
+</span><a name="line-224"></a><span>                </span><span class="hs-identifier">pango_ellipsize_mode_get_type</span><span>
+</span><a name="line-225"></a><span class="hs-pragma">{-# LINE 217 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-226"></a><span>
+</span><a name="line-227"></a><span class="hs-comment">-- | Whether the 'cellTextEllipsize' tag affects the ellipsize mode.</span><span>
+</span><a name="line-228"></a><span class="hs-comment">--</span><span>
+</span><a name="line-229"></a><span class="hs-comment">-- * Available in Gtk 2.6 or higher.</span><span>
+</span><a name="line-230"></a><span class="hs-comment">--</span><span>
+</span><a name="line-231"></a><span class="hs-identifier">cellTextEllipsizeSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-232"></a><span class="hs-identifier">cellTextEllipsizeSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;ellipsize-set&quot;</span><span>
+</span><a name="line-233"></a><span>
+</span><a name="line-234"></a><span>
+</span><a name="line-235"></a><span class="hs-comment">-- | Name of the font family, e.g. Sans, Helvetica, Times, Monospace.</span><span>
+</span><a name="line-236"></a><span class="hs-comment">--</span><span>
+</span><a name="line-237"></a><span class="hs-identifier">cellTextFamily</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">string</span><span>
+</span><a name="line-238"></a><span class="hs-identifier">cellTextFamily</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromStringProperty</span><span> </span><span class="hs-string">&quot;family&quot;</span><span>
+</span><a name="line-239"></a><span>
+</span><a name="line-240"></a><span class="hs-comment">-- | Determines if 'cellTextFamily' has an effect.</span><span>
+</span><a name="line-241"></a><span class="hs-comment">--</span><span>
+</span><a name="line-242"></a><span class="hs-identifier">cellTextFamilySet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-243"></a><span class="hs-identifier">cellTextFamilySet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;family-set&quot;</span><span>
+</span><a name="line-244"></a><span>
+</span><a name="line-245"></a><span class="hs-comment">-- | Font description as a string.</span><span>
+</span><a name="line-246"></a><span class="hs-comment">--</span><span>
+</span><a name="line-247"></a><span class="hs-identifier">cellTextFont</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">string</span><span>
+</span><a name="line-248"></a><span class="hs-identifier">cellTextFont</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromStringProperty</span><span> </span><span class="hs-string">&quot;font&quot;</span><span>
+</span><a name="line-249"></a><span>
+</span><a name="line-250"></a><span class="hs-comment">-- | Font description as a 'Graphics.Rendering.Pango.FontDescription'.</span><span>
+</span><a name="line-251"></a><span class="hs-comment">--</span><span>
+</span><a name="line-252"></a><span class="hs-identifier">cellTextFontDesc</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier hs-type">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">FontDescription</span><span>
+</span><a name="line-253"></a><a name="cellTextForeground"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextForeground"><span class="hs-identifier">cellTextFontDesc</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoxedOpaqueProperty</span><span> </span><span class="hs-identifier">makeNewFontDescription</span><span>
+</span><a name="line-254"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">FontDescription</span><span> </span><span class="hs-identifier">fd</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">act</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">fd</span><span> </span><span class="hs-identifier">act</span><span class="hs-special">)</span><span> </span><span class="hs-string">&quot;font-desc&quot;</span><span>
+</span><a name="line-255"></a><span>  </span><span class="hs-identifier">pango_font_description_get_type</span><span>
+</span><a name="line-256"></a><span class="hs-pragma">{-# LINE 247 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-257"></a><span>
+</span><a name="line-258"></a><span class="hs-comment">-- | Text foreground color as a string.</span><span>
+</span><a name="line-259"></a><span class="hs-comment">--</span><span>
+</span><a name="line-260"></a><span class="hs-comment">-- Default value: @\&quot;\&quot;@</span><span>
+</span><a name="line-261"></a><span class="hs-comment">--</span><span>
+</span><a name="line-262"></a><span class="hs-identifier">cellTextForeground</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">WriteAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">string</span><span>
+</span><a name="line-263"></a><span class="hs-identifier">cellTextForeground</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">writeAttrFromStringProperty</span><span> </span><span class="hs-string">&quot;foreground&quot;</span><span>
+</span><a name="line-264"></a><span>
+</span><a name="line-265"></a><span class="hs-comment">-- | Text foreground color as a 'Color'.</span><span>
+</span><a name="line-266"></a><span class="hs-comment">--</span><span>
+</span><a name="line-267"></a><span class="hs-identifier">cellTextForegroundColor</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Color</span><span>
+</span><a name="line-268"></a><span class="hs-identifier">cellTextForegroundColor</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoxedStorableProperty</span><span> </span><span class="hs-string">&quot;foreground-gdk&quot;</span><span>
+</span><a name="line-269"></a><span>  </span><span class="hs-identifier">gdk_color_get_type</span><span>
+</span><a name="line-270"></a><span class="hs-pragma">{-# LINE 260 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-271"></a><span>
+</span><a name="line-272"></a><span class="hs-comment">-- | Whether the 'cellTextForeground'\/'cellTextForegroundColor' attribute is set.</span><span>
+</span><a name="line-273"></a><span class="hs-comment">--</span><span>
+</span><a name="line-274"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-275"></a><span class="hs-comment">--</span><span>
+</span><a name="line-276"></a><span class="hs-identifier">cellTextForegroundSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-277"></a><span class="hs-identifier">cellTextForegroundSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;foreground-set&quot;</span><span>
+</span><a name="line-278"></a><span>
+</span><a name="line-279"></a><span class="hs-comment">-- | The language this text is in, as an ISO code. Pango can use this as</span><span>
+</span><a name="line-280"></a><span class="hs-comment">-- a hint when rendering the text. If you don't understand this parameter,</span><span>
+</span><a name="line-281"></a><span class="hs-comment">-- you probably don't need it.</span><span>
+</span><a name="line-282"></a><span class="hs-comment">--</span><span>
+</span><a name="line-283"></a><span class="hs-identifier">cellTextLanguage</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">CellRendererTextClass</span><span> </span><span class="hs-identifier hs-var">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span>
+</span><a name="line-284"></a><span class="hs-identifier">cellTextLanguage</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromMaybeStringProperty</span><span> </span><span class="hs-string">&quot;language&quot;</span><span>
+</span><a name="line-285"></a><span>
+</span><a name="line-286"></a><span class="hs-comment">-- | Whether the 'cellTextLanguage' tag is used, default is @False@.</span><span>
+</span><a name="line-287"></a><span class="hs-comment">--</span><span>
+</span><a name="line-288"></a><span class="hs-identifier">cellTextLanguageSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-289"></a><span class="hs-identifier">cellTextLanguageSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;language-set&quot;</span><span>
+</span><a name="line-290"></a><span>
+</span><a name="line-291"></a><span class="hs-comment">-- | Define a markup string instead of a text. See 'cellText'.</span><span>
+</span><a name="line-292"></a><span class="hs-comment">--</span><span>
+</span><a name="line-293"></a><span class="hs-identifier">cellTextMarkup</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">cr</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">WriteAttr</span><span> </span><span class="hs-identifier">cr</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span>
+</span><a name="line-294"></a><span class="hs-identifier">cellTextMarkup</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">writeAttrFromMaybeStringProperty</span><span> </span><span class="hs-string">&quot;markup&quot;</span><span>
+</span><a name="line-295"></a><span>
+</span><a name="line-296"></a><span class="hs-comment">-- %hash c:4e25 d:f7c6</span><span>
+</span><a name="line-297"></a><span class="hs-comment">-- | Offset of text above the baseline (below the baseline if rise is</span><span>
+</span><a name="line-298"></a><span class="hs-comment">-- negative).</span><span>
+</span><a name="line-299"></a><span class="hs-comment">--</span><span>
+</span><a name="line-300"></a><span class="hs-comment">-- Allowed values: &gt;= -2147483647</span><span>
+</span><a name="line-301"></a><span class="hs-comment">--</span><span>
+</span><a name="line-302"></a><span class="hs-comment">-- Default value: 0</span><span>
+</span><a name="line-303"></a><span class="hs-comment">--</span><span>
+</span><a name="line-304"></a><a name="cellTextScale"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextScale"><span class="hs-identifier">cellTextRise</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-var">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-305"></a><span class="hs-identifier">cellTextRise</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;rise&quot;</span><span>
+</span><a name="line-306"></a><span>
+</span><a name="line-307"></a><span class="hs-comment">-- | Whether the 'cellTextRise' tag is used, default is @False@.</span><span>
+</span><a name="line-308"></a><span class="hs-comment">--</span><span>
+</span><a name="line-309"></a><a name="cellTextScaleSet"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextScaleSet"><span class="hs-identifier">cellTextRiseSet</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-var">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-310"></a><span class="hs-identifier">cellTextRiseSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;rise-set&quot;</span><span>
+</span><a name="line-311"></a><span>
+</span><a name="line-312"></a><span class="hs-comment">-- | Font scaling factor. Default is 1.</span><span>
+</span><a name="line-313"></a><span class="hs-comment">--</span><span>
+</span><a name="line-314"></a><span class="hs-identifier">cellTextScale</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Double</span><span>
+</span><a name="line-315"></a><span class="hs-identifier">cellTextScale</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromDoubleProperty</span><span> </span><span class="hs-string">&quot;scale&quot;</span><span>
+</span><a name="line-316"></a><span>
+</span><a name="line-317"></a><span class="hs-comment">-- | Whether the 'cellTextScale' tag is used, default is @False@.</span><span>
+</span><a name="line-318"></a><span class="hs-comment">--</span><span>
+</span><a name="line-319"></a><span class="hs-identifier">cellTextScaleSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-320"></a><span class="hs-identifier">cellTextScaleSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;scale-set&quot;</span><span>
+</span><a name="line-321"></a><span>
+</span><a name="line-322"></a><span class="hs-comment">-- %hash c:d85f d:9cfb</span><span>
+</span><a name="line-323"></a><span class="hs-comment">-- | Whether or not to keep all text in a single paragraph.</span><span>
+</span><a name="line-324"></a><span class="hs-comment">--</span><span>
+</span><a name="line-325"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-326"></a><span class="hs-comment">--</span><span>
+</span><a name="line-327"></a><span class="hs-identifier">cellTextSingleParagraphMode</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-328"></a><span class="hs-identifier">cellTextSingleParagraphMode</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;single-paragraph-mode&quot;</span><span>
+</span><a name="line-329"></a><span>
+</span><a name="line-330"></a><span class="hs-comment">-- | Font size in points.</span><span>
+</span><a name="line-331"></a><span class="hs-comment">--</span><span>
+</span><a name="line-332"></a><a name="cellTextSizePoints"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextSizePoints"><span class="hs-identifier">cellTextSize</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier hs-var">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Double</span><span>
+</span><a name="line-333"></a><span class="hs-identifier">cellTextSize</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromDoubleProperty</span><span> </span><span class="hs-string">&quot;size-points&quot;</span><span>
+</span><a name="line-334"></a><span>
+</span><a name="line-335"></a><span class="hs-comment">-- %hash c:d281 d:3b0c</span><span>
+</span><a name="line-336"></a><span class="hs-comment">-- | Font size in points.</span><span>
+</span><a name="line-337"></a><span class="hs-comment">--</span><span>
+</span><a name="line-338"></a><span class="hs-comment">-- Allowed values: &gt;= 0</span><span>
+</span><a name="line-339"></a><span class="hs-comment">--</span><span>
+</span><a name="line-340"></a><span class="hs-comment">-- Default value: 0</span><span>
+</span><a name="line-341"></a><span class="hs-comment">--</span><span>
+</span><a name="line-342"></a><span class="hs-identifier">cellTextSizePoints</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Double</span><span>
+</span><a name="line-343"></a><span class="hs-identifier">cellTextSizePoints</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromDoubleProperty</span><span> </span><span class="hs-string">&quot;size-points&quot;</span><span>
+</span><a name="line-344"></a><span>
+</span><a name="line-345"></a><span class="hs-comment">-- | Whether the 'cellTextSize' tag is used, default is @False@.</span><span>
+</span><a name="line-346"></a><span class="hs-comment">--</span><span>
+</span><a name="line-347"></a><span class="hs-identifier">cellTextSizeSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-348"></a><a name="cellTextStretchSet"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextStretchSet"><span class="hs-identifier">cellTextSizeSet</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;size-set&quot;</span><span>
+</span><a name="line-349"></a><span>
+</span><a name="line-350"></a><span class="hs-comment">-- | Font stretch.</span><span>
+</span><a name="line-351"></a><span class="hs-comment">--</span><span>
+</span><a name="line-352"></a><span class="hs-identifier">cellTextStretch</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><a href="Graphics.UI.Gtk.Types.html#CellRendererTextClass"><span class="hs-identifier hs-type">self</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Stretch</span><span>
+</span><a name="line-353"></a><a name="cellTextStrikethrough"><a href="Graphics.UI.Gtk.ModelView.CellRendererText.html#cellTextStrikethrough"><span class="hs-identifier">cellTextStretch</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;stretch&quot;</span><span>
+</span><a name="line-354"></a><span>              </span><span class="hs-identifier">pango_stretch_get_type</span><span>
+</span><a name="line-355"></a><span class="hs-pragma">{-# LINE 344 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-356"></a><span>
+</span><a name="line-357"></a><span class="hs-comment">-- | Whether the 'cellTextStretch' tag is used, default is @False@.</span><span>
+</span><a name="line-358"></a><span class="hs-comment">--</span><span>
+</span><a name="line-359"></a><span class="hs-identifier">cellTextStretchSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-360"></a><span class="hs-identifier">cellTextStretchSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;stretch-set&quot;</span><span>
+</span><a name="line-361"></a><span>
+</span><a name="line-362"></a><span class="hs-comment">-- | Whether to strike through the text.</span><span>
+</span><a name="line-363"></a><span class="hs-comment">--</span><span>
+</span><a name="line-364"></a><span class="hs-identifier">cellTextStrikethrough</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-365"></a><span class="hs-identifier">cellTextStrikethrough</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;strikethrough&quot;</span><span>
+</span><a name="line-366"></a><span>
+</span><a name="line-367"></a><span class="hs-comment">-- | Whether the 'cellTextStrikethrough' tag is used, default is @False@.</span><span>
+</span><a name="line-368"></a><span class="hs-comment">--</span><span>
+</span><a name="line-369"></a><span class="hs-identifier">cellTextStrikethroughSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-370"></a><span class="hs-identifier">cellTextStrikethroughSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;strikethrough-set&quot;</span><span>
+</span><a name="line-371"></a><span>
+</span><a name="line-372"></a><span class="hs-comment">-- | Font style (e.g. normal or italics).</span><span>
+</span><a name="line-373"></a><span class="hs-comment">--</span><span>
+</span><a name="line-374"></a><span class="hs-identifier">cellTextStyle</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier hs-type">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><a href="#local-6989586621679318765"><span class="hs-identifier hs-type">self</span></a><span> </span><span class="hs-identifier">FontStyle</span><span>
+</span><a name="line-375"></a><span class="hs-identifier">cellTextStyle</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;style&quot;</span><span>
+</span><a name="line-376"></a><span>            </span><span class="hs-identifier">pango_style_get_type</span><span>
+</span><a name="line-377"></a><span class="hs-pragma">{-# LINE 365 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-378"></a><span>
+</span><a name="line-379"></a><span class="hs-comment">-- | Whether the 'cellTextStyle' tag is used, default is @False@.</span><span>
+</span><a name="line-380"></a><span class="hs-comment">--</span><span>
+</span><a name="line-381"></a><span class="hs-identifier">cellTextStyleSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-382"></a><span class="hs-identifier">cellTextStyleSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;style-set&quot;</span><span>
+</span><a name="line-383"></a><span>
+</span><a name="line-384"></a><span class="hs-comment">-- | Define the attribute that specifies the text to be rendered. See</span><span>
+</span><a name="line-385"></a><span class="hs-comment">-- also 'cellTextMarkup'.</span><span>
+</span><a name="line-386"></a><span class="hs-comment">--</span><span>
+</span><a name="line-387"></a><span class="hs-identifier">cellText</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">cr</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">cr</span><span> </span><span class="hs-identifier">string</span><span>
+</span><a name="line-388"></a><span class="hs-identifier">cellText</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromStringProperty</span><span> </span><span class="hs-string">&quot;text&quot;</span><span>
+</span><a name="line-389"></a><span>
+</span><a name="line-390"></a><span class="hs-comment">-- | Style of underline for this text.</span><span>
+</span><a name="line-391"></a><span class="hs-comment">--</span><span>
+</span><a name="line-392"></a><span class="hs-identifier">cellTextUnderline</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Underline</span><span>
+</span><a name="line-393"></a><span class="hs-identifier">cellTextUnderline</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;underline&quot;</span><span>
+</span><a name="line-394"></a><span>                </span><span class="hs-identifier">pango_underline_get_type</span><span>
+</span><a name="line-395"></a><span class="hs-pragma">{-# LINE 382 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-396"></a><span>
+</span><a name="line-397"></a><span class="hs-comment">-- | Whether the 'cellTextUnderline' tag is used, default is @False@.</span><span>
+</span><a name="line-398"></a><span class="hs-comment">--</span><span>
+</span><a name="line-399"></a><span class="hs-identifier">cellTextUnderlineSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-400"></a><span class="hs-identifier">cellTextUnderlineSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;underline-set&quot;</span><span>
+</span><a name="line-401"></a><span>
+</span><a name="line-402"></a><span class="hs-comment">-- | Font variant (e.g. small caps).</span><span>
+</span><a name="line-403"></a><span class="hs-comment">--</span><span>
+</span><a name="line-404"></a><span class="hs-identifier">cellTextVariant</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Variant</span><span>
+</span><a name="line-405"></a><span class="hs-identifier">cellTextVariant</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;variant&quot;</span><span>
+</span><a name="line-406"></a><span>              </span><span class="hs-identifier">pango_variant_get_type</span><span>
+</span><a name="line-407"></a><span class="hs-pragma">{-# LINE 393 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-408"></a><span>
+</span><a name="line-409"></a><span class="hs-comment">-- | Whether the 'cellTextVariant' tag is used, default is @False@.</span><span>
+</span><a name="line-410"></a><span class="hs-comment">--</span><span>
+</span><a name="line-411"></a><span class="hs-identifier">cellTextVariantSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-412"></a><span class="hs-identifier">cellTextVariantSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;variant-set&quot;</span><span>
+</span><a name="line-413"></a><span>
+</span><a name="line-414"></a><span class="hs-comment">-- | Font weight, default: 400.</span><span>
+</span><a name="line-415"></a><span class="hs-comment">--</span><span>
+</span><a name="line-416"></a><span class="hs-identifier">cellTextWeight</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-417"></a><span class="hs-identifier">cellTextWeight</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;weight&quot;</span><span>
+</span><a name="line-418"></a><span>
+</span><a name="line-419"></a><span class="hs-comment">-- | Whether the 'cellTextWeight' tag is used, default is @False@.</span><span>
+</span><a name="line-420"></a><span class="hs-comment">--</span><span>
+</span><a name="line-421"></a><span class="hs-identifier">cellTextWeightSet</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-422"></a><span class="hs-identifier">cellTextWeightSet</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;weight-set&quot;</span><span>
+</span><a name="line-423"></a><span>
+</span><a name="line-424"></a><span>
+</span><a name="line-425"></a><span>
+</span><a name="line-426"></a><span class="hs-comment">-- | The desired width of the cell, in characters. If this property is set</span><span>
+</span><a name="line-427"></a><span class="hs-comment">-- to @-1@, the width will be calculated automatically, otherwise the cell</span><span>
+</span><a name="line-428"></a><span class="hs-comment">-- will request either 3 characters or the property value, whichever is</span><span>
+</span><a name="line-429"></a><span class="hs-comment">-- greater.</span><span>
+</span><a name="line-430"></a><span class="hs-comment">--</span><span>
+</span><a name="line-431"></a><span class="hs-comment">-- * Available in Gtk 2.6 or higher.</span><span>
+</span><a name="line-432"></a><span class="hs-comment">--</span><span>
+</span><a name="line-433"></a><span class="hs-identifier">cellTextWidthChars</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-434"></a><span class="hs-identifier">cellTextWidthChars</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;width-chars&quot;</span><span>
+</span><a name="line-435"></a><span>
+</span><a name="line-436"></a><span>
+</span><a name="line-437"></a><span>
+</span><a name="line-438"></a><span>
+</span><a name="line-439"></a><span>
+</span><a name="line-440"></a><span class="hs-comment">-- | Specifies how to break the string into multiple lines, if the cell</span><span>
+</span><a name="line-441"></a><span class="hs-comment">-- renderer does not have enough room to display the entire string.</span><span>
+</span><a name="line-442"></a><span class="hs-comment">-- This property has no effect unless the 'cellTextWrapWidth' property is set.</span><span>
+</span><a name="line-443"></a><span class="hs-comment">--</span><span>
+</span><a name="line-444"></a><span class="hs-comment">-- * Available in Gtk 2.8 or higher.</span><span>
+</span><a name="line-445"></a><span class="hs-comment">--</span><span>
+</span><a name="line-446"></a><span class="hs-identifier">cellTextWrapMode</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">LayoutWrapMode</span><span>
+</span><a name="line-447"></a><span class="hs-identifier">cellTextWrapMode</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;wrap-mode&quot;</span><span>
+</span><a name="line-448"></a><span>               </span><span class="hs-identifier">pango_wrap_mode_get_type</span><span>
+</span><a name="line-449"></a><span class="hs-pragma">{-# LINE 434 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-450"></a><span>
+</span><a name="line-451"></a><span class="hs-comment">-- | Specifies the width at which the text is wrapped. The wrap-mode</span><span>
+</span><a name="line-452"></a><span class="hs-comment">-- property can be used to influence at what character positions the</span><span>
+</span><a name="line-453"></a><span class="hs-comment">-- line breaks can be placed. Setting wrap-width to @-1@ turns wrapping off.</span><span>
+</span><a name="line-454"></a><span class="hs-comment">--</span><span>
+</span><a name="line-455"></a><span class="hs-comment">-- * Available in Gtk 2.8 or higher.</span><span>
+</span><a name="line-456"></a><span class="hs-comment">--</span><span>
+</span><a name="line-457"></a><span class="hs-identifier">cellTextWrapWidth</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-458"></a><span class="hs-identifier">cellTextWrapWidth</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromIntProperty</span><span> </span><span class="hs-string">&quot;wrap-width&quot;</span><span>
+</span><a name="line-459"></a><span>
+</span><a name="line-460"></a><span>
+</span><a name="line-461"></a><span>
+</span><a name="line-462"></a><span>
+</span><a name="line-463"></a><span>
+</span><a name="line-464"></a><span class="hs-comment">-- %hash c:a59c d:a84a</span><span>
+</span><a name="line-465"></a><span class="hs-comment">-- | Specifies how to align the lines of text with respect to each other.</span><span>
+</span><a name="line-466"></a><span class="hs-comment">--</span><span>
+</span><a name="line-467"></a><span class="hs-comment">-- Note that this property describes how to align the lines of text in case</span><span>
+</span><a name="line-468"></a><span class="hs-comment">-- there are several of them. The</span><span>
+</span><a name="line-469"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.ModelView.CellRenderer.cellXAlign' property of</span><span>
+</span><a name="line-470"></a><span class="hs-comment">-- 'CellRenderer', on the other hand, sets the horizontal alignment of the</span><span>
+</span><a name="line-471"></a><span class="hs-comment">-- whole text.</span><span>
+</span><a name="line-472"></a><span class="hs-comment">--</span><span>
+</span><a name="line-473"></a><span class="hs-comment">-- Default value: 'Graphics.Rendering.Pango.Layout.AlignLeft'</span><span>
+</span><a name="line-474"></a><span class="hs-comment">--</span><span>
+</span><a name="line-475"></a><span class="hs-comment">-- * Available since Gtk+ version 2.10</span><span>
+</span><a name="line-476"></a><span class="hs-comment">--</span><span>
+</span><a name="line-477"></a><span class="hs-identifier">cellTextAlignment</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">LayoutAlignment</span><span>
+</span><a name="line-478"></a><span class="hs-identifier">cellTextAlignment</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromEnumProperty</span><span> </span><span class="hs-string">&quot;alignment&quot;</span><span>
+</span><a name="line-479"></a><span>                              </span><span class="hs-identifier">pango_alignment_get_type</span><span>
+</span><a name="line-480"></a><span class="hs-pragma">{-# LINE 464 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-481"></a><span>
+</span><a name="line-482"></a><span>
+</span><a name="line-483"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-484"></a><span class="hs-comment">-- Signals</span><span>
+</span><a name="line-485"></a><span>
+</span><a name="line-486"></a><span class="hs-comment">-- %hash c:a541 d:18f9</span><span>
+</span><a name="line-487"></a><span class="hs-comment">-- | Emitted when the user finished editing a cell.</span><span>
+</span><a name="line-488"></a><span class="hs-comment">--</span><span>
+</span><a name="line-489"></a><span class="hs-comment">-- Whenever editing is finished successfully, this signal is emitted which</span><span>
+</span><a name="line-490"></a><span class="hs-comment">-- indicates that the model should be updated with the supplied value.</span><span>
+</span><a name="line-491"></a><span class="hs-comment">-- The value is always a string which matches the 'cellText' attribute of</span><span>
+</span><a name="line-492"></a><span class="hs-comment">-- 'CellRendererText' (and its derivates like 'CellRendererCombo').</span><span>
+</span><a name="line-493"></a><span class="hs-comment">--</span><span>
+</span><a name="line-494"></a><span class="hs-comment">-- * This signal is not emitted when editing is disabled (see</span><span>
+</span><a name="line-495"></a><span class="hs-comment">-- 'cellTextEditable') or when the user aborts editing.</span><span>
+</span><a name="line-496"></a><span class="hs-comment">--</span><span>
+</span><a name="line-497"></a><span class="hs-identifier">edited</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
+</span><a name="line-498"></a><span>          </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">TreePath</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">string</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-499"></a><span class="hs-identifier">edited</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-identifier">internalEdited</span><span>
+</span><a name="line-500"></a><span>
+</span><a name="line-501"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-502"></a><span class="hs-comment">-- Deprecated Signals</span><span>
+</span><a name="line-503"></a><span class="hs-pragma">{-# LINE 503 &quot;./Graphics/UI/Gtk/ModelView/CellRendererText.chs&quot; #-}</span><span>
+</span><a name="line-504"></a><span class="hs-identifier">internalEdited</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CellRendererTextClass</span><span> </span><span class="hs-identifier">cr</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">GlibString</span><span> </span><span class="hs-identifier">string</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
+</span><a name="line-505"></a><span>                  </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">cr</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-506"></a><span>                  </span><span class="hs-special">(</span><span class="hs-identifier">TreePath</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">string</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-507"></a><span>                  </span><a name="local-6989586621679318811"><a href="#local-6989586621679318811"><span class="hs-identifier">IO</span></a></a><span> </span><span class="hs-special">(</span><span class="hs-identifier">ConnectId</span><span> </span><span class="hs-identifier">cr</span><span class="hs-special">)</span><span>
+</span><a name="line-508"></a><span class="hs-identifier">internalEdited</span><span> </span><a href="Graphics.UI.Gtk.Signals.html#connect_GLIBSTRING_GLIBSTRING__NONE"><span class="hs-identifier hs-var">after</span></a><span> </span><a href="Graphics.UI.Gtk.Signals.html#connect_GLIBSTRING_GLIBSTRING__NONE"><span class="hs-identifier hs-var">cr</span></a><span> </span><a href="Graphics.UI.Gtk.Signals.html#connect_GLIBSTRING_GLIBSTRING__NONE"><span class="hs-identifier hs-var">user</span></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-509"></a><span>  </span><span class="hs-identifier">connect_GLIBSTRING_GLIBSTRING__NONE</span><span> </span><span class="hs-string">&quot;edited&quot;</span><span> </span><span class="hs-identifier">after</span><span> </span><span class="hs-identifier">cr</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">path</span><span> </span><span class="hs-identifier">string</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-510"></a><span>    </span><span class="hs-identifier">user</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">stringToTreePath</span><span> </span><span class="hs-identifier">path</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">string</span><span>
+</span><a name="line-511"></a><span>
+</span><a name="line-512"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_cell_renderer_text_new&quot;</span><span>
+</span><a name="line-513"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_text_new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRenderer</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-514"></a><span>
+</span><a name="line-515"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_cell_renderer_text_set_fixed_height_from_font&quot;</span><span>
+</span><a name="line-516"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_text_set_fixed_height_from_font</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRendererText</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-517"></a><span>
+</span><a name="line-518"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gdk_color_get_type&quot;</span><span>
+</span><a name="line-519"></a><span>  </span><span class="hs-identifier">gdk_color_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-520"></a><span>
+</span><a name="line-521"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;pango_ellipsize_mode_get_type&quot;</span><span>
+</span><a name="line-522"></a><span>  </span><span class="hs-identifier">pango_ellipsize_mode_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-523"></a><span>
+</span><a name="line-524"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;pango_font_description_get_type&quot;</span><span>
+</span><a name="line-525"></a><span>  </span><span class="hs-identifier">pango_font_description_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-526"></a><span>
+</span><a name="line-527"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;pango_stretch_get_type&quot;</span><span>
+</span><a name="line-528"></a><span>  </span><span class="hs-identifier">pango_stretch_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-529"></a><span>
+</span><a name="line-530"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;pango_style_get_type&quot;</span><span>
+</span><a name="line-531"></a><span>  </span><span class="hs-identifier">pango_style_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-532"></a><span>
+</span><a name="line-533"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;pango_underline_get_type&quot;</span><span>
+</span><a name="line-534"></a><span>  </span><span class="hs-identifier">pango_underline_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-535"></a><span>
+</span><a name="line-536"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;pango_variant_get_type&quot;</span><span>
+</span><a name="line-537"></a><span>  </span><span class="hs-identifier">pango_variant_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-538"></a><span>
+</span><a name="line-539"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;pango_wrap_mode_get_type&quot;</span><span>
+</span><a name="line-540"></a><span>  </span><span class="hs-identifier">pango_wrap_mode_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-541"></a><span>
+</span><a name="line-542"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;pango_alignment_get_type&quot;</span><span>
+</span><a name="line-543"></a><span>  </span><span class="hs-identifier">pango_alignment_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-544"></a></pre></body></html>

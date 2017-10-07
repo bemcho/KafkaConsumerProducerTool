@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) Widget Plug</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon, Andy Stewart</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 23 May 2001</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 1999-2005 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright (C) 2009 Andy Stewart</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-22"></a><span class="hs-comment">--</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-26"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-27"></a><span class="hs-comment">--</span><span>
+</span><a name="line-28"></a><span class="hs-comment">-- Toplevel for embedding into other processes</span><span>
+</span><a name="line-29"></a><span class="hs-comment">--</span><span>
+</span><a name="line-30"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Embedding</span><span class="hs-operator">.</span><span class="hs-identifier">Plug</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-32"></a><span class="hs-comment">--</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- | Together with 'Socket', 'Plug' provides the ability to embed widgets from</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- one process into another process in a fashion that is transparent to the</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- user. One process creates a 'Socket' widget and, passes the ID of that</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- widgets window to the other process, which then creates a 'Plug' with that</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- window ID. Any widgets contained in the 'Plug' then will appear inside the</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- first applications window.</span><span>
+</span><a name="line-39"></a><span>
+</span><a name="line-40"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- | +----'Widget'</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- | +----'Container'</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- | +----'Bin'</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- | +----'Window'</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- | +----Plug</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-51"></a><span>
+</span><a name="line-52"></a><span>
+</span><a name="line-53"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-54"></a><span>  </span><a href="Graphics.UI.Gtk.Embedding.Types.html#PlugClass"><span class="hs-identifier hs-type">Plug</span></a><span class="hs-special">,</span><span>
+</span><a name="line-55"></a><span>  </span><a href="Graphics.UI.Gtk.Embedding.Types.html#castToPlug"><span class="hs-identifier hs-var">PlugClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-56"></a><span>  </span><span class="hs-identifier">castToPlug</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">gTypePlug</span><span class="hs-special">,</span><span>
+</span><a name="line-57"></a><span>  </span><a href="Graphics.UI.Gtk.General.Structs.html#NativeWindowId"><span class="hs-identifier hs-type">toPlug</span></a><span class="hs-special">,</span><span>
+</span><a name="line-58"></a><span>  </span><span class="hs-identifier">NativeWindowId</span><span class="hs-special">,</span><span>
+</span><a name="line-59"></a><span>
+</span><a name="line-60"></a><span class="hs-comment">-- * Constructors</span><span>
+</span><a name="line-61"></a><span>  </span><span class="hs-identifier">plugNew</span><span class="hs-special">,</span><span>
+</span><a name="line-62"></a><span>
+</span><a name="line-63"></a><span>  </span><span class="hs-identifier">plugNewForDisplay</span><span class="hs-special">,</span><span>
+</span><a name="line-64"></a><span>
+</span><a name="line-65"></a><span>
+</span><a name="line-66"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-67"></a><span>  </span><span class="hs-identifier">plugGetId</span><span class="hs-special">,</span><span>
+</span><a name="line-68"></a><span>
+</span><a name="line-69"></a><span>  </span><a href="Graphics.UI.Gtk.Embedding.Plug.html#plugGetSocketWindow"><span class="hs-identifier hs-var">plugGetEmbedded</span></a><span class="hs-special">,</span><span>
+</span><a name="line-70"></a><span>  </span><span class="hs-identifier">plugGetSocketWindow</span><span class="hs-special">,</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span>
+</span><a name="line-73"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-74"></a><span>  </span><a href="Graphics.UI.Gtk.Embedding.Plug.html#plugAttrSocketWindow"><span class="hs-identifier hs-var">plugAttrEmbedded</span></a><span class="hs-special">,</span><span>
+</span><a name="line-75"></a><span>  </span><span class="hs-identifier">plugAttrSocketWindow</span><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span>
+</span><a name="line-77"></a><span class="hs-comment">-- * Signals</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-identifier">plugEmbedded</span><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>
+</span><a name="line-80"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-81"></a><span>
+</span><a name="line-82"></a><span>
+</span><a name="line-83"></a><span>
+</span><a name="line-84"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-85"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Data</span><span class="hs-operator">.</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromMaybe</span><span class="hs-special">)</span><span>
+</span><a name="line-86"></a><span>
+</span><a name="line-87"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-88"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span>
+</span><a name="line-89"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Properties</span></a><span>
+</span><a name="line-90"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span></a><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Object</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-91"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Embedding.Types.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span></a><span>
+</span><a name="line-92"></a><span class="hs-pragma">{-# LINE 91 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-93"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Embedding</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-94"></a><span class="hs-pragma">{-# LINE 92 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-95"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Signals</span><span>
+</span><a name="line-96"></a><span class="hs-pragma">{-# LINE 93 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span>
+</span><a name="line-99"></a><span>
+</span><a name="line-100"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">General</span><span class="hs-operator">.</span><span class="hs-identifier">Structs</span><span>
+</span><a name="line-101"></a><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><span class="hs-pragma">{-# LINE 99 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-104"></a><span>
+</span><a name="line-105"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-106"></a><span class="hs-comment">-- Constructors</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-comment">-- | Creates a new plug widget inside the 'Socket' identified by @socketId@.</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- If @socketId@ is @Nothing@, the plug is left \&quot;unplugged\&quot; and can later be</span><span>
+</span><a name="line-110"></a><span class="hs-comment">-- plugged into a 'Socket' by 'Graphics.UI.Gtk.Embedding.Socket.socketAddId'.</span><span>
+</span><a name="line-111"></a><span class="hs-comment">--</span><span>
+</span><a name="line-112"></a><span class="hs-comment">-- If a NativeWindowId is supplied the foreign application window will</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- immediatly appear in this 'Plug' once it is shown. If @Nothing@ is passed</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- then a 'NativeWindowId' can be extracted from this 'Plug' using 'plugGetId'</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- and be passed to the application which is to be embedded.</span><span>
+</span><a name="line-116"></a><span class="hs-comment">--</span><span>
+</span><a name="line-117"></a><span class="hs-identifier">plugNew</span><span> </span><span class="hs-glyph">::</span><span>
+</span><a name="line-118"></a><span>  </span><span class="hs-identifier hs-var">Maybe</span><span> </span><span class="hs-identifier">NativeWindowId</span><span> </span><span class="hs-comment">-- ^ @socketId@ - the window ID of the socket, or</span><span>
+</span><a name="line-119"></a><span>                       </span><span class="hs-comment">-- @Nothing@.</span><span>
+</span><a name="line-120"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><a href="Graphics.UI.Gtk.General.Structs.html#fromNativeWindowId"><span class="hs-identifier hs-var">Plug</span></a><span>
+</span><a name="line-121"></a><span class="hs-identifier">plugNew</span><span> </span><span class="hs-identifier">socketId</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-122"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkPlug</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-123"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Plug</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-124"></a><span>  </span><span class="hs-identifier">gtk_plug_new</span><span>
+</span><a name="line-125"></a><span class="hs-pragma">{-# LINE 120 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-126"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromNativeWindowId</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromMaybe</span><span> </span><span class="hs-identifier">nativeWindowIdNone</span><span> </span><span class="hs-identifier">socketId</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-127"></a><span>
+</span><a name="line-128"></a><span>
+</span><a name="line-129"></a><span class="hs-comment">-- | Create a new plug widget inside the 'Socket' identified by socket_id.</span><span>
+</span><a name="line-130"></a><span class="hs-comment">--</span><span>
+</span><a name="line-131"></a><span class="hs-comment">-- * Available since Gtk+ version 2.2</span><span>
+</span><a name="line-132"></a><span class="hs-comment">--</span><span>
+</span><a name="line-133"></a><span class="hs-identifier">plugNewForDisplay</span><span> </span><span class="hs-glyph">::</span><span>
+</span><a name="line-134"></a><span>    </span><span class="hs-identifier">Display</span><span> </span><span class="hs-comment">-- ^ @display@ - the 'Display' on which @socketId@ is</span><span>
+</span><a name="line-135"></a><span>                        </span><span class="hs-comment">-- displayed</span><span>
+</span><a name="line-136"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679227178"><span class="hs-identifier hs-var">Maybe</span></a><span> </span><span class="hs-identifier">NativeWindowId</span><span> </span><span class="hs-comment">-- ^ @socketId@ - the XID of the socket's window.</span><span>
+</span><a name="line-137"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><a href="Graphics.UI.Gtk.General.Structs.html#fromNativeWindowId"><span class="hs-identifier hs-var">Plug</span></a><span>
+</span><a name="line-138"></a><span class="hs-identifier">plugNewForDisplay</span><span> </span><span class="hs-identifier">display</span><span> </span><span class="hs-identifier">socketId</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-139"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkPlug</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-140"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Plug</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-141"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Display</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_plug_new_for_display</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-142"></a><span class="hs-pragma">{-# LINE 136 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-143"></a><span>    </span><span class="hs-identifier">display</span><span>
+</span><a name="line-144"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromNativeWindowId</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromMaybe</span><span> </span><span class="hs-identifier">nativeWindowIdNone</span><span> </span><span class="hs-identifier">socketId</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-145"></a><span>
+</span><a name="line-146"></a><span>
+</span><a name="line-147"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-148"></a><span class="hs-comment">-- Methods</span><span>
+</span><a name="line-149"></a><span>
+</span><a name="line-150"></a><span class="hs-comment">-- | Gets the window ID of a 'Plug' widget, which can then be used to embed</span><span>
+</span><a name="line-151"></a><span class="hs-comment">-- this window inside another window, for instance with</span><span>
+</span><a name="line-152"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.Embedding.Socket.socketAddId'.</span><span>
+</span><a name="line-153"></a><span class="hs-comment">--</span><span>
+</span><a name="line-154"></a><span class="hs-identifier">plugGetId</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PlugClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-155"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">NativeWindowId</span><span> </span><span class="hs-comment">-- ^ returns the window ID for the plug</span><span>
+</span><a name="line-156"></a><span class="hs-identifier">plugGetId</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-157"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toNativeWindowId</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-158"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Plug</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_plug_get_id</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-159"></a><span class="hs-pragma">{-# LINE 152 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-160"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPlug</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-161"></a><span>
+</span><a name="line-162"></a><span>
+</span><a name="line-163"></a><span class="hs-comment">-- | Determines whether the plug is embedded in a socket.</span><span>
+</span><a name="line-164"></a><span class="hs-comment">--</span><span>
+</span><a name="line-165"></a><span class="hs-comment">-- * Available since Gtk+ version 2.14</span><span>
+</span><a name="line-166"></a><span class="hs-comment">--</span><span>
+</span><a name="line-167"></a><span class="hs-identifier">plugGetEmbedded</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PlugClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-168"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ returns @True@ if the plug is embedded in a socket</span><span>
+</span><a name="line-169"></a><span class="hs-identifier">plugGetEmbedded</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-170"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-171"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Plug</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_plug_get_embedded</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-172"></a><span class="hs-pragma">{-# LINE 164 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-173"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier hs-var">toPlug</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-174"></a><span>
+</span><a name="line-175"></a><span class="hs-comment">-- | Retrieves the socket the plug is embedded in.</span><span>
+</span><a name="line-176"></a><span class="hs-comment">--</span><span>
+</span><a name="line-177"></a><span class="hs-comment">-- * Available since Gtk+ version 2.14</span><span>
+</span><a name="line-178"></a><span class="hs-comment">--</span><span>
+</span><a name="line-179"></a><span class="hs-identifier">plugGetSocketWindow</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PlugClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span>
+</span><a name="line-180"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">DrawWindow</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- ^ returns the window of the socket</span><span>
+</span><a name="line-181"></a><span class="hs-identifier">plugGetSocketWindow</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-182"></a><span>  </span><span class="hs-identifier">maybeNull</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewGObject</span><span> </span><span class="hs-identifier">mkDrawWindow</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-183"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Plug</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_plug_get_socket_window</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-184"></a><span class="hs-pragma">{-# LINE 175 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-185"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toPlug</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-186"></a><span>
+</span><a name="line-187"></a><span>
+</span><a name="line-188"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-189"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-190"></a><span>
+</span><a name="line-191"></a><span class="hs-comment">-- | @True@ if the plug is embedded in a socket.</span><span>
+</span><a name="line-192"></a><span class="hs-comment">--</span><span>
+</span><a name="line-193"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-194"></a><span class="hs-comment">--</span><span>
+</span><a name="line-195"></a><span class="hs-comment">-- * Available since Gtk+ version 2.12</span><span>
+</span><a name="line-196"></a><span class="hs-comment">--</span><span>
+</span><a name="line-197"></a><span class="hs-identifier">plugAttrEmbedded</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PlugClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">ReadAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-198"></a><span class="hs-identifier">plugAttrEmbedded</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">readAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;embedded&quot;</span><span>
+</span><a name="line-199"></a><span>
+</span><a name="line-200"></a><span class="hs-comment">-- | The window of the socket the plug is embedded in.</span><span>
+</span><a name="line-201"></a><span class="hs-comment">--</span><span>
+</span><a name="line-202"></a><span class="hs-comment">-- * Available since Gtk+ version 2.14</span><span>
+</span><a name="line-203"></a><span class="hs-comment">--</span><span>
+</span><a name="line-204"></a><span class="hs-identifier">plugAttrSocketWindow</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PlugClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">ReadAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">DrawWindow</span><span class="hs-special">)</span><span>
+</span><a name="line-205"></a><span class="hs-identifier">plugAttrSocketWindow</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">readAttrFromMaybeObjectProperty</span><span> </span><span class="hs-string">&quot;socket-window&quot;</span><span>
+</span><a name="line-206"></a><span>
+</span><a name="line-207"></a><span>
+</span><a name="line-208"></a><span>
+</span><a name="line-209"></a><span>                       </span><span class="hs-identifier">gdk_window_get_type</span><span>
+</span><a name="line-210"></a><span class="hs-pragma">{-# LINE 200 &quot;./Graphics/UI/Gtk/Embedding/Plug.chs&quot; #-}</span><span>
+</span><a name="line-211"></a><span>
+</span><a name="line-212"></a><span>
+</span><a name="line-213"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-214"></a><span class="hs-comment">-- Signals</span><span>
+</span><a name="line-215"></a><span>
+</span><a name="line-216"></a><span class="hs-comment">-- | Gets emitted when the plug becomes embedded in a socket and when the</span><span>
+</span><a name="line-217"></a><span class="hs-comment">-- embedding ends.</span><span>
+</span><a name="line-218"></a><span class="hs-comment">--</span><span>
+</span><a name="line-219"></a><span class="hs-identifier">plugEmbedded</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">PlugClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-220"></a><span class="hs-identifier">plugEmbedded</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">Signal</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">connect_NONE__NONE</span><span> </span><span class="hs-string">&quot;embedded&quot;</span><span class="hs-special">)</span><span>
+</span><a name="line-221"></a><span>
+</span><a name="line-222"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_plug_new&quot;</span><span>
+</span><a name="line-223"></a><span>  </span><span class="hs-identifier">gtk_plug_new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CULong</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-224"></a><span>
+</span><a name="line-225"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_plug_new_for_display&quot;</span><span>
+</span><a name="line-226"></a><span>  </span><span class="hs-identifier">gtk_plug_new_for_display</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Display</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CULong</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-227"></a><span>
+</span><a name="line-228"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_plug_get_id&quot;</span><span>
+</span><a name="line-229"></a><span>  </span><span class="hs-identifier">gtk_plug_get_id</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Plug</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CULong</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-230"></a><span>
+</span><a name="line-231"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_plug_get_embedded&quot;</span><span>
+</span><a name="line-232"></a><span>  </span><span class="hs-identifier">gtk_plug_get_embedded</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Plug</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-233"></a><span>
+</span><a name="line-234"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_plug_get_socket_window&quot;</span><span>
+</span><a name="line-235"></a><span>  </span><span class="hs-identifier">gtk_plug_get_socket_window</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Plug</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">DrawWindow</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-236"></a><span>
+</span><a name="line-237"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gdk_window_get_type&quot;</span><span>
+</span><a name="line-238"></a><span>  </span><span class="hs-identifier">gdk_window_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-239"></a></pre></body></html>

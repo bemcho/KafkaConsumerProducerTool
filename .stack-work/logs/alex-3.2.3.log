@@ -1,0 +1,205 @@
+[1 of 2] Compiling Main             ( /tmp/stack21314/alex-3.2.3/Setup.lhs, /tmp/stack21314/alex-3.2.3/.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/setup/Main.o )
+[2 of 2] Compiling StackSetupShim   ( /home/bemcho/.stack/setup-exe-src/setup-shim-mPHDZzAJ.hs, /tmp/stack21314/alex-3.2.3/.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/setup/StackSetupShim.o )
+Linking /tmp/stack21314/alex-3.2.3/.stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/setup/setup ...
+Configuring alex-3.2.3...
+Building alex-3.2.3...
+Preprocessing executable 'alex' for alex-3.2.3...
+[ 1 of 22] Compiling Util             ( src/Util.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Util.o )
+[ 2 of 22] Compiling UTF8             ( src/UTF8.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/UTF8.o )
+[ 3 of 22] Compiling Sort             ( src/Sort.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Sort.o )
+[ 4 of 22] Compiling Set              ( src/Set.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Set.o )
+[ 5 of 22] Compiling Paths_alex       ( .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/autogen/Paths_alex.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Paths_alex.o )
+[ 6 of 22] Compiling Map              ( src/Map.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Map.o )
+[ 7 of 22] Compiling Data.Ranged.Boundaries ( src/Data/Ranged/Boundaries.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Data/Ranged/Boundaries.o )
+[ 8 of 22] Compiling Data.Ranged.Ranges ( src/Data/Ranged/Ranges.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Data/Ranged/Ranges.o )
+[ 9 of 22] Compiling Data.Ranged.RangedSet ( src/Data/Ranged/RangedSet.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Data/Ranged/RangedSet.o )
+[10 of 22] Compiling Data.Ranged      ( src/Data/Ranged.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Data/Ranged.o )
+[11 of 22] Compiling DFS              ( src/DFS.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/DFS.o )
+[12 of 22] Compiling CharSet          ( src/CharSet.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/CharSet.o )
+[13 of 22] Compiling AbsSyn           ( src/AbsSyn.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/AbsSyn.o )
+[14 of 22] Compiling DFAMin           ( src/DFAMin.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/DFAMin.o )
+[15 of 22] Compiling Info             ( src/Info.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Info.o )
+[16 of 22] Compiling NFA              ( src/NFA.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/NFA.o )
+[17 of 22] Compiling DFA              ( src/DFA.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/DFA.o )
+[18 of 22] Compiling Output           ( src/Output.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Output.o )
+[19 of 22] Compiling ParseMonad       ( src/ParseMonad.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/ParseMonad.o )
+[20 of 22] Compiling Scan             ( src/Scan.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Scan.o )
+
+src/Scan.hs:17:1: warning: [-Wunused-imports]
+    The import of ‘Data.Char’ is redundant
+      except perhaps to import instances from ‘Data.Char’
+    To import instances alone, use: import Data.Char()
+
+src/Scan.hs:40:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alex_accept :: Array Int (AlexAcc Action Any)
+
+src/Scan.hs:361:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexIndexInt32OffAddr :: AlexAddr -> Int# -> Int#
+
+src/Scan.hs:386:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      quickIndex :: Array Int (AlexAcc Action Any)
+                    -> Int -> AlexAcc Action Any
+
+src/Scan.hs:402:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexScan :: AlexInput -> Int -> AlexReturn Action
+
+src/Scan.hs:405:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexScanUser :: Any -> AlexInput -> Int -> AlexReturn Action
+
+src/Scan.hs:407:1: warning: [-Wtabs]
+    Tab character found here, and in 59 further locations.
+    Please use spaces instead.
+
+src/Scan.hs:436:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alex_scan_tkn :: Any
+                       -> AlexInput
+                       -> Int#
+                       -> AlexInput
+                       -> Int#
+                       -> AlexLastAcc Action
+                       -> (AlexLastAcc Action,
+                           (AlexPosn, Char, [ParseMonad.Byte], String))
+
+src/Scan.hs:489:10: warning: [-Wunused-matches]
+    Defined but not used: ‘f’
+
+src/Scan.hs:491:10: warning: [-Wunused-matches]
+    Defined but not used: ‘f’
+
+src/Scan.hs:506:1: warning: [-Wunused-top-binds]
+    Defined but not used: ‘alexAndPred’
+
+src/Scan.hs:506:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexAndPred :: (t3 -> t2 -> t1 -> t -> Bool)
+                     -> (t3 -> t2 -> t1 -> t -> Bool) -> t3 -> t2 -> t1 -> t -> Bool
+
+src/Scan.hs:510:1: warning: [-Wunused-top-binds]
+    Defined but not used: ‘alexPrevCharIs’
+
+src/Scan.hs:510:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexPrevCharIs :: Char -> t2 -> AlexInput -> t1 -> t -> Bool
+
+src/Scan.hs:512:1: warning: [-Wunused-top-binds]
+    Defined but not used: ‘alexPrevCharMatches’
+
+src/Scan.hs:512:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexPrevCharMatches :: (Char -> t3)
+                             -> t2 -> AlexInput -> t1 -> t -> t3
+
+src/Scan.hs:515:1: warning: [-Wunused-top-binds]
+    Defined but not used: ‘alexPrevCharIsOneOf’
+
+src/Scan.hs:515:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexPrevCharIsOneOf :: Array Char e
+                             -> t2 -> AlexInput -> t1 -> t -> e
+
+src/Scan.hs:518:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexRightContext :: Int -> AlexAccPred Any
+
+src/Scan.hs:528:1: warning: [-Wunused-top-binds]
+    Defined but not used: ‘iUnbox’
+
+src/Scan.hs:528:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: iUnbox :: Int -> Int#
+
+src/Scan.x:85:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      tokPosn :: Token -> AlexPosn
+
+src/Scan.x:249:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_0 :: Action
+
+src/Scan.x:250:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_1 :: Action
+
+src/Scan.x:251:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_2 :: Action
+
+src/Scan.x:252:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_3 :: Action
+
+src/Scan.x:253:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_4 :: Action
+
+src/Scan.x:254:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_5 :: Action
+
+src/Scan.x:255:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_6 :: Action
+
+src/Scan.x:256:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_7 :: Action
+
+src/Scan.x:257:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_8 :: Action
+
+src/Scan.x:258:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_9 :: Action
+
+src/Scan.x:259:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_10 :: Action
+
+src/Scan.x:260:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_11 :: Action
+
+src/Scan.x:261:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_12 :: Action
+
+src/Scan.x:262:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_13 :: Action
+
+src/Scan.x:263:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_14 :: Action
+
+src/Scan.x:264:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_15 :: Action
+
+src/Scan.x:265:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_16 :: Action
+
+src/Scan.x:266:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_17 :: Action
+
+src/Scan.x:267:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_18 :: Action
+
+src/Scan.x:268:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_19 :: Action
+
+src/Scan.x:269:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_20 :: Action
+
+src/Scan.x:270:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_21 :: Action
+
+src/Scan.x:271:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_22 :: Action
+
+src/Scan.x:272:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_23 :: Action
+
+src/Scan.x:273:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_24 :: Action
+
+src/Scan.x:274:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature: alex_action_25 :: Action
+
+templates/GenericTemplate.hs:60:1: warning: [-Wmissing-signatures]
+    Top-level binding with no type signature:
+      alexIndexInt16OffAddr :: AlexAddr -> Int# -> Int#
+[21 of 22] Compiling Parser           ( src/Parser.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Parser.o )
+[22 of 22] Compiling Main             ( src/Main.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex-tmp/Main.o )
+Linking .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/alex/alex ...
+Installing executable(s) in
+/home/bemcho/.stack/snapshots/x86_64-linux-nopie/lts-9.6/8.0.2/bin

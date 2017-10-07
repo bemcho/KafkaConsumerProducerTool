@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) General</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon, Manuel M. T. Chakravarty</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 8 December 1998</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 2000..2005 Axel Simon, Manuel M. T. Chakravarty</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- library initialization, main event loop, and events</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">General</span><span class="hs-operator">.</span><span class="hs-identifier">General</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- getDefaultLanguage,</span><span>
+</span><a name="line-31"></a><span>  </span><span class="hs-comment">-- * Initialisation</span><span>
+</span><a name="line-32"></a><span>  </span><span class="hs-identifier">initGUI</span><span class="hs-special">,</span><span>
+</span><a name="line-33"></a><span>
+</span><a name="line-34"></a><span>  </span><span class="hs-comment">-- ** Support for OS threads</span><span>
+</span><a name="line-35"></a><span>  </span><span class="hs-identifier">unsafeInitGUIForThreadedRTS</span><span class="hs-special">,</span><span>
+</span><a name="line-36"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#postGUIAsync"><span class="hs-identifier hs-var">postGUISync</span></a><span class="hs-special">,</span><span>
+</span><a name="line-37"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#threadsEnter"><span class="hs-identifier hs-var">postGUIAsync</span></a><span class="hs-special">,</span><span>
+</span><a name="line-38"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#threadsLeave"><span class="hs-identifier hs-var">threadsEnter</span></a><span class="hs-special">,</span><span>
+</span><a name="line-39"></a><span>  </span><span class="hs-identifier">threadsLeave</span><span class="hs-special">,</span><span>
+</span><a name="line-40"></a><span>
+</span><a name="line-41"></a><span>  </span><span class="hs-comment">-- * Main event loop</span><span>
+</span><a name="line-42"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#mainQuit"><span class="hs-identifier hs-var">mainGUI</span></a><span class="hs-special">,</span><span>
+</span><a name="line-43"></a><span>  </span><span class="hs-identifier">mainQuit</span><span class="hs-special">,</span><span>
+</span><a name="line-44"></a><span>
+</span><a name="line-45"></a><span>  </span><span class="hs-comment">-- ** Less commonly used event loop functions</span><span>
+</span><a name="line-46"></a><span>  </span><span class="hs-identifier">eventsPending</span><span class="hs-special">,</span><span>
+</span><a name="line-47"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#mainIteration"><span class="hs-identifier hs-var">mainLevel</span></a><span class="hs-special">,</span><span>
+</span><a name="line-48"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#mainIterationDo"><span class="hs-identifier hs-var">mainIteration</span></a><span class="hs-special">,</span><span>
+</span><a name="line-49"></a><span>  </span><span class="hs-identifier">mainIterationDo</span><span class="hs-special">,</span><span>
+</span><a name="line-50"></a><span>  </span><span class="hs-identifier">mainDoEvent</span><span class="hs-special">,</span><span>
+</span><a name="line-51"></a><span>
+</span><a name="line-52"></a><span>  </span><span class="hs-comment">-- ** Call when mainloop is left</span><span>
+</span><a name="line-53"></a><span>
+</span><a name="line-54"></a><span>
+</span><a name="line-55"></a><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span>
+</span><a name="line-58"></a><span>
+</span><a name="line-59"></a><span>  </span><span class="hs-comment">-- * Grab widgets</span><span>
+</span><a name="line-60"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#grabGetCurrent"><span class="hs-identifier hs-var">grabAdd</span></a><span class="hs-special">,</span><span>
+</span><a name="line-61"></a><span>  </span><span class="hs-identifier">grabGetCurrent</span><span class="hs-special">,</span><span>
+</span><a name="line-62"></a><span>  </span><span class="hs-identifier">grabRemove</span><span class="hs-special">,</span><span>
+</span><a name="line-63"></a><span>
+</span><a name="line-64"></a><span>  </span><span class="hs-comment">-- * Timeout and idle callbacks</span><span>
+</span><a name="line-65"></a><span>  </span><span class="hs-identifier hs-var">Priority</span><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>  </span><span class="hs-identifier hs-var">priorityLow</span><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span>  </span><span class="hs-identifier">priorityDefaultIdle</span><span class="hs-special">,</span><span>
+</span><a name="line-68"></a><span>  </span><span class="hs-identifier">priorityHighIdle</span><span class="hs-special">,</span><span>
+</span><a name="line-69"></a><span>  </span><span class="hs-identifier">priorityDefault</span><span class="hs-special">,</span><span>
+</span><a name="line-70"></a><span>  </span><span class="hs-identifier">priorityHigh</span><span class="hs-special">,</span><span>
+</span><a name="line-71"></a><span>  </span><a href="Graphics.UI.Gtk.General.General.html#timeoutAddFull"><span class="hs-identifier hs-var">timeoutAdd</span></a><span class="hs-special">,</span><span>
+</span><a name="line-72"></a><span>  </span><span class="hs-identifier">timeoutAddFull</span><span class="hs-special">,</span><span>
+</span><a name="line-73"></a><span>  </span><span class="hs-identifier">timeoutRemove</span><span class="hs-special">,</span><span>
+</span><a name="line-74"></a><span>  </span><span class="hs-identifier hs-var">idleAdd</span><span class="hs-special">,</span><span>
+</span><a name="line-75"></a><span>  </span><span class="hs-identifier">idleRemove</span><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span>  </span><span class="hs-identifier hs-var">inputAdd</span><span class="hs-special">,</span><span>
+</span><a name="line-77"></a><span>  </span><span class="hs-identifier hs-type">inputRemove</span><span class="hs-special">,</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-identifier">IOCondition</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>  </span><span class="hs-identifier">HandlerId</span><span class="hs-special">,</span><span>
+</span><a name="line-80"></a><span>  </span><span class="hs-identifier">FD</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-82"></a><span>
+</span><a name="line-83"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Applicative</span><span>
+</span><a name="line-84"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Prelude</span><span>
+</span><a name="line-85"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Environment</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">getProgName</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">getArgs</span><span class="hs-special">)</span><span>
+</span><a name="line-86"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-var">when</span><span class="hs-special">)</span><span>
+</span><a name="line-87"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Concurrent</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">rtsSupportsBoundThreads</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">newEmptyMVar</span><span class="hs-special">,</span><span>
+</span><a name="line-88"></a><span>                           </span><span class="hs-identifier">putMVar</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">takeMVar</span><span class="hs-special">)</span><span>
+</span><a name="line-89"></a><span>
+</span><a name="line-90"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-91"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">UTFString</span><span>
+</span><a name="line-92"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">MainLoop</span><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier hs-var">ML</span><span>
+</span><a name="line-93"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier hs-var">System</span><span class="hs-operator hs-var">.</span><span class="hs-identifier hs-var">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">MainLoop</span><span> </span><span class="hs-special">(</span><span> </span><span class="hs-identifier">Priority</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">priorityLow</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">priorityDefaultIdle</span><span class="hs-special">,</span><span>
+</span><a name="line-94"></a><span>  </span><span class="hs-identifier">priorityHighIdle</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">priorityDefault</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">priorityHigh</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">timeoutRemove</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">idleRemove</span><span class="hs-special">,</span><span>
+</span><a name="line-95"></a><span>  </span><span class="hs-identifier">inputRemove</span><span class="hs-special">,</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">IOCondition</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">HandlerId</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-96"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Gdk.EventM.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span></a><span class="hs-identifier">Object</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-97"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Gdk</span><span class="hs-operator">.</span><span class="hs-identifier">EventM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">EventM</span><span class="hs-special">)</span><span>
+</span><a name="line-98"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span class="hs-operator">.</span><span class="hs-identifier">Reader</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">ask</span><span class="hs-special">)</span><span>
+</span><a name="line-99"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span class="hs-operator">.</span><span class="hs-identifier">Trans</span></a><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftIO</span><span class="hs-special">)</span><span>
+</span><a name="line-100"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-101"></a><span class="hs-pragma">{-# LINE 100 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span class="hs-pragma">{-# LINE 102 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-105"></a><span>
+</span><a name="line-106"></a><span class="hs-comment">{-
+-- | Retreive the current language.
+-- * This function returns a String which's pointer can be used later on for
+-- comarisions.
+--
+--getDefaultLanguage :: GlibString string =&gt; IO string
+--getDefaultLanguage = do
+-- strPtr &lt;- {#call unsafe get_default_language#}
+-- str &lt;- peekUTFString strPtr
+-- destruct strPtr
+-- return str
+-}</span><span>
+</span><a name="line-118"></a><span>
+</span><a name="line-119"></a><span class="hs-identifier">unsafeInitGUIForThreadedRTS</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">initGUI</span><span>
+</span><a name="line-120"></a><span>
+</span><a name="line-121"></a><span class="hs-comment">-- We compile this module using -#includ&quot;gtk/wingtk.h&quot; to bypass the win32 abi</span><span>
+</span><a name="line-122"></a><span class="hs-comment">-- check however we do not compile users programs with this header so if</span><span>
+</span><a name="line-123"></a><span class="hs-comment">-- initGUI was ever inlined in a users program, then that program would not</span><span>
+</span><a name="line-124"></a><span class="hs-comment">-- bypass the abi check and would fail on startup. So to stop that we must</span><span>
+</span><a name="line-125"></a><span class="hs-comment">-- prevent initGUI from being inlined.</span><span>
+</span><a name="line-126"></a><span class="hs-pragma">{-# NOINLINE initGUI #-}</span><span>
+</span><a name="line-127"></a><span class="hs-comment">-- | Initialize the GUI.</span><span>
+</span><a name="line-128"></a><span class="hs-comment">--</span><span>
+</span><a name="line-129"></a><span class="hs-comment">-- This must be called before any other function in the Gtk2Hs library.</span><span>
+</span><a name="line-130"></a><span class="hs-comment">--</span><span>
+</span><a name="line-131"></a><span class="hs-comment">-- This function initializes the GUI toolkit and parses all Gtk</span><span>
+</span><a name="line-132"></a><span class="hs-comment">-- specific arguments. The remaining arguments are returned. If the</span><span>
+</span><a name="line-133"></a><span class="hs-comment">-- initialization of the toolkit fails for whatever reason, an exception</span><span>
+</span><a name="line-134"></a><span class="hs-comment">-- is thrown.</span><span>
+</span><a name="line-135"></a><span class="hs-comment">--</span><span>
+</span><a name="line-136"></a><span class="hs-comment">-- * Throws: @error \&quot;Cannot initialize GUI.\&quot;@</span><span>
+</span><a name="line-137"></a><span class="hs-comment">--</span><span>
+</span><a name="line-138"></a><span class="hs-comment">--</span><span>
+</span><a name="line-139"></a><span class="hs-comment">-- * If you want to use Gtk2Hs and in a multi-threaded application then it is your obligation</span><span>
+</span><a name="line-140"></a><span class="hs-comment">-- to ensure that all calls to Gtk+ happen in a single OS thread.</span><span>
+</span><a name="line-141"></a><span class="hs-comment">-- If you want to make calls to Gtk2Hs functions from a Haskell thread other</span><span>
+</span><a name="line-142"></a><span class="hs-comment">-- than the one that calls this functions and 'mainGUI' then you will have to</span><span>
+</span><a name="line-143"></a><span class="hs-comment">-- \'post\' your GUI actions to the main GUI thread. You can do this using</span><span>
+</span><a name="line-144"></a><span class="hs-comment">-- 'postGUISync' or 'postGUIAsync'. See also 'threadsEnter'.</span><span>
+</span><a name="line-145"></a><span class="hs-comment">--</span><span>
+</span><a name="line-146"></a><span class="hs-identifier">initGUI</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-var">IO</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-var">String</span><span class="hs-special">]</span><span>
+</span><a name="line-147"></a><span class="hs-identifier">initGUI</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-148"></a><span>  </span><span class="hs-identifier">initialise</span><span>
+</span><a name="line-149"></a><span>  </span><a name="local-6989586621679245376"><a href="#local-6989586621679245376"><span class="hs-identifier">when</span></a></a><span> </span><span class="hs-identifier">rtsSupportsBoundThreads</span><span> </span><span class="hs-identifier">initialiseGThreads</span><span>
+</span><a name="line-150"></a><span>  </span><span class="hs-comment">-- note: initizliseGThreads calls 'threadsEnter'</span><span>
+</span><a name="line-151"></a><span>  </span><span class="hs-identifier hs-var">prog</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">getProgName</span><span>
+</span><a name="line-152"></a><span>  </span><span class="hs-identifier">args</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">getArgs</span><span>
+</span><a name="line-153"></a><span>  </span><span class="hs-keyword">let</span><span> </span><span class="hs-identifier">allArgs</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679245381"><a href="#local-6989586621679245381"><span class="hs-identifier">prog</span></a></a><span class="hs-glyph">:</span><span class="hs-identifier">args</span><span class="hs-special">)</span><span>
+</span><a name="line-154"></a><span>  </span><span class="hs-identifier">withMany</span><span> </span><span class="hs-identifier">withUTFString</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">map</span><span> </span><span class="hs-identifier">stringToGlib</span><span> </span><span class="hs-identifier">allArgs</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">addrs</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-155"></a><span>    </span><span class="hs-identifier">withArrayLen</span><span> </span><a href="Graphics.UI.Gtk.General.General.html#gtk_init_check"><span class="hs-identifier hs-var">addrs</span></a><span> </span><a href="Graphics.UI.Gtk.General.General.html#gtk_init_check"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argc</span><span> </span><span class="hs-identifier hs-var">argv</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-156"></a><span>    </span><span class="hs-identifier">with</span><span> </span><span class="hs-identifier">argv</span><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argvp</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-157"></a><span>    </span><span class="hs-identifier">with</span><span> </span><a name="local-6989586621679245384"><a href="#local-6989586621679245384"><span class="hs-identifier">argc</span></a></a><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argcp</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-158"></a><span>      </span><span class="hs-identifier">res</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">gtk_init_check</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-identifier">argcp</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-identifier">argvp</span><span class="hs-special">)</span><span>
+</span><a name="line-159"></a><span>      </span><span class="hs-keyword">if</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679245386"><a href="#local-6989586621679245386"><span class="hs-identifier">toBool</span></a></a><span> </span><span class="hs-identifier">res</span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-160"></a><span>        </span><span class="hs-identifier">argc'</span><span>   </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">peek</span><span> </span><span class="hs-identifier">argcp</span><span>
+</span><a name="line-161"></a><span>        </span><span class="hs-identifier">argv'</span><span>   </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">peek</span><span> </span><span class="hs-identifier">argvp</span><span>
+</span><a name="line-162"></a><span>        </span><span class="hs-identifier">_</span><span class="hs-glyph">:</span><span class="hs-identifier">addrs'</span><span>  </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">peekArray</span><span> </span><span class="hs-identifier">argc'</span><span> </span><span class="hs-identifier">argv'</span><span>  </span><span class="hs-comment">-- drop the program name</span><span>
+</span><a name="line-163"></a><span>        </span><span class="hs-identifier">mapM</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">glibToString</span><span> </span><span class="hs-operator">&lt;$&gt;</span><span class="hs-special">)</span><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-identifier">peekUTFString</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">addrs'</span><span>
+</span><a name="line-164"></a><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-identifier">error</span><span> </span><span class="hs-string">&quot;Cannot initialize GUI.&quot;</span><span>
+</span><a name="line-165"></a><span>
+</span><a name="line-166"></a><span class="hs-comment">-- g_thread_init aborts the whole program if it's called more than once so</span><span>
+</span><a name="line-167"></a><span class="hs-comment">-- we've got to keep track of whether or not we've called it already. Sigh.</span><span>
+</span><a name="line-168"></a><span class="hs-comment">--</span><span>
+</span><a name="line-169"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-string">&quot;hsgthread.h gtk2hs_threads_initialise&quot;</span><span>
+</span><a name="line-170"></a><span>  </span><span class="hs-identifier">initialiseGThreads</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-171"></a><span>
+</span><a name="line-172"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-string">&quot;hsgthread.h gtk2hs_initialise&quot;</span><span>
+</span><a name="line-173"></a><span>  </span><span class="hs-identifier">initialise</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-174"></a><span>
+</span><a name="line-175"></a><span class="hs-comment">-- | Post an action to be run in the main GUI thread.</span><span>
+</span><a name="line-176"></a><span class="hs-comment">--</span><span>
+</span><a name="line-177"></a><span class="hs-comment">-- The current thread blocks until the action completes and the result is</span><span>
+</span><a name="line-178"></a><span class="hs-comment">-- returned.</span><span>
+</span><a name="line-179"></a><span class="hs-comment">--</span><span>
+</span><a name="line-180"></a><span class="hs-identifier">postGUISync</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679245387"><span class="hs-identifier hs-var">IO</span></a><span> </span><span class="hs-identifier hs-var">a</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-var">IO</span><span> </span><span class="hs-identifier hs-var">a</span><span>
+</span><a name="line-181"></a><span class="hs-identifier">postGUISync</span><span> </span><a href="#local-6989586621679245440"><span class="hs-identifier hs-var">action</span></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-182"></a><span>  </span><span class="hs-identifier">resultVar</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">newEmptyMVar</span><span>
+</span><a name="line-183"></a><span>  </span><span class="hs-identifier">idleAdd</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">action</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-identifier">putMVar</span><span> </span><span class="hs-identifier">resultVar</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-identifier">False</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">priorityDefault</span><span>
+</span><a name="line-184"></a><span>  </span><span class="hs-identifier">takeMVar</span><span> </span><span class="hs-identifier">resultVar</span><span>
+</span><a name="line-185"></a><span>
+</span><a name="line-186"></a><span class="hs-comment">-- | Post an action to be run in the main GUI thread.</span><span>
+</span><a name="line-187"></a><span class="hs-comment">--</span><span>
+</span><a name="line-188"></a><span class="hs-comment">-- The current thread continues and does not wait for the result of the</span><span>
+</span><a name="line-189"></a><span class="hs-comment">-- action.</span><span>
+</span><a name="line-190"></a><span class="hs-comment">--</span><span>
+</span><a name="line-191"></a><span class="hs-identifier">postGUIAsync</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-192"></a><span class="hs-identifier">postGUIAsync</span><span> </span><span class="hs-identifier">action</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-193"></a><span>  </span><span class="hs-identifier">idleAdd</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">action</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-identifier">False</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">priorityDefault</span><span>
+</span><a name="line-194"></a><span>  </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-195"></a><span>
+</span><a name="line-196"></a><span class="hs-comment">-- | Acquire the global Gtk lock.</span><span>
+</span><a name="line-197"></a><span class="hs-comment">--</span><span>
+</span><a name="line-198"></a><span class="hs-comment">-- * During normal operation, this lock is held by the thread from which all</span><span>
+</span><a name="line-199"></a><span class="hs-comment">-- interaction with Gtk is performed. When calling 'mainGUI', the thread will</span><span>
+</span><a name="line-200"></a><span class="hs-comment">-- release this global lock before it waits for user interaction. During this</span><span>
+</span><a name="line-201"></a><span class="hs-comment">-- time it is, in principle, possible to use a different OS thread (any other</span><span>
+</span><a name="line-202"></a><span class="hs-comment">-- Haskell thread that is bound to the Gtk OS thread will be blocked anyway)</span><span>
+</span><a name="line-203"></a><span class="hs-comment">-- to interact with Gtk by explicitly acquiring the lock, calling Gtk functions</span><span>
+</span><a name="line-204"></a><span class="hs-comment">-- and releasing the lock. However, the Gtk functions that are called from this</span><span>
+</span><a name="line-205"></a><span class="hs-comment">-- different thread may not trigger any calls to the OS since this will</span><span>
+</span><a name="line-206"></a><span class="hs-comment">-- lead to a crash on Windows (the Win32 API can only be used from a single</span><span>
+</span><a name="line-207"></a><span class="hs-comment">-- thread). Since it is very hard to tell which function only interacts on</span><span>
+</span><a name="line-208"></a><span class="hs-comment">-- Gtk data structures and which function call actual OS functions, it</span><span>
+</span><a name="line-209"></a><span class="hs-comment">-- is best not to use this feature at all. A better way to perform updates</span><span>
+</span><a name="line-210"></a><span class="hs-comment">-- in the background is to spawn a Haskell thread and to perform the update</span><span>
+</span><a name="line-211"></a><span class="hs-comment">-- to Gtk widgets using 'postGUIAsync' or 'postGUISync'. These will execute</span><span>
+</span><a name="line-212"></a><span class="hs-comment">-- their arguments from the main loop, that is, from the OS thread of Gtk,</span><span>
+</span><a name="line-213"></a><span class="hs-comment">-- thereby ensuring that any Gtk and OS function can be called.</span><span>
+</span><a name="line-214"></a><span class="hs-comment">--</span><span>
+</span><a name="line-215"></a><span class="hs-identifier">threadsEnter</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-216"></a><span class="hs-identifier">threadsEnter</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-217"></a><span>  </span><span class="hs-identifier">threadsEnter'_</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">res</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-218"></a><span>  </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-219"></a><span class="hs-pragma">{-# LINE 213 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-220"></a><span>
+</span><a name="line-221"></a><span class="hs-comment">-- | Release the global Gtk lock.</span><span>
+</span><a name="line-222"></a><span class="hs-comment">--</span><span>
+</span><a name="line-223"></a><span class="hs-comment">-- * The use of this function is not recommended. See 'threadsEnter'.</span><span>
+</span><a name="line-224"></a><span class="hs-comment">--</span><span>
+</span><a name="line-225"></a><span class="hs-identifier">threadsLeave</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-226"></a><span class="hs-identifier">threadsLeave</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-227"></a><span>  </span><span class="hs-identifier">threadsLeave'_</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">res</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-228"></a><span>  </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-229"></a><span class="hs-pragma">{-# LINE 219 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-230"></a><span>
+</span><a name="line-231"></a><span class="hs-comment">-- | Inquire the number of events pending on the event queue</span><span>
+</span><a name="line-232"></a><span class="hs-comment">--</span><span>
+</span><a name="line-233"></a><span class="hs-identifier">eventsPending</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-234"></a><span class="hs-identifier">eventsPending</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">gtk_events_pending</span><span>
+</span><a name="line-235"></a><span class="hs-pragma">{-# LINE 224 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-236"></a><span>
+</span><a name="line-237"></a><span class="hs-comment">-- | Run the Gtk+ main event loop.</span><span>
+</span><a name="line-238"></a><span class="hs-comment">--</span><span>
+</span><a name="line-239"></a><span class="hs-identifier">mainGUI</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-240"></a><span class="hs-identifier">mainGUI</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">gtk_main</span><span>
+</span><a name="line-241"></a><span class="hs-pragma">{-# LINE 229 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-242"></a><span>
+</span><a name="line-243"></a><span class="hs-comment">-- | Inquire the main loop level.</span><span>
+</span><a name="line-244"></a><span class="hs-comment">--</span><span>
+</span><a name="line-245"></a><span class="hs-comment">-- * Callbacks that take more time to process can call 'mainIteration' to keep</span><span>
+</span><a name="line-246"></a><span class="hs-comment">-- the GUI responsive. Each time the main loop is restarted this way, the main</span><span>
+</span><a name="line-247"></a><span class="hs-comment">-- loop counter is increased. This function returns this counter.</span><span>
+</span><a name="line-248"></a><span class="hs-comment">--</span><span>
+</span><a name="line-249"></a><a name="mainIteration"><a href="Graphics.UI.Gtk.General.General.html#mainIteration"><span class="hs-identifier">mainLevel</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier hs-var">Int</span><span>
+</span><a name="line-250"></a><span class="hs-identifier">mainLevel</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">toEnum</span><span class="hs-operator">.</span><span class="hs-identifier">fromEnum</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">gtk_main_level</span><span>
+</span><a name="line-251"></a><span class="hs-pragma">{-# LINE 238 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-252"></a><span>
+</span><a name="line-253"></a><span class="hs-comment">-- | Exit the main event loop.</span><span>
+</span><a name="line-254"></a><span class="hs-comment">--</span><span>
+</span><a name="line-255"></a><span class="hs-identifier">mainQuit</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-256"></a><span class="hs-identifier">mainQuit</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">gtk_main_quit</span><span>
+</span><a name="line-257"></a><span class="hs-pragma">{-# LINE 243 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-258"></a><span>
+</span><a name="line-259"></a><span class="hs-comment">-- | Process an event, block if necessary.</span><span>
+</span><a name="line-260"></a><span class="hs-comment">--</span><span>
+</span><a name="line-261"></a><span class="hs-comment">-- * Returns @True@ if 'mainQuit' was called while processing the event.</span><span>
+</span><a name="line-262"></a><span class="hs-comment">--</span><span>
+</span><a name="line-263"></a><span class="hs-identifier">mainIteration</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-264"></a><span class="hs-identifier">mainIteration</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-identifier">gtk_main_iteration</span><span>
+</span><a name="line-265"></a><span class="hs-pragma">{-# LINE 250 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-266"></a><span>
+</span><a name="line-267"></a><span class="hs-comment">-- | Process a single event.</span><span>
+</span><a name="line-268"></a><span class="hs-comment">--</span><span>
+</span><a name="line-269"></a><span class="hs-comment">-- * Called with @True@, this function behaves as 'mainIteration' in that it</span><span>
+</span><a name="line-270"></a><span class="hs-comment">-- waits until an event is available for processing. It will return</span><span>
+</span><a name="line-271"></a><span class="hs-comment">-- immediately, if passed @False@.</span><span>
+</span><a name="line-272"></a><span class="hs-comment">--</span><span>
+</span><a name="line-273"></a><span class="hs-comment">-- * Returns @True@ if the 'mainQuit' was called while processing the event.</span><span>
+</span><a name="line-274"></a><span class="hs-comment">--</span><span>
+</span><a name="line-275"></a><span class="hs-identifier">mainIterationDo</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-276"></a><span class="hs-identifier">mainIterationDo</span><span> </span><span class="hs-identifier">blocking</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-277"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">gtk_main_iteration_do</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">blocking</span><span class="hs-special">)</span><span>
+</span><a name="line-278"></a><span>
+</span><a name="line-279"></a><span class="hs-comment">-- | Processes a single GDK event. This is public only to allow filtering of events between GDK and</span><span>
+</span><a name="line-280"></a><span class="hs-comment">-- GTK+. You will not usually need to call this function directly.</span><span>
+</span><a name="line-281"></a><span class="hs-comment">--</span><span>
+</span><a name="line-282"></a><span class="hs-comment">-- While you should not call this function directly, you might want to know how exactly events are</span><span>
+</span><a name="line-283"></a><span class="hs-comment">-- handled. So here is what this function does with the event:</span><span>
+</span><a name="line-284"></a><span class="hs-comment">--</span><span>
+</span><a name="line-285"></a><span class="hs-comment">-- 1. Compress enter\/leave notify events. If the event passed build an enter\/leave pair together with</span><span>
+</span><a name="line-286"></a><span class="hs-comment">-- the next event (peeked from GDK) both events are thrown away. This is to avoid a backlog of</span><span>
+</span><a name="line-287"></a><span class="hs-comment">-- (de-)highlighting widgets crossed by the pointer.</span><span>
+</span><a name="line-288"></a><span class="hs-comment">--</span><span>
+</span><a name="line-289"></a><span class="hs-comment">-- 2. Find the widget which got the event. If the widget can't be determined the event is thrown away</span><span>
+</span><a name="line-290"></a><span class="hs-comment">-- unless it belongs to a INCR transaction. In that case it is passed to</span><span>
+</span><a name="line-291"></a><span class="hs-comment">-- 'selectionIncrEvent'.</span><span>
+</span><a name="line-292"></a><span class="hs-comment">--</span><span>
+</span><a name="line-293"></a><span class="hs-comment">-- 3. Then the event is passed on a stack so you can query the currently handled event with</span><span>
+</span><a name="line-294"></a><span class="hs-comment">-- 'getCurrentEvent'.</span><span>
+</span><a name="line-295"></a><span class="hs-comment">--</span><span>
+</span><a name="line-296"></a><span class="hs-comment">-- 4. The event is sent to a widget. If a grab is active all events for widgets that are not in the</span><span>
+</span><a name="line-297"></a><span class="hs-comment">-- contained in the grab widget are sent to the latter with a few exceptions:</span><span>
+</span><a name="line-298"></a><span class="hs-comment">--</span><span>
+</span><a name="line-299"></a><span class="hs-comment">-- * Deletion and destruction events are still sent to the event widget for obvious reasons.</span><span>
+</span><a name="line-300"></a><span class="hs-comment">--</span><span>
+</span><a name="line-301"></a><span class="hs-comment">-- * Events which directly relate to the visual representation of the event widget.</span><span>
+</span><a name="line-302"></a><span class="hs-comment">--</span><span>
+</span><a name="line-303"></a><span class="hs-comment">-- * Leave events are delivered to the event widget if there was an enter event delivered to it</span><span>
+</span><a name="line-304"></a><span class="hs-comment">-- before without the paired leave event.</span><span>
+</span><a name="line-305"></a><span class="hs-comment">--</span><span>
+</span><a name="line-306"></a><span class="hs-comment">-- * Drag events are not redirected because it is unclear what the semantics of that would be.</span><span>
+</span><a name="line-307"></a><span class="hs-comment">--</span><span>
+</span><a name="line-308"></a><span class="hs-comment">-- Another point of interest might be that all key events are first passed through the key snooper</span><span>
+</span><a name="line-309"></a><span class="hs-comment">-- functions if there are any. Read the description of 'keySnooperInstall' if you need this</span><span>
+</span><a name="line-310"></a><span class="hs-comment">-- feature.</span><span>
+</span><a name="line-311"></a><span class="hs-comment">--</span><span>
+</span><a name="line-312"></a><span class="hs-comment">-- 5. After finishing the delivery the event is popped from the event stack.</span><span>
+</span><a name="line-313"></a><span class="hs-identifier">mainDoEvent</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">EventM</span><span> </span><span class="hs-identifier">t</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-314"></a><span class="hs-identifier">mainDoEvent</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-315"></a><span>  </span><span class="hs-identifier">ptr</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">ask</span><span>
+</span><a name="line-316"></a><span>  </span><span class="hs-identifier">liftIO</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">gtk_main_do_event</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-identifier">ptr</span><span class="hs-special">)</span><span>
+</span><a name="line-317"></a><span class="hs-pragma">{-# LINE 344 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-318"></a><span class="hs-comment">-- | add a grab widget</span><span>
+</span><a name="line-319"></a><span class="hs-comment">--</span><span>
+</span><a name="line-320"></a><span class="hs-identifier">grabAdd</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">wd</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">wd</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-321"></a><span class="hs-identifier">grabAdd</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Widget</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_grab_add</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-identifier">toWidget</span><span>
+</span><a name="line-322"></a><span>
+</span><a name="line-323"></a><span class="hs-comment">-- | inquire current grab widget</span><span>
+</span><a name="line-324"></a><span class="hs-comment">--</span><span>
+</span><a name="line-325"></a><span class="hs-identifier">grabGetCurrent</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span>
+</span><a name="line-326"></a><span class="hs-identifier">grabGetCurrent</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-327"></a><span>  </span><span class="hs-identifier">wPtr</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">gtk_grab_get_current</span><span>
+</span><a name="line-328"></a><span class="hs-pragma">{-# LINE 354 &quot;./Graphics/UI/Gtk/General/General.chs&quot; #-}</span><span>
+</span><a name="line-329"></a><span>  </span><span class="hs-keyword">if</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">wPtr</span><span class="hs-operator">==</span><span class="hs-identifier">nullPtr</span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-identifier">Nothing</span><span> </span><span class="hs-keyword">else</span><span>
+</span><a name="line-330"></a><span>    </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">Just</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkWidget</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">return</span><span> </span><span class="hs-identifier">wPtr</span><span class="hs-special">)</span><span>
+</span><a name="line-331"></a><span>
+</span><a name="line-332"></a><span class="hs-comment">-- | remove a grab widget</span><span>
+</span><a name="line-333"></a><span class="hs-comment">--</span><span>
+</span><a name="line-334"></a><span class="hs-identifier">grabRemove</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">WidgetClass</span><span> </span><span class="hs-identifier">w</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">w</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-335"></a><span class="hs-identifier">grabRemove</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">Widget</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_grab_remove</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-identifier">toWidget</span><span>
+</span><a name="line-336"></a><span>
+</span><a name="line-337"></a><span class="hs-comment">-- | Sets a function to be called at regular intervals, with the default</span><span>
+</span><a name="line-338"></a><span class="hs-comment">-- priority 'priorityDefault'. The function is called repeatedly until it</span><span>
+</span><a name="line-339"></a><span class="hs-comment">-- returns @False@, after which point the timeout function will not be called</span><span>
+</span><a name="line-340"></a><span class="hs-comment">-- again. The first call to the function will be at the end of the first interval.</span><span>
+</span><a name="line-341"></a><span class="hs-comment">--</span><span>
+</span><a name="line-342"></a><span class="hs-comment">-- Note that timeout functions may be delayed, due to the processing of other</span><span>
+</span><a name="line-343"></a><span class="hs-comment">-- event sources. Thus they should not be relied on for precise timing. After</span><span>
+</span><a name="line-344"></a><span class="hs-comment">-- each call to the timeout function, the time of the next timeout is</span><span>
+</span><a name="line-345"></a><span class="hs-comment">-- recalculated based on the current time and the given interval (it does not</span><span>
+</span><a name="line-346"></a><span class="hs-comment">-- try to 'catch up' time lost in delays).</span><span>
+</span><a name="line-347"></a><span class="hs-comment">--</span><span>
+</span><a name="line-348"></a><span class="hs-comment">-- This function differs from 'ML.timeoutAdd' in that the action will</span><span>
+</span><a name="line-349"></a><span class="hs-comment">-- be executed within the global Gtk+ lock. It is therefore possible to</span><span>
+</span><a name="line-350"></a><span class="hs-comment">-- call Gtk+ functions from the action.</span><span>
+</span><a name="line-351"></a><span class="hs-comment">--</span><span>
+</span><a name="line-352"></a><a name="grabGetCurrent"><a href="Graphics.UI.Gtk.General.General.html#grabGetCurrent"><span class="hs-identifier">timeoutAdd</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">HandlerId</span><span>
+</span><a name="line-353"></a><span class="hs-identifier">timeoutAdd</span><span> </span><a href="Graphics.UI.Gtk.General.General.html#gtk_grab_get_current"><span class="hs-identifier hs-var">fun</span></a><span> </span><a href="Graphics.UI.Gtk.General.General.html#gtk_grab_get_current"><span class="hs-identifier hs-var">msec</span></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">timeoutAddFull</span><span> </span><span class="hs-identifier">fun</span><span> </span><span class="hs-identifier">priorityDefault</span><span> </span><span class="hs-identifier">msec</span><span>
+</span><a name="line-354"></a><span>
+</span><a name="line-355"></a><span class="hs-comment">-- | Sets a function to be called at regular intervals, with the given</span><span>
+</span><a name="line-356"></a><span class="hs-comment">-- priority. The function is called repeatedly until it returns @False@, after</span><span>
+</span><a name="line-357"></a><span class="hs-comment">-- which point the timeout function will not be called again. The first call</span><span>
+</span><a name="line-358"></a><span class="hs-comment">-- to the function will be at the end of the first interval.</span><span>
+</span><a name="line-359"></a><span class="hs-comment">--</span><span>
+</span><a name="line-360"></a><span class="hs-comment">-- Note that timeout functions may be delayed, due to the processing of other</span><span>
+</span><a name="line-361"></a><span class="hs-comment">-- event sources. Thus they should not be relied on for precise timing. After</span><span>
+</span><a name="line-362"></a><span class="hs-comment">-- each call to the timeout function, the time of the next timeout is</span><span>
+</span><a name="line-363"></a><span class="hs-comment">-- recalculated based on the current time and the given interval (it does not</span><span>
+</span><a name="line-364"></a><span class="hs-comment">-- try to 'catch up' time lost in delays).</span><span>
+</span><a name="line-365"></a><span class="hs-comment">--</span><span>
+</span><a name="line-366"></a><span class="hs-comment">-- This function differs from 'ML.timeoutAddFull' in that the action will</span><span>
+</span><a name="line-367"></a><span class="hs-comment">-- be executed within the global Gtk+ lock. It is therefore possible to</span><span>
+</span><a name="line-368"></a><span class="hs-comment">-- call Gtk+ functions from the action.</span><span>
+</span><a name="line-369"></a><span class="hs-comment">--</span><span>
+</span><a name="line-370"></a><span class="hs-identifier">timeoutAddFull</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Priority</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">HandlerId</span><span>
+</span><a name="line-371"></a><span class="hs-identifier">timeoutAddFull</span><span> </span><span class="hs-identifier">fun</span><span> </span><span class="hs-identifier">pri</span><span> </span><span class="hs-identifier">msec</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-372"></a><span>  </span><span class="hs-identifier">ML</span><span class="hs-operator">.</span><span class="hs-identifier">timeoutAddFull</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">threadsEnter</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">fun</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">r</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">threadsLeave</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-identifier">r</span><span class="hs-special">)</span><span>
+</span><a name="line-373"></a><span>                    </span><span class="hs-identifier">pri</span><span> </span><span class="hs-identifier">msec</span><span>
+</span><a name="line-374"></a><span>
+</span><a name="line-375"></a><span class="hs-comment">-- | Add a callback that is called whenever the system is idle.</span><span>
+</span><a name="line-376"></a><span class="hs-comment">--</span><span>
+</span><a name="line-377"></a><span class="hs-comment">-- * A priority can be specified via an integer. This should usually be</span><span>
+</span><a name="line-378"></a><span class="hs-comment">-- 'priorityDefaultIdle'.</span><span>
+</span><a name="line-379"></a><span class="hs-comment">--</span><span>
+</span><a name="line-380"></a><span class="hs-comment">-- * If the function returns @False@ it will be removed.</span><span>
+</span><a name="line-381"></a><span class="hs-comment">--</span><span>
+</span><a name="line-382"></a><span class="hs-comment">-- This function differs from 'ML.idleAdd' in that the action will</span><span>
+</span><a name="line-383"></a><span class="hs-comment">-- be executed within the global Gtk+ lock. It is therefore possible to</span><span>
+</span><a name="line-384"></a><span class="hs-comment">-- call Gtk+ functions from the action.</span><span>
+</span><a name="line-385"></a><span class="hs-comment">--</span><span>
+</span><a name="line-386"></a><span class="hs-identifier">idleAdd</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Priority</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">HandlerId</span><span>
+</span><a name="line-387"></a><span class="hs-identifier">idleAdd</span><span> </span><span class="hs-identifier">fun</span><span> </span><span class="hs-identifier">pri</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-388"></a><span>  </span><span class="hs-identifier">ML</span><span class="hs-operator">.</span><span class="hs-identifier">idleAdd</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">threadsEnter</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">fun</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">r</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">threadsLeave</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-identifier">r</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">pri</span><span>
+</span><a name="line-389"></a><span>
+</span><a name="line-390"></a><span class="hs-keyword">type</span><span> </span><span class="hs-identifier">FD</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-391"></a><span>
+</span><a name="line-392"></a><span class="hs-comment">-- | Adds the file descriptor into the main event loop with the given priority.</span><span>
+</span><a name="line-393"></a><span class="hs-comment">--</span><span>
+</span><a name="line-394"></a><span class="hs-comment">-- This function differs from 'ML.inputAdd' in that the action will</span><span>
+</span><a name="line-395"></a><span class="hs-comment">-- be executed within the global Gtk+ lock. It is therefore possible to</span><span>
+</span><a name="line-396"></a><span class="hs-comment">-- call Gtk+ functions from the action.</span><span>
+</span><a name="line-397"></a><span class="hs-comment">--</span><span>
+</span><a name="line-398"></a><span class="hs-identifier">inputAdd</span><span> </span><span class="hs-glyph">::</span><span>
+</span><a name="line-399"></a><span>    </span><span class="hs-identifier">FD</span><span> </span><span class="hs-comment">-- ^ a file descriptor</span><span>
+</span><a name="line-400"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-identifier">IOCondition</span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- ^ the condition to watch for</span><span>
+</span><a name="line-401"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Priority</span><span> </span><span class="hs-comment">-- ^ the priority of the event source</span><span>
+</span><a name="line-402"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-comment">-- ^ the function to call when the condition is satisfied.</span><span>
+</span><a name="line-403"></a><span>                  </span><span class="hs-comment">-- The function should return False if the event source</span><span>
+</span><a name="line-404"></a><span>                  </span><span class="hs-comment">-- should be removed.</span><span>
+</span><a name="line-405"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">HandlerId</span><span> </span><span class="hs-comment">-- ^ the event source id</span><span>
+</span><a name="line-406"></a><span class="hs-identifier">inputAdd</span><span> </span><span class="hs-identifier">fd</span><span> </span><span class="hs-identifier">conds</span><span> </span><span class="hs-identifier">pri</span><span> </span><span class="hs-identifier">fun</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-407"></a><span>  </span><span class="hs-identifier">ML</span><span class="hs-operator">.</span><span class="hs-identifier">inputAdd</span><span> </span><span class="hs-identifier">fd</span><span> </span><span class="hs-identifier">conds</span><span> </span><span class="hs-identifier">pri</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">threadsEnter</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">fun</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">r</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">threadsLeave</span><span> </span><span class="hs-operator">&gt;&gt;</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-identifier">r</span><span class="hs-special">)</span><span>
+</span><a name="line-408"></a><span>
+</span><a name="line-409"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_init_check&quot;</span><span>
+</span><a name="line-410"></a><span>  </span><span class="hs-identifier">gtk_init_check</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CChar</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-411"></a><span>
+</span><a name="line-412"></a><a name="idleAdd"><a href="Graphics.UI.Gtk.General.General.html#idleAdd"><span class="hs-identifier">foreign</span></a></a><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gdk_threads_enter&quot;</span><span>
+</span><a name="line-413"></a><span>  </span><span class="hs-identifier">threadsEnter'_</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.General.General.html#threadsEnter"><span class="hs-identifier hs-var">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-414"></a><span>
+</span><a name="line-415"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gdk_threads_leave&quot;</span><span>
+</span><a name="line-416"></a><span>  </span><span class="hs-identifier">threadsLeave'_</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-417"></a><span>
+</span><a name="line-418"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_events_pending&quot;</span><span>
+</span><a name="line-419"></a><span>  </span><span class="hs-identifier">gtk_events_pending</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span>
+</span><a name="line-420"></a><span>
+</span><a name="line-421"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_main&quot;</span><span>
+</span><a name="line-422"></a><span>  </span><span class="hs-identifier">gtk_main</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-423"></a><span>
+</span><a name="line-424"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_main_level&quot;</span><span>
+</span><a name="line-425"></a><span>  </span><span class="hs-identifier">gtk_main_level</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CUInt</span><span class="hs-special">)</span><span>
+</span><a name="line-426"></a><span>
+</span><a name="line-427"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_main_quit&quot;</span><span>
+</span><a name="line-428"></a><span>  </span><span class="hs-identifier">gtk_main_quit</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-429"></a><span>
+</span><a name="line-430"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_main_iteration&quot;</span><span>
+</span><a name="line-431"></a><span>  </span><span class="hs-identifier">gtk_main_iteration</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span>
+</span><a name="line-432"></a><span>
+</span><a name="line-433"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_main_iteration_do&quot;</span><span>
+</span><a name="line-434"></a><span>  </span><span class="hs-identifier">gtk_main_iteration_do</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-435"></a><span>
+</span><a name="line-436"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_main_do_event&quot;</span><span>
+</span><a name="line-437"></a><span>  </span><span class="hs-identifier">gtk_main_do_event</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-438"></a><span>
+</span><a name="line-439"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_grab_add&quot;</span><span>
+</span><a name="line-440"></a><span>  </span><span class="hs-identifier">gtk_grab_add</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-441"></a><span>
+</span><a name="line-442"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_grab_get_current&quot;</span><span>
+</span><a name="line-443"></a><span>  </span><span class="hs-identifier">gtk_grab_get_current</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-444"></a><span>
+</span><a name="line-445"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_grab_remove&quot;</span><span>
+</span><a name="line-446"></a><span>  </span><span class="hs-identifier">gtk_grab_remove</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-447"></a></pre></body></html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) TextMark TextBuffer</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 23 February 2002</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 2002-2005 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- A position in the buffer preserved across buffer modifications</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Multiline</span><span class="hs-operator">.</span><span class="hs-identifier">TextMark</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | You may wish to begin by reading the text widget conceptual overview</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- which gives an overview of all the objects and data types related to the</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- text widget and how they work together.</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- A 'TextMark' is like a bookmark in a text buffer; it preserves a position</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- in the text. You can convert the mark to an iterator using</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- 'textBufferGetIterAtMark'. Unlike</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- iterators, marks remain valid across buffer mutations, because their</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- behavior is defined when text is inserted or deleted. When text containing</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- a mark is deleted, the mark remains in the position originally occupied by</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- the deleted text. When text is inserted at a mark, a mark with left</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- gravity will be moved to the beginning of the newly-inserted text, and a</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- mark with right gravity will be moved to the end.</span><span>
+</span><a name="line-45"></a><span class="hs-comment">--</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- Marks can be deleted from the buffer at any time with</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- 'textBufferDeleteMark'. Once deleted</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- from the buffer, a mark is essentially useless.</span><span>
+</span><a name="line-49"></a><span class="hs-comment">--</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- Marks optionally have names; these can be convenient to avoid passing the</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- 'TextMark' object around.</span><span>
+</span><a name="line-52"></a><span class="hs-comment">--</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- Marks are typically created using the</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- 'textBufferCreateMark' function.</span><span>
+</span><a name="line-55"></a><span>
+</span><a name="line-56"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-60"></a><span class="hs-comment">-- | +----TextMark</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-62"></a><span>
+</span><a name="line-63"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-64"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#TextMarkClass"><span class="hs-identifier hs-type">TextMark</span></a><span class="hs-special">,</span><span>
+</span><a name="line-65"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToTextMark"><span class="hs-identifier hs-var">TextMarkClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>  </span><span class="hs-identifier">castToTextMark</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">gTypeTextMark</span><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span>  </span><span class="hs-identifier">toTextMark</span><span class="hs-special">,</span><span>
+</span><a name="line-68"></a><span>  </span><span class="hs-identifier">MarkName</span><span class="hs-special">,</span><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span class="hs-comment">-- * Constructors</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span>  </span><span class="hs-identifier">textMarkNew</span><span class="hs-special">,</span><span>
+</span><a name="line-73"></a><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-76"></a><span>  </span><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkGetVisible"><span class="hs-identifier hs-var">textMarkSetVisible</span></a><span class="hs-special">,</span><span>
+</span><a name="line-77"></a><span>  </span><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkGetDeleted"><span class="hs-identifier hs-var">textMarkGetVisible</span></a><span class="hs-special">,</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-identifier">textMarkGetDeleted</span><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>  </span><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkGetBuffer"><span class="hs-identifier hs-var">textMarkGetName</span></a><span class="hs-special">,</span><span>
+</span><a name="line-80"></a><span>  </span><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkGetLeftGravity"><span class="hs-identifier hs-var">textMarkGetBuffer</span></a><span class="hs-special">,</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-identifier">textMarkGetLeftGravity</span><span class="hs-special">,</span><span>
+</span><a name="line-82"></a><span>
+</span><a name="line-83"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-84"></a><span>  </span><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkVisible"><span class="hs-identifier hs-var">textMarkName</span></a><span class="hs-special">,</span><span>
+</span><a name="line-85"></a><span>  </span><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkLeftGravity"><span class="hs-identifier hs-var">textMarkVisible</span></a><span class="hs-special">,</span><span>
+</span><a name="line-86"></a><span>  </span><span class="hs-identifier">textMarkLeftGravity</span><span>
+</span><a name="line-87"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-88"></a><span>
+</span><a name="line-89"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-90"></a><span>
+</span><a name="line-91"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-92"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">UTFString</span><span>
+</span><a name="line-93"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span>
+</span><a name="line-94"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span></a><span class="hs-identifier">Properties</span><span>
+</span><a name="line-95"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-96"></a><span class="hs-pragma">{-# LINE 95 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span>
+</span><a name="line-99"></a><span class="hs-pragma">{-# LINE 97 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-100"></a><span>
+</span><a name="line-101"></a><span class="hs-comment">-- | The name of a mark.</span><span>
+</span><a name="line-102"></a><span class="hs-keyword">type</span><span> </span><span class="hs-identifier">MarkName</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">DefaultGlibString</span><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-105"></a><span class="hs-comment">-- Constructors</span><span>
+</span><a name="line-106"></a><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-comment">-- | Creates a text mark. Add it to a buffer using 'textBufferAddMark'. If</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- @name@ is @Nothing@, the mark is anonymous; otherwise, the mark can be retrieved by</span><span>
+</span><a name="line-110"></a><span class="hs-comment">-- this name</span><span>
+</span><a name="line-111"></a><span class="hs-comment">-- using 'textBufferGetMark'. If a mark has left gravity, and text is inserted</span><span>
+</span><a name="line-112"></a><span class="hs-comment">-- at the mark's current location, the mark will be moved to the left of the</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- newly-inserted text. If the mark has right gravity (@leftGravity@ =</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- @False@), the mark will end up on the right of newly-inserted text. The</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- standard left-to-right cursor is a mark with right gravity (when you type,</span><span>
+</span><a name="line-116"></a><span class="hs-comment">-- the cursor stays on the right side of the text you\'re typing).</span><span>
+</span><a name="line-117"></a><span class="hs-comment">--</span><span>
+</span><a name="line-118"></a><span class="hs-comment">-- * Available since Gtk+ version 2.12</span><span>
+</span><a name="line-119"></a><span class="hs-comment">--</span><span>
+</span><a name="line-120"></a><span class="hs-identifier">textMarkNew</span><span> </span><span class="hs-glyph">::</span><span>
+</span><a name="line-121"></a><span>  </span><a name="textMarkNew"><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkNew"><span class="hs-identifier">Maybe</span></a></a><span> </span><span class="hs-identifier">MarkName</span><span> </span><span class="hs-comment">-- ^ @markName@ - name for mark, or @Nothing@</span><span>
+</span><a name="line-122"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-var">Bool</span><span> </span><span class="hs-comment">-- ^ @leftGravity@ - whether the mark has left gravity</span><span>
+</span><a name="line-123"></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-var">IO</span><span> </span><span class="hs-identifier">TextMark</span><span>
+</span><a name="line-124"></a><span class="hs-identifier">textMarkNew</span><span> </span><span class="hs-identifier">markName</span><span> </span><span class="hs-identifier">leftGravity</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-125"></a><span>  </span><span class="hs-identifier">wrapNewGObject</span><span> </span><span class="hs-identifier">mkTextMark</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-126"></a><span>  </span><span class="hs-identifier">maybeWith</span><span> </span><span class="hs-identifier">withUTFString</span><span> </span><span class="hs-identifier">markName</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">markNamePtr</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-127"></a><span>  </span><span class="hs-identifier">gtk_text_mark_new</span><span>
+</span><a name="line-128"></a><span class="hs-pragma">{-# LINE 125 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-129"></a><span>    </span><span class="hs-identifier">markNamePtr</span><span>
+</span><a name="line-130"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">leftGravity</span><span class="hs-special">)</span><span>
+</span><a name="line-131"></a><span>
+</span><a name="line-132"></a><span>
+</span><a name="line-133"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-134"></a><span class="hs-comment">-- Methods</span><span>
+</span><a name="line-135"></a><span>
+</span><a name="line-136"></a><span class="hs-comment">-- | Sets the visibility of @mark@; the insertion point is normally visible,</span><span>
+</span><a name="line-137"></a><span class="hs-comment">-- i.e. you can see it as a vertical bar. Also, the text widget uses a visible</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- mark to indicate where a drop will occur when dragging-and-dropping text.</span><span>
+</span><a name="line-139"></a><span class="hs-comment">-- Most other marks are not visible. Marks are not visible by default.</span><span>
+</span><a name="line-140"></a><span class="hs-comment">--</span><span>
+</span><a name="line-141"></a><span class="hs-identifier">textMarkSetVisible</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-142"></a><span class="hs-identifier">textMarkSetVisible</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">setting</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-143"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">TextMark</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_text_mark_set_visible</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-144"></a><span class="hs-pragma">{-# LINE 140 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-145"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toTextMark</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-146"></a><span>    </span><span class="hs-special">(</span><a name="textMarkGetVisible"><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkGetVisible"><span class="hs-identifier">fromBool</span></a></a><span> </span><span class="hs-identifier">setting</span><span class="hs-special">)</span><span>
+</span><a name="line-147"></a><span>
+</span><a name="line-148"></a><span class="hs-comment">-- | Returns @True@ if the mark is visible (i.e. a cursor is displayed for it)</span><span>
+</span><a name="line-149"></a><span class="hs-comment">--</span><span>
+</span><a name="line-150"></a><span class="hs-identifier">textMarkGetVisible</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-151"></a><span class="hs-identifier">textMarkGetVisible</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-152"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-153"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">TextMark</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_text_mark_get_visible</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-154"></a><span class="hs-pragma">{-# LINE 149 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-155"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toTextMark</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-156"></a><span>
+</span><a name="line-157"></a><span class="hs-comment">-- | Returns @True@ if the mark has been removed from its buffer with</span><span>
+</span><a name="line-158"></a><span class="hs-comment">-- 'textBufferDeleteMark'. Marks can't</span><span>
+</span><a name="line-159"></a><span class="hs-comment">-- be used once deleted.</span><span>
+</span><a name="line-160"></a><span class="hs-comment">--</span><span>
+</span><a name="line-161"></a><span class="hs-identifier">textMarkGetDeleted</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-162"></a><span class="hs-identifier">textMarkGetDeleted</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-163"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-164"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><a name="textMarkGetName"><a href="Graphics.UI.Gtk.Multiline.TextMark.html#textMarkGetName"><span class="hs-identifier">TextMark</span></a></a><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_text_mark_get_deleted</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-165"></a><span class="hs-pragma">{-# LINE 159 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-166"></a><span>    </span><span class="hs-special">(</span><a href="Graphics.UI.Gtk.Types.html#toTextMark"><span class="hs-identifier hs-var">toTextMark</span></a><span> </span><a href="#local-6989586621679143743"><span class="hs-identifier hs-var">self</span></a><span class="hs-special">)</span><span>
+</span><a name="line-167"></a><span>
+</span><a name="line-168"></a><span class="hs-comment">-- | Returns the mark name; returns @Nothing@ for anonymous marks.</span><span>
+</span><a name="line-169"></a><span class="hs-comment">--</span><span>
+</span><a name="line-170"></a><span class="hs-identifier">textMarkGetName</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">MarkName</span><span class="hs-special">)</span><span>
+</span><a name="line-171"></a><span class="hs-identifier">textMarkGetName</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-172"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">TextMark</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><a href="#local-6989586621679143724"><span class="hs-operator hs-type">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_text_mark_get_name</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-173"></a><span class="hs-pragma">{-# LINE 166 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-174"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toTextMark</span><span> </span><span class="hs-identifier hs-var">self</span><span class="hs-special">)</span><span>
+</span><a name="line-175"></a><span>  </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-identifier">maybePeek</span><span> </span><span class="hs-identifier">peekUTFString</span><span>
+</span><a name="line-176"></a><span>
+</span><a name="line-177"></a><span class="hs-comment">-- | Gets the buffer this mark is located inside, or @Nothing@ if the mark is</span><span>
+</span><a name="line-178"></a><span class="hs-comment">-- deleted.</span><span>
+</span><a name="line-179"></a><span class="hs-comment">--</span><span>
+</span><a name="line-180"></a><span class="hs-identifier">textMarkGetBuffer</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">TextBuffer</span><span class="hs-special">)</span><span>
+</span><a name="line-181"></a><span class="hs-identifier">textMarkGetBuffer</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-182"></a><span>  </span><span class="hs-identifier">maybeNull</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewGObject</span><span> </span><span class="hs-identifier">mkTextBuffer</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-183"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">TextMark</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><a href="#local-6989586621679143723"><span class="hs-operator hs-type">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_text_mark_get_buffer</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-184"></a><span class="hs-pragma">{-# LINE 176 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-185"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toTextMark</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-186"></a><span>
+</span><a name="line-187"></a><span class="hs-comment">-- | Determines whether the mark has left gravity.</span><span>
+</span><a name="line-188"></a><span class="hs-comment">--</span><span>
+</span><a name="line-189"></a><span class="hs-comment">-- The name is misleading as Arabic, Hebrew and some other languages have the</span><span>
+</span><a name="line-190"></a><span class="hs-comment">-- beginning of a line towards the right.</span><span>
+</span><a name="line-191"></a><span class="hs-comment">--</span><span>
+</span><a name="line-192"></a><span class="hs-identifier">textMarkGetLeftGravity</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-193"></a><span class="hs-identifier">textMarkGetLeftGravity</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-194"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-195"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">TextMark</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-var">withForeignPtr</span><span> </span><span class="hs-identifier hs-var">arg1</span><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_text_mark_get_left_gravity</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-196"></a><span class="hs-pragma">{-# LINE 187 &quot;./Graphics/UI/Gtk/Multiline/TextMark.chs&quot; #-}</span><span>
+</span><a name="line-197"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">toTextMark</span><span> </span><span class="hs-identifier">self</span><span class="hs-special">)</span><span>
+</span><a name="line-198"></a><span>
+</span><a name="line-199"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-200"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-201"></a><span>
+</span><a name="line-202"></a><span class="hs-comment">-- | Retreives the name of a mark.</span><span>
+</span><a name="line-203"></a><span class="hs-comment">--</span><span>
+</span><a name="line-204"></a><span class="hs-identifier">textMarkName</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">ReadAttr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-identifier">MarkName</span><span class="hs-special">)</span><span>
+</span><a name="line-205"></a><span class="hs-identifier">textMarkName</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">readAttrFromMaybeStringProperty</span><span> </span><span class="hs-string">&quot;name&quot;</span><span>
+</span><a name="line-206"></a><span>
+</span><a name="line-207"></a><span class="hs-comment">-- | The \'visible\' property. See 'textMarkGetVisible' and 'textMarkSetVisible'</span><span>
+</span><a name="line-208"></a><span class="hs-comment">--</span><span>
+</span><a name="line-209"></a><span class="hs-identifier">textMarkVisible</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-210"></a><span class="hs-identifier">textMarkVisible</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttr</span><span>
+</span><a name="line-211"></a><span>  </span><span class="hs-identifier">textMarkGetVisible</span><span>
+</span><a name="line-212"></a><span>  </span><span class="hs-identifier">textMarkSetVisible</span><span>
+</span><a name="line-213"></a><span>
+</span><a name="line-214"></a><span class="hs-comment">-- | Determines whether the mark keeps to the left when text is inserted at its position.</span><span>
+</span><a name="line-215"></a><span class="hs-comment">--</span><span>
+</span><a name="line-216"></a><span class="hs-identifier">textMarkLeftGravity</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">TextMarkClass</span><span> </span><a href="Graphics.UI.Gtk.Types.html#TextMark"><span class="hs-identifier hs-type">self</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">ReadAttr</span><span> </span><span class="hs-identifier hs-type">self</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-217"></a><span class="hs-identifier">textMarkLeftGravity</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">readAttrFromBoolProperty</span><span> </span><span class="hs-string">&quot;left-gravity&quot;</span><span>
+</span><a name="line-218"></a><span>
+</span><a name="line-219"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_text_mark_new&quot;</span><span>
+</span><a name="line-220"></a><span>  </span><span class="hs-identifier">gtk_text_mark_new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CChar</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextMark</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-221"></a><span>
+</span><a name="line-222"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_text_mark_set_visible&quot;</span><span>
+</span><a name="line-223"></a><span>  </span><span class="hs-identifier">gtk_text_mark_set_visible</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextMark</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-224"></a><span>
+</span><a name="line-225"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_text_mark_get_visible&quot;</span><span>
+</span><a name="line-226"></a><span>  </span><span class="hs-identifier">gtk_text_mark_get_visible</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextMark</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-227"></a><span>
+</span><a name="line-228"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_text_mark_get_deleted&quot;</span><span>
+</span><a name="line-229"></a><span>  </span><span class="hs-identifier">gtk_text_mark_get_deleted</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextMark</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-230"></a><span>
+</span><a name="line-231"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_text_mark_get_name&quot;</span><span>
+</span><a name="line-232"></a><span>  </span><span class="hs-identifier">gtk_text_mark_get_name</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextMark</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CChar</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-233"></a><span>
+</span><a name="line-234"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_text_mark_get_buffer&quot;</span><span>
+</span><a name="line-235"></a><span>  </span><span class="hs-identifier">gtk_text_mark_get_buffer</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextMark</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextBuffer</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-236"></a><span>
+</span><a name="line-237"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_text_mark_get_left_gravity&quot;</span><span>
+</span><a name="line-238"></a><span>  </span><span class="hs-identifier">gtk_text_mark_get_left_gravity</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">TextMark</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-239"></a></pre></body></html>

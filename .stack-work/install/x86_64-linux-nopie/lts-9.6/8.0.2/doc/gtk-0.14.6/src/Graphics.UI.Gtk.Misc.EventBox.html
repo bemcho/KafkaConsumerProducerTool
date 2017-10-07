@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) Widget EventBox</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 23 May 2001</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 1999-2005 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- A widget used to catch events for widgets which do not have their own</span><span>
+</span><a name="line-28"></a><span class="hs-comment">-- window</span><span>
+</span><a name="line-29"></a><span class="hs-comment">--</span><span>
+</span><a name="line-30"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Misc</span><span class="hs-operator">.</span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-32"></a><span class="hs-comment">--</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- | The 'EventBox' widget is a subclass of 'Bin' which also has its own</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- window. It is useful since it allows you to catch events for widgets which</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- do not have their own window.</span><span>
+</span><a name="line-36"></a><span>
+</span><a name="line-37"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- | +----'Widget'</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- | +----'Container'</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- | +----'Bin'</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- | +----EventBox</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-47"></a><span>
+</span><a name="line-48"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-49"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#EventBoxClass"><span class="hs-identifier hs-type">EventBox</span></a><span class="hs-special">,</span><span>
+</span><a name="line-50"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToEventBox"><span class="hs-identifier hs-var">EventBoxClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-51"></a><span>  </span><span class="hs-identifier">castToEventBox</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">gTypeEventBox</span><span class="hs-special">,</span><span>
+</span><a name="line-52"></a><span>  </span><span class="hs-identifier">toEventBox</span><span class="hs-special">,</span><span>
+</span><a name="line-53"></a><span>
+</span><a name="line-54"></a><span class="hs-comment">-- * Constructors</span><span>
+</span><a name="line-55"></a><span>  </span><span class="hs-identifier">eventBoxNew</span><span class="hs-special">,</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-comment">-- * Methods</span><span>
+</span><a name="line-58"></a><span>
+</span><a name="line-59"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.EventBox.html#eventBoxGetVisibleWindow"><span class="hs-identifier hs-var">eventBoxSetVisibleWindow</span></a><span class="hs-special">,</span><span>
+</span><a name="line-60"></a><span>  </span><span class="hs-identifier">eventBoxGetVisibleWindow</span><span class="hs-special">,</span><span>
+</span><a name="line-61"></a><span>  </span><a href="Graphics.UI.Gtk.Misc.EventBox.html#eventBoxGetAboveChild"><span class="hs-identifier hs-var">eventBoxSetAboveChild</span></a><span class="hs-special">,</span><span>
+</span><a name="line-62"></a><span>  </span><span class="hs-identifier">eventBoxGetAboveChild</span><span class="hs-special">,</span><span>
+</span><a name="line-63"></a><span>
+</span><a name="line-64"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-65"></a><span>  </span><span class="hs-identifier">eventBoxVisibleWindow</span><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>  </span><span class="hs-identifier">eventBoxAboveChild</span><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span>
+</span><a name="line-68"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-73"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span></a><span>
+</span><a name="line-74"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span></a><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Object</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-75"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-76"></a><span class="hs-pragma">{-# LINE 75 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-77"></a><span>
+</span><a name="line-78"></a><span>
+</span><a name="line-79"></a><span class="hs-pragma">{-# LINE 77 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-80"></a><span>
+</span><a name="line-81"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-82"></a><span class="hs-comment">-- Constructors</span><span>
+</span><a name="line-83"></a><span>
+</span><a name="line-84"></a><span class="hs-comment">-- | Creates a new 'EventBox'.</span><span>
+</span><a name="line-85"></a><span class="hs-comment">--</span><span>
+</span><a name="line-86"></a><span class="hs-identifier">eventBoxNew</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">EventBox</span><span>
+</span><a name="line-87"></a><span class="hs-identifier">eventBoxNew</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-88"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkEventBox</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-89"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">castPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">EventBox</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-90"></a><span>  </span><span class="hs-identifier">gtk_event_box_new</span><span>
+</span><a name="line-91"></a><span class="hs-pragma">{-# LINE 88 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-92"></a><span>
+</span><a name="line-93"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-94"></a><span class="hs-comment">-- Methods</span><span>
+</span><a name="line-95"></a><span>
+</span><a name="line-96"></a><span>
+</span><a name="line-97"></a><span class="hs-comment">-- | Set whether the event box uses a visible or invisible child window. The</span><span>
+</span><a name="line-98"></a><span class="hs-comment">-- default is to use visible windows.</span><span>
+</span><a name="line-99"></a><span class="hs-comment">--</span><span>
+</span><a name="line-100"></a><span class="hs-comment">-- In an invisible window event box, the window that that the event box</span><span>
+</span><a name="line-101"></a><span class="hs-comment">-- creates is a \&quot;input only\&quot; window, which means that it is invisible and only</span><span>
+</span><a name="line-102"></a><span class="hs-comment">-- serves to receive events.</span><span>
+</span><a name="line-103"></a><span class="hs-comment">--</span><span>
+</span><a name="line-104"></a><span class="hs-comment">-- A visible window event box creates a visible (\&quot;input output\&quot;) window that</span><span>
+</span><a name="line-105"></a><span class="hs-comment">-- acts as the parent window for all the widgets contained in the event box.</span><span>
+</span><a name="line-106"></a><span class="hs-comment">--</span><span>
+</span><a name="line-107"></a><span class="hs-comment">-- You should generally make your event box invisible if you just want to</span><span>
+</span><a name="line-108"></a><span class="hs-comment">-- trap events. Creating a visible window may cause artifacts that are visible</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- to the user, especially if the user is using a theme with gradients or</span><span>
+</span><a name="line-110"></a><span class="hs-comment">-- pixmaps.</span><span>
+</span><a name="line-111"></a><span class="hs-comment">--</span><span>
+</span><a name="line-112"></a><span class="hs-comment">-- The main reason to create a non input-only event box is if you want to</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- set the background to a different color or draw on it.</span><span>
+</span><a name="line-114"></a><span class="hs-comment">--</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- * Available since Gtk+ version 2.4</span><span>
+</span><a name="line-116"></a><span class="hs-comment">--</span><span>
+</span><a name="line-117"></a><span class="hs-identifier">eventBoxSetVisibleWindow</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-118"></a><span class="hs-identifier">eventBoxSetVisibleWindow</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">visibleWindow</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-119"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_event_box_set_visible_window</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-120"></a><span class="hs-pragma">{-# LINE 116 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-121"></a><span>    </span><span class="hs-identifier">self</span><span>
+</span><a name="line-122"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">visibleWindow</span><span class="hs-special">)</span><span>
+</span><a name="line-123"></a><span>
+</span><a name="line-124"></a><span class="hs-comment">-- | Returns whether the event box has a visible window. See</span><span>
+</span><a name="line-125"></a><span class="hs-comment">-- 'eventBoxSetVisibleWindow' for details.</span><span>
+</span><a name="line-126"></a><span class="hs-comment">--</span><span>
+</span><a name="line-127"></a><span class="hs-comment">-- * Available since Gtk+ version 2.4</span><span>
+</span><a name="line-128"></a><span class="hs-comment">--</span><span>
+</span><a name="line-129"></a><span class="hs-identifier">eventBoxGetVisibleWindow</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-130"></a><span class="hs-identifier">eventBoxGetVisibleWindow</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-131"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-132"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_event_box_get_visible_window</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-133"></a><span class="hs-pragma">{-# LINE 128 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-134"></a><span>    </span><span class="hs-identifier">self</span><span>
+</span><a name="line-135"></a><span>
+</span><a name="line-136"></a><span class="hs-comment">-- | Set whether the event box window is positioned above the windows of its</span><span>
+</span><a name="line-137"></a><span class="hs-comment">-- child, as opposed to below it. If the window is above, all events inside the</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- event box will go to the event box. If the window is below, events in</span><span>
+</span><a name="line-139"></a><span class="hs-comment">-- windows of child widgets will first got to that widget, and then to its</span><span>
+</span><a name="line-140"></a><span class="hs-comment">-- parents.</span><span>
+</span><a name="line-141"></a><span class="hs-comment">--</span><span>
+</span><a name="line-142"></a><span class="hs-comment">-- The default is to keep the window below the child.</span><span>
+</span><a name="line-143"></a><span class="hs-comment">--</span><span>
+</span><a name="line-144"></a><span class="hs-comment">-- * Available since Gtk+ version 2.4</span><span>
+</span><a name="line-145"></a><span class="hs-comment">--</span><span>
+</span><a name="line-146"></a><span class="hs-identifier">eventBoxSetAboveChild</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-147"></a><span class="hs-identifier">eventBoxSetAboveChild</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">aboveChild</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-148"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">arg2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_event_box_set_above_child</span><span> </span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-identifier">arg2</span><span class="hs-special">)</span><span>
+</span><a name="line-149"></a><span class="hs-pragma">{-# LINE 143 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-150"></a><span>    </span><span class="hs-identifier">self</span><span>
+</span><a name="line-151"></a><span>    </span><span class="hs-special">(</span><span class="hs-identifier">fromBool</span><span> </span><span class="hs-identifier">aboveChild</span><span class="hs-special">)</span><span>
+</span><a name="line-152"></a><span>
+</span><a name="line-153"></a><span class="hs-comment">-- | Returns whether the event box window is above or below the windows of its</span><span>
+</span><a name="line-154"></a><span class="hs-comment">-- child. See 'eventBoxSetAboveChild' for details.</span><span>
+</span><a name="line-155"></a><span class="hs-comment">--</span><span>
+</span><a name="line-156"></a><span class="hs-comment">-- * Available since Gtk+ version 2.4</span><span>
+</span><a name="line-157"></a><span class="hs-comment">--</span><span>
+</span><a name="line-158"></a><span class="hs-identifier">eventBoxGetAboveChild</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-159"></a><span class="hs-identifier">eventBoxGetAboveChild</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-160"></a><span>  </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">toBool</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-161"></a><span>  </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-identifier">arg1</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">withForeignPtr</span><span> </span><span class="hs-identifier">arg1</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">argPtr1</span><span> </span><span class="hs-glyph">-&gt;</span><span class="hs-identifier">gtk_event_box_get_above_child</span><span> </span><span class="hs-identifier">argPtr1</span><span class="hs-special">)</span><span>
+</span><a name="line-162"></a><span class="hs-pragma">{-# LINE 155 &quot;./Graphics/UI/Gtk/Misc/EventBox.chs&quot; #-}</span><span>
+</span><a name="line-163"></a><span>    </span><span class="hs-identifier">self</span><span>
+</span><a name="line-164"></a><span>
+</span><a name="line-165"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-166"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-167"></a><span>
+</span><a name="line-168"></a><span class="hs-comment">-- | Whether the event box is visible, as opposed to invisible and only used</span><span>
+</span><a name="line-169"></a><span class="hs-comment">-- to trap events.</span><span>
+</span><a name="line-170"></a><span class="hs-comment">--</span><span>
+</span><a name="line-171"></a><span class="hs-comment">-- Default value: @True@</span><span>
+</span><a name="line-172"></a><span class="hs-comment">--</span><span>
+</span><a name="line-173"></a><span class="hs-identifier">eventBoxVisibleWindow</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-174"></a><span class="hs-identifier">eventBoxVisibleWindow</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttr</span><span>
+</span><a name="line-175"></a><span>  </span><span class="hs-identifier">eventBoxGetVisibleWindow</span><span>
+</span><a name="line-176"></a><span>  </span><span class="hs-identifier">eventBoxSetVisibleWindow</span><span>
+</span><a name="line-177"></a><span>
+</span><a name="line-178"></a><span class="hs-comment">-- | Whether the event-trapping window of the eventbox is above the window of</span><span>
+</span><a name="line-179"></a><span class="hs-comment">-- the child widget as opposed to below it.</span><span>
+</span><a name="line-180"></a><span class="hs-comment">--</span><span>
+</span><a name="line-181"></a><span class="hs-comment">-- Default value: @False@</span><span>
+</span><a name="line-182"></a><span class="hs-comment">--</span><span>
+</span><a name="line-183"></a><span class="hs-identifier">eventBoxAboveChild</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">EventBox</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-184"></a><span class="hs-identifier">eventBoxAboveChild</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttr</span><span>
+</span><a name="line-185"></a><span>  </span><span class="hs-identifier">eventBoxGetAboveChild</span><span>
+</span><a name="line-186"></a><span>  </span><span class="hs-identifier">eventBoxSetAboveChild</span><span>
+</span><a name="line-187"></a><span>
+</span><a name="line-188"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_event_box_new&quot;</span><span>
+</span><a name="line-189"></a><span>  </span><span class="hs-identifier">gtk_event_box_new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">Widget</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-190"></a><span>
+</span><a name="line-191"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_event_box_set_visible_window&quot;</span><span>
+</span><a name="line-192"></a><span>  </span><span class="hs-identifier">gtk_event_box_set_visible_window</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">EventBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-193"></a><span>
+</span><a name="line-194"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_event_box_get_visible_window&quot;</span><span>
+</span><a name="line-195"></a><span>  </span><span class="hs-identifier">gtk_event_box_get_visible_window</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">EventBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-196"></a><span>
+</span><a name="line-197"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_event_box_set_above_child&quot;</span><span>
+</span><a name="line-198"></a><span>  </span><span class="hs-identifier">gtk_event_box_set_above_child</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">EventBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-199"></a><span>
+</span><a name="line-200"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_event_box_get_above_child&quot;</span><span>
+</span><a name="line-201"></a><span>  </span><span class="hs-identifier">gtk_event_box_get_above_child</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">EventBox</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-202"></a></pre></body></html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/UI/Gtk/ModelView/CellRendererSpin.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) Widget CellRendererSpin</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Andy Stewart</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 25 Mar 2010</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 2010 Andy Stewart</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- Renders a spin button in a cell</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- * Module available since Gtk+ version 2.10</span><span>
+</span><a name="line-30"></a><span class="hs-comment">--</span><span>
+</span><a name="line-31"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">ModelView</span><span class="hs-operator">.</span><span class="hs-identifier">CellRendererSpin</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span class="hs-comment">-- * Detail</span><span>
+</span><a name="line-34"></a><span class="hs-comment">--</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- | 'CellRendererSpin' renders text in a cell like 'CellRendererText' from</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- which it is derived. But while 'CellRendererText' offers a simple entry to</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- edit the text, 'CellRendererSpin' offers a 'SpinButton' widget. Of course,</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- that means that the text has to be parseable as a floating point number.</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- The range of the spinbutton is taken from the adjustment property of the</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- cell renderer, which can be set explicitly or mapped to a column in the tree</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- model, like all properties of cell renders. 'CellRendererSpin' also has</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- properties for the climb rate and the number of digits to display. Other</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- 'SpinButton' properties can be set in a handler for the start-editing</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- signal.</span><span>
+</span><a name="line-46"></a><span class="hs-comment">--</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- The 'CellRendererSpin' cell renderer was added in Gtk+ 2.10.</span><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-comment">-- * Class Hierarchy</span><span>
+</span><a name="line-50"></a><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- | 'GObject'</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- | +----'Object'</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- | +----'CellRenderer'</span><span>
+</span><a name="line-56"></a><span class="hs-comment">-- | +----'CellRendererText'</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- | +----CellRendererSpin</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-59"></a><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-62"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#CellRendererSpinClass"><span class="hs-identifier hs-type">CellRendererSpin</span></a><span class="hs-special">,</span><span>
+</span><a name="line-63"></a><span>  </span><a href="Graphics.UI.Gtk.Types.html#castToCellRendererSpin"><span class="hs-identifier hs-var">CellRendererSpinClass</span></a><span class="hs-special">,</span><span>
+</span><a name="line-64"></a><span>  </span><span class="hs-identifier">castToCellRendererSpin</span><span class="hs-special">,</span><span>
+</span><a name="line-65"></a><span>  </span><span class="hs-identifier">toCellRendererSpin</span><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>
+</span><a name="line-67"></a><span class="hs-comment">-- * Constructors</span><span>
+</span><a name="line-68"></a><span>  </span><span class="hs-identifier">cellRendererSpinNew</span><span class="hs-special">,</span><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span class="hs-comment">-- * Attributes</span><span>
+</span><a name="line-71"></a><span>  </span><span class="hs-identifier">cellRendererSpinAdjustment</span><span class="hs-special">,</span><span>
+</span><a name="line-72"></a><span>  </span><span class="hs-identifier">cellRendererSpinClimbRate</span><span class="hs-special">,</span><span>
+</span><a name="line-73"></a><span>  </span><span class="hs-identifier">cellRendererSpinDigits</span><span class="hs-special">,</span><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-76"></a><span>
+</span><a name="line-77"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">liftM</span><span class="hs-special">)</span><span>
+</span><a name="line-78"></a><span>
+</span><a name="line-79"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">FFI</span><span>
+</span><a name="line-80"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span>
+</span><a name="line-81"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Abstract.Object.html"><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Properties</span></a><span>
+</span><a name="line-82"></a><span class="hs-keyword">import</span><span> </span><a href="Graphics.UI.Gtk.Types.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span></a><span class="hs-identifier">Abstract</span><span class="hs-operator">.</span><span class="hs-identifier">Object</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">makeNewObject</span><span class="hs-special">)</span><span>
+</span><a name="line-83"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">UI</span><span class="hs-operator">.</span><span class="hs-identifier">Gtk</span><span class="hs-operator">.</span><span class="hs-identifier">Types</span><span>
+</span><a name="line-84"></a><span class="hs-pragma">{-# LINE 83 &quot;./Graphics/UI/Gtk/ModelView/CellRendererSpin.chs&quot; #-}</span><span>
+</span><a name="line-85"></a><span>
+</span><a name="line-86"></a><span>
+</span><a name="line-87"></a><span class="hs-pragma">{-# LINE 85 &quot;./Graphics/UI/Gtk/ModelView/CellRendererSpin.chs&quot; #-}</span><span>
+</span><a name="line-88"></a><span>
+</span><a name="line-89"></a><span>
+</span><a name="line-90"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-91"></a><span class="hs-comment">-- Constructors</span><span>
+</span><a name="line-92"></a><span>
+</span><a name="line-93"></a><span class="hs-comment">-- | Creates a new 'CellRendererSpin'.</span><span>
+</span><a name="line-94"></a><span class="hs-comment">--</span><span>
+</span><a name="line-95"></a><span class="hs-comment">-- * Available since Gtk+ version 2.10</span><span>
+</span><a name="line-96"></a><span class="hs-comment">--</span><span>
+</span><a name="line-97"></a><span class="hs-identifier">cellRendererSpinNew</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Graphics.UI.Gtk.ModelView.CellRendererSpin.html#gtk_cell_renderer_spin_new"><span class="hs-identifier hs-var">IO</span></a><span> </span><span class="hs-identifier">CellRendererSpin</span><span>
+</span><a name="line-98"></a><span class="hs-identifier">cellRendererSpinNew</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-99"></a><span>  </span><span class="hs-identifier">makeNewObject</span><span> </span><span class="hs-identifier">mkCellRendererSpin</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">liftM</span><span> </span><span class="hs-identifier">castPtr</span><span>
+</span><a name="line-100"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_spin_new</span><span>
+</span><a name="line-101"></a><span class="hs-pragma">{-# LINE 98 &quot;./Graphics/UI/Gtk/ModelView/CellRendererSpin.chs&quot; #-}</span><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><span class="hs-comment">--------------------</span><span>
+</span><a name="line-104"></a><span class="hs-comment">-- Attributes</span><span>
+</span><a name="line-105"></a><span>
+</span><a name="line-106"></a><span class="hs-comment">-- | The adjustment that holds the value of the spinbutton.</span><span>
+</span><a name="line-107"></a><span class="hs-comment">--</span><span>
+</span><a name="line-108"></a><span class="hs-comment">-- * Available since Gtk+ version 2.10</span><span>
+</span><a name="line-109"></a><span class="hs-comment">--</span><span>
+</span><a name="line-110"></a><span class="hs-identifier">cellRendererSpinAdjustment</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererSpinClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Adjustment</span><span>
+</span><a name="line-111"></a><span class="hs-identifier">cellRendererSpinAdjustment</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromObjectProperty</span><span> </span><span class="hs-string">&quot;adjustment&quot;</span><span>
+</span><a name="line-112"></a><span>                               </span><span class="hs-identifier">gtk_adjustment_get_type</span><span>
+</span><a name="line-113"></a><span class="hs-pragma">{-# LINE 109 &quot;./Graphics/UI/Gtk/ModelView/CellRendererSpin.chs&quot; #-}</span><span>
+</span><a name="line-114"></a><span>
+</span><a name="line-115"></a><span class="hs-comment">-- | The acceleration rate when you hold down a button.</span><span>
+</span><a name="line-116"></a><span class="hs-comment">--</span><span>
+</span><a name="line-117"></a><span class="hs-comment">-- Allowed values: &gt;= 0</span><span>
+</span><a name="line-118"></a><span class="hs-comment">--</span><span>
+</span><a name="line-119"></a><span class="hs-comment">-- Default value: 0</span><span>
+</span><a name="line-120"></a><span class="hs-comment">--</span><span>
+</span><a name="line-121"></a><span class="hs-comment">-- * Available since Gtk+ version 2.10</span><span>
+</span><a name="line-122"></a><span class="hs-comment">--</span><span>
+</span><a name="line-123"></a><span class="hs-identifier">cellRendererSpinClimbRate</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererSpinClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Double</span><span>
+</span><a name="line-124"></a><span class="hs-identifier">cellRendererSpinClimbRate</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromDoubleProperty</span><span> </span><span class="hs-string">&quot;climb-rate&quot;</span><span>
+</span><a name="line-125"></a><span>
+</span><a name="line-126"></a><span class="hs-comment">-- | The number of decimal places to display.</span><span>
+</span><a name="line-127"></a><span class="hs-comment">--</span><span>
+</span><a name="line-128"></a><span class="hs-comment">-- Allowed values: &lt;= 20</span><span>
+</span><a name="line-129"></a><span class="hs-comment">--</span><span>
+</span><a name="line-130"></a><span class="hs-comment">-- Default value: 0</span><span>
+</span><a name="line-131"></a><span class="hs-comment">--</span><span>
+</span><a name="line-132"></a><span class="hs-comment">-- * Available since Gtk+ version 2.10</span><span>
+</span><a name="line-133"></a><span class="hs-comment">--</span><span>
+</span><a name="line-134"></a><span class="hs-identifier">cellRendererSpinDigits</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CellRendererSpinClass</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">Attr</span><span> </span><span class="hs-identifier">self</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-135"></a><span class="hs-identifier">cellRendererSpinDigits</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">newAttrFromUIntProperty</span><span> </span><span class="hs-string">&quot;digits&quot;</span><span>
+</span><a name="line-136"></a><span>
+</span><a name="line-137"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">safe</span><span> </span><span class="hs-string">&quot;gtk_cell_renderer_spin_new&quot;</span><span>
+</span><a name="line-138"></a><span>  </span><span class="hs-identifier">gtk_cell_renderer_spin_new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CellRenderer</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-139"></a><span>
+</span><a name="line-140"></a><span class="hs-identifier">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">ccall</span><span> </span><span class="hs-identifier">unsafe</span><span> </span><span class="hs-string">&quot;gtk_adjustment_get_type&quot;</span><span>
+</span><a name="line-141"></a><span>  </span><span class="hs-identifier">gtk_adjustment_get_type</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CULong</span><span>
+</span><a name="line-142"></a></pre></body></html>

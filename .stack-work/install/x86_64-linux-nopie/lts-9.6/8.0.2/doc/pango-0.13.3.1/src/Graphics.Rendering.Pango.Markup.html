@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LINE 2 &quot;./Graphics/Rendering/Pango/Markup.chs&quot; #-}</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- GIMP Toolkit (GTK) Markup</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Author : Axel Simon</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Created: 5 June 2001</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright (C) 1999-2005 Axel Simon</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Lesser General Public License for more details.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Maintainer : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Stability : provisional</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- Portability : portable (depends on GHC)</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- This module defines some helper functions for generating texts with</span><span>
+</span><a name="line-28"></a><span class="hs-comment">-- embedded attributes. Note that there is no need to use these functions.</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- In particular, if you set markup in labels that are subject to</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- internationalization, it can be of advantage to write out the markup</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- instead of using the functions in this module.</span><span>
+</span><a name="line-32"></a><span class="hs-comment">--</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- In order to display a string that may contain markup characters, use</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- 'Graphics.UI.Gtk.Pango.Layout.escapeMarkup'.</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- When you write markup directly, you can make use of the following</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- convenience tags:</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- [@b@] Bold</span><span>
+</span><a name="line-40"></a><span class="hs-comment">--</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- [@big@] Makes font relatively larger</span><span>
+</span><a name="line-42"></a><span class="hs-comment">--</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- [@i@] Italic</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- [@s@] Strikethrough</span><span>
+</span><a name="line-46"></a><span class="hs-comment">--</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- [@sub@] Subscript</span><span>
+</span><a name="line-48"></a><span class="hs-comment">--</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- [@sup@] Superscript</span><span>
+</span><a name="line-50"></a><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- [@small@] Makes font relatively smaller</span><span>
+</span><a name="line-52"></a><span class="hs-comment">--</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- [@tt@] Monospace font</span><span>
+</span><a name="line-54"></a><span class="hs-comment">--</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- [@u@] Underline</span><span>
+</span><a name="line-56"></a><span class="hs-comment">--</span><span>
+</span><a name="line-57"></a><span class="hs-keyword">module</span><span> </span><a href="Graphics.Rendering.Pango.Markup.html#SpanAttribute"><span class="hs-identifier hs-type">Graphics</span></a><span class="hs-operator">.</span><span class="hs-identifier">Rendering</span><span class="hs-operator">.</span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Markup</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-58"></a><span>  </span><span class="hs-identifier">SpanAttribute</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-59"></a><span>  </span><a href="Graphics.Rendering.Pango.Attributes.html#parseMarkup"><span class="hs-identifier hs-var">markSpan</span></a><span class="hs-special">,</span><span>
+</span><a name="line-60"></a><span>  </span><span class="hs-identifier">parseMarkup</span><span>
+</span><a name="line-61"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-62"></a><span>
+</span><a name="line-63"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Graphics.Rendering.Pango.Attributes.html"><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">Rendering</span><span class="hs-operator">.</span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span></a><span class="hs-identifier">Enums</span><span> </span><span class="hs-keyword">as</span><span> </span><a href="Graphics.Rendering.Pango.Attributes.html#parseMarkup"><span class="hs-identifier hs-var">Pango</span></a><span>
+</span><a name="line-64"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Graphics</span><span class="hs-operator">.</span><span class="hs-identifier">Rendering</span><span class="hs-operator">.</span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Attributes</span><span> </span><span class="hs-special">(</span><span> </span><span class="hs-identifier">parseMarkup</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-65"></a><span>
+</span><a name="line-66"></a><span class="hs-comment">-- | These are all the attributes the 'markSpan' function can express.</span><span>
+</span><a name="line-67"></a><span class="hs-comment">--</span><span>
+</span><a name="line-68"></a><span class="hs-keyword">data</span><span> </span><span class="hs-identifier">SpanAttribute</span><span>
+</span><a name="line-69"></a><span>  </span><span class="hs-comment">-- | Choose a font by textual description.</span><span>
+</span><a name="line-70"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-71"></a><span>  </span><span class="hs-comment">-- * Takes a string to completely describe the font, example:</span><span>
+</span><a name="line-72"></a><span>  </span><span class="hs-comment">-- @FontDescr@ \&quot;Sans Italic 12\&quot;</span><span>
+</span><a name="line-73"></a><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">FontDescr</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span>  </span><span class="hs-comment">-- | Specify the family of font to use.</span><span>
+</span><a name="line-76"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-77"></a><span>  </span><span class="hs-comment">-- * Example: @FontFamily@ \&quot;Sans\&quot;</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontFamily</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-79"></a><span>
+</span><a name="line-80"></a><span>  </span><span class="hs-comment">-- | Change the size of the current font.</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-82"></a><span>  </span><span class="hs-comment">-- * The constuctor takes the size in points (pt) or a predefined</span><span>
+</span><a name="line-83"></a><span>  </span><span class="hs-comment">-- sizes. Setting the absolute size 12.5pt can be achieved by passing</span><span>
+</span><a name="line-84"></a><span>  </span><span class="hs-comment">-- 'FontSize' ('SizePoint' 12.5) to 'markSpan'. Next to predefined</span><span>
+</span><a name="line-85"></a><span>  </span><span class="hs-comment">-- absolute sizes such as 'Pango.SizeSmall' the size can be changed by</span><span>
+</span><a name="line-86"></a><span>  </span><span class="hs-comment">-- asking for the next larger or smaller front with</span><span>
+</span><a name="line-87"></a><span>  </span><span class="hs-comment">-- 'Pango.SizeLarger' and 'Pango.SizeSmaller', respectively.</span><span>
+</span><a name="line-88"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontSize</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Size</span><span>
+</span><a name="line-89"></a><span>
+</span><a name="line-90"></a><span>  </span><span class="hs-comment">-- | Change the slant of the current font.</span><span>
+</span><a name="line-91"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-92"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontStyle</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">FontStyle</span><span>
+</span><a name="line-93"></a><span>
+</span><a name="line-94"></a><span>  </span><span class="hs-comment">-- | Change the thickness of the current font.</span><span>
+</span><a name="line-95"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-96"></a><span>  </span><span class="hs-comment">-- * The constructor takes one of the six predefined weights. Most likely to</span><span>
+</span><a name="line-97"></a><span>  </span><span class="hs-comment">-- be supported: 'Pango.WeightBold'.</span><span>
+</span><a name="line-98"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-99"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontWeight</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Weight</span><span>
+</span><a name="line-100"></a><span>
+</span><a name="line-101"></a><span>  </span><span class="hs-comment">-- | Choosing an alternative rendering for lower case letters.</span><span>
+</span><a name="line-102"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-103"></a><span>  </span><span class="hs-comment">-- * The argument 'Pango.VariantSmallCaps' will display lower case letters</span><span>
+</span><a name="line-104"></a><span>  </span><span class="hs-comment">-- as smaller upper case letters, if this option is available.</span><span>
+</span><a name="line-105"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontVariant</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Variant</span><span>
+</span><a name="line-106"></a><span>
+</span><a name="line-107"></a><span>  </span><span class="hs-comment">-- | Choose a different width.</span><span>
+</span><a name="line-108"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-109"></a><span>  </span><span class="hs-comment">-- * Takes one of nine font widths, e.g. 'Pango.WidthExpanded'.</span><span>
+</span><a name="line-110"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-111"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontStretch</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Stretch</span><span>
+</span><a name="line-112"></a><span>
+</span><a name="line-113"></a><span>  </span><span class="hs-comment">-- | Foreground color.</span><span>
+</span><a name="line-114"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-115"></a><span>  </span><span class="hs-comment">-- * This constructor and 'FontBackground' take both a description</span><span>
+</span><a name="line-116"></a><span>  </span><span class="hs-comment">-- of the color to be used for rendering. The name is either a</span><span>
+</span><a name="line-117"></a><span>  </span><span class="hs-comment">-- hex code of the form \&quot;#RRGGBB\&quot; or an X11 color name like</span><span>
+</span><a name="line-118"></a><span>  </span><span class="hs-comment">-- \&quot;dark olive green\&quot;.</span><span>
+</span><a name="line-119"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-120"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontForeground</span><span> </span><span class="hs-identifier">String</span><span> </span><span class="hs-comment">-- FIXME: should be ColorName from GDK or so</span><span>
+</span><a name="line-121"></a><span>
+</span><a name="line-122"></a><span>  </span><span class="hs-comment">-- | Background color.</span><span>
+</span><a name="line-123"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontBackground</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-124"></a><span>
+</span><a name="line-125"></a><span>  </span><span class="hs-comment">-- | Specify underlining of text.</span><span>
+</span><a name="line-126"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-127"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontUnderline</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Underline</span><span>
+</span><a name="line-128"></a><span>
+</span><a name="line-129"></a><span>  </span><span class="hs-comment">-- | Specify a vertical displacement.</span><span>
+</span><a name="line-130"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-131"></a><span>  </span><span class="hs-comment">-- * Takes the vertical displacement in em (the width of the \'m\' character</span><span>
+</span><a name="line-132"></a><span>  </span><span class="hs-comment">-- in the current font).</span><span>
+</span><a name="line-133"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontRise</span><span> </span><span class="hs-identifier">Double</span><span>
+</span><a name="line-134"></a><span>
+</span><a name="line-135"></a><span>  </span><span class="hs-comment">-- | Give a hint about the language to be displayed.</span><span>
+</span><a name="line-136"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-137"></a><span>  </span><span class="hs-comment">-- * This hint might help the system rendering a particular piece of text</span><span>
+</span><a name="line-138"></a><span>  </span><span class="hs-comment">-- with different fonts that are more suitable for the given language.</span><span>
+</span><a name="line-139"></a><span>  </span><span class="hs-comment">--</span><span>
+</span><a name="line-140"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontLang</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">Language</span><span>
+</span><a name="line-141"></a><span>
+</span><a name="line-142"></a><span>
+</span><a name="line-143"></a><span>  </span><span class="hs-comment">-- | Gravity of text, use for ratation.</span><span>
+</span><a name="line-144"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontGravity</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">PangoGravity</span><span>
+</span><a name="line-145"></a><span>
+</span><a name="line-146"></a><span>  </span><span class="hs-comment">-- | Intensity of gravity.</span><span>
+</span><a name="line-147"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">FontGravityHint</span><span> </span><span class="hs-identifier">Pango</span><span class="hs-operator">.</span><span class="hs-identifier">PangoGravityHint</span><span>
+</span><a name="line-148"></a><span>
+</span><a name="line-149"></a><span>
+</span><a name="line-150"></a><span class="hs-keyword">instance</span><span> </span><span class="hs-identifier">Show</span><span> </span><span class="hs-identifier">SpanAttribute</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-151"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontFamily"><span class="hs-identifier hs-var">FontDescr</span></a><span> </span><span class="hs-identifier">str</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; font_desc=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">str</span><span>
+</span><a name="line-152"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">FontFamily</span><span> </span><span class="hs-identifier">str</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; font_family=&quot;</span><a href="#local-6989586621679059571"><span class="hs-operator hs-var">.</span></a><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">str</span><span>
+</span><a name="line-153"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontStyle"><span class="hs-identifier hs-var">FontSize</span></a><span> </span><span class="hs-identifier">size</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; size=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">size</span><span>
+</span><a name="line-154"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontWeight"><span class="hs-identifier hs-var">FontStyle</span></a><span> </span><span class="hs-identifier">style</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; style=&quot;</span><span class="hs-operator hs-var">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">style</span><span>
+</span><a name="line-155"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontVariant"><span class="hs-identifier hs-var">FontWeight</span></a><span> </span><span class="hs-identifier">w</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; weight=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier hs-var">w</span><span>
+</span><a name="line-156"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontStretch"><span class="hs-identifier hs-var">FontVariant</span></a><span> </span><a name="local-6989586621679059575"><a href="#local-6989586621679059575"><span class="hs-identifier">v</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">showString</span><span> </span><span class="hs-string">&quot; variant=&quot;</span><span class="hs-operator hs-var">.</span><span class="hs-identifier hs-var">shows</span><span> </span><a href="#local-6989586621679059575"><span class="hs-identifier hs-var">v</span></a><span>
+</span><a name="line-157"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontForeground"><span class="hs-identifier hs-var">FontStretch</span></a><span> </span><a href="Graphics.Rendering.Pango.Markup.html#FontForeground"><span class="hs-identifier hs-var">s</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; stretch=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier hs-var">s</span><span>
+</span><a name="line-158"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontBackground"><span class="hs-identifier hs-var">FontForeground</span></a><span> </span><a name="local-6989586621679059577"><a href="#local-6989586621679059577"><span class="hs-identifier">c</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">showString</span><span> </span><span class="hs-string">&quot; foreground=&quot;</span><span class="hs-operator hs-var">.</span><span class="hs-identifier hs-var">shows</span><span> </span><a href="#local-6989586621679059577"><span class="hs-identifier hs-var">c</span></a><span>
+</span><a name="line-159"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">FontBackground</span><span> </span><span class="hs-identifier">c</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; background=&quot;</span><span class="hs-operator hs-var">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">c</span><span>
+</span><a name="line-160"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">FontUnderline</span><span> </span><span class="hs-identifier hs-var">u</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; underline=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">u</span><span>
+</span><a name="line-161"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">FontRise</span><span> </span><span class="hs-identifier">r</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; rise=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span>
+</span><a name="line-162"></a><span>                                   </span><span class="hs-special">(</span><span class="hs-identifier">show</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">round</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">r</span><span class="hs-operator hs-var">*</span><span class="hs-number">10000</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-163"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">FontLang</span><span> </span><span class="hs-identifier">l</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; lang=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">l</span><span>
+</span><a name="line-164"></a><span>
+</span><a name="line-165"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Graphics.Rendering.Pango.Markup.html#FontGravityHint"><span class="hs-identifier hs-var">FontGravity</span></a><span> </span><a href="Graphics.Rendering.Pango.Markup.html#FontGravityHint"><span class="hs-identifier hs-var">g</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; gravity=&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">g</span><span>
+</span><a name="line-166"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">FontGravityHint</span><span> </span><span class="hs-identifier">h</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot; gravity_hint&quot;</span><span class="hs-operator">.</span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">h</span><span>
+</span><a name="line-167"></a><span>
+</span><a name="line-168"></a><span>
+</span><a name="line-169"></a><span class="hs-comment">-- | Create the most generic span attribute.</span><span>
+</span><a name="line-170"></a><span class="hs-comment">--</span><span>
+</span><a name="line-171"></a><a name="markSpan"><a href="Graphics.Rendering.Pango.Markup.html#markSpan"><span class="hs-identifier">markSpan</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-identifier">SpanAttribute</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">String</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-172"></a><span class="hs-identifier">markSpan</span><span> </span><span class="hs-identifier">attrs</span><span> </span><span class="hs-identifier">text</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot;&lt;span&quot;</span><span class="hs-operator hs-var">.</span><span>
+</span><a name="line-173"></a><span>                      </span><span class="hs-identifier hs-var">foldr</span><span> </span><span class="hs-special">(</span><span class="hs-operator hs-var">.</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">showChar</span><span> </span><span class="hs-char">'&gt;'</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">map</span><span> </span><span class="hs-identifier">shows</span><span> </span><span class="hs-identifier">attrs</span><span class="hs-special">)</span><span class="hs-operator">.</span><span>
+</span><a name="line-174"></a><span>                      </span><span class="hs-identifier hs-var">showString</span><span> </span><span class="hs-identifier">text</span><span class="hs-operator">.</span><span>
+</span><a name="line-175"></a><span>                      </span><span class="hs-identifier">showString</span><span> </span><span class="hs-string">&quot;&lt;/span&gt;&quot;</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-string">&quot;&quot;</span><span>
+</span><a name="line-176"></a></pre></body></html>

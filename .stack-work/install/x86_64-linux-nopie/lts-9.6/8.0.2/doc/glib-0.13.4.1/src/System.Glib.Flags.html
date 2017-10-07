@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- -*-haskell-*-</span><span>
+</span><a name="line-2"></a><span class="hs-comment">--  class of flag types</span><span>
+</span><a name="line-3"></a><span class="hs-comment">--</span><span>
+</span><a name="line-4"></a><span class="hs-comment">--  Author : Duncan Coutts</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">--  Created: 21 January 2005</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">--  Copyright (C) 2001-2005 Duncan Coutts, Axel Simon</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--  This library is free software; you can redistribute it and/or</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--  modify it under the terms of the GNU Lesser General Public</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--  License as published by the Free Software Foundation; either</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--  version 2.1 of the License, or (at your option) any later version.</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--  This library is distributed in the hope that it will be useful,</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--  but WITHOUT ANY WARRANTY; without even the implied warranty of</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--  Lesser General Public License for more details.</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- Maintainer  : gtk2hs-users@lists.sourceforge.net</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- Stability   : provisional</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Portability : portable</span><span>
+</span><a name="line-24"></a><span class="hs-comment">--</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- This module defines a type class for flags that are marshaled as bitflags.</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System</span><span class="hs-operator">.</span><span class="hs-identifier">Glib</span><span class="hs-operator">.</span><span class="hs-identifier">Flags</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-28"></a><span>  </span><a href="System.Glib.Flags.html#Flags"><span class="hs-identifier hs-type">Flags</span></a><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>  </span><a href="System.Glib.Flags.html#fromFlags"><span class="hs-identifier hs-var">fromFlags</span></a><span class="hs-special">,</span><span>
+</span><a name="line-30"></a><span>  </span><a href="System.Glib.Flags.html#toFlags"><span class="hs-identifier hs-var">toFlags</span></a><span>
+</span><a name="line-31"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Data</span><span class="hs-operator">.</span><span class="hs-identifier">Bits</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-operator hs-var">.|.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-operator hs-var">.&amp;.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-var">testBit</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-var">shiftL</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-var">shiftR</span><span class="hs-special">)</span><span>
+</span><a name="line-34"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Data</span><span class="hs-operator">.</span><span class="hs-identifier">Maybe</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">catMaybes</span><span class="hs-special">)</span><span>
+</span><a name="line-35"></a><span>
+</span><a name="line-36"></a><span class="hs-keyword">class</span><span>  </span><span class="hs-special">(</span><span class="hs-identifier hs-type">Enum</span><span> </span><a href="#local-6989586621679028477"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">Bounded</span><span> </span><a href="#local-6989586621679028477"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a name="Flags"><a href="System.Glib.Flags.html#Flags"><span class="hs-identifier">Flags</span></a></a><span> </span><a name="local-6989586621679028477"><a href="#local-6989586621679028477"><span class="hs-identifier">a</span></a></a><span>
+</span><a name="line-37"></a><span>
+</span><a name="line-38"></a><span class="hs-identifier">fromFlags</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="System.Glib.Flags.html#Flags"><span class="hs-identifier hs-type">Flags</span></a><span> </span><a href="#local-6989586621679028896"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679028896"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">Int</span><span>
+</span><a name="line-39"></a><a name="fromFlags"><a href="System.Glib.Flags.html#fromFlags"><span class="hs-identifier">fromFlags</span></a></a><span> </span><a name="local-6989586621679028897"><a href="#local-6989586621679028897"><span class="hs-identifier">is</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679028898"><span class="hs-identifier hs-var">orNum</span></a><span> </span><span class="hs-number">0</span><span> </span><a href="#local-6989586621679028897"><span class="hs-identifier hs-var">is</span></a><span>
+</span><a name="line-40"></a><span>  </span><span class="hs-keyword">where</span><span> </span><a name="local-6989586621679028898"><a href="#local-6989586621679028898"><span class="hs-identifier">orNum</span></a></a><span> </span><a name="local-6989586621679028899"><a href="#local-6989586621679028899"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>     </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679028899"><span class="hs-identifier hs-var">n</span></a><span>
+</span><a name="line-41"></a><span>        </span><span class="hs-identifier">orNum</span><span> </span><a name="local-6989586621679028900"><a href="#local-6989586621679028900"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-special">(</span><a name="local-6989586621679028901"><a href="#local-6989586621679028901"><span class="hs-identifier">i</span></a></a><span class="hs-glyph">:</span><a name="local-6989586621679028902"><a href="#local-6989586621679028902"><span class="hs-identifier">is</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679028898"><span class="hs-identifier hs-var">orNum</span></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679028900"><span class="hs-identifier hs-var">n</span></a><span> </span><span class="hs-operator hs-var">.|.</span><span> </span><span class="hs-identifier hs-var">fromEnum</span><span> </span><a href="#local-6989586621679028901"><span class="hs-identifier hs-var">i</span></a><span class="hs-special">)</span><span> </span><a href="#local-6989586621679028902"><span class="hs-identifier hs-var">is</span></a><span>
+</span><a name="line-42"></a><span>
+</span><a name="line-43"></a><span class="hs-comment">-- * Note that this function ignores bits set in the passed</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--   'Int' that do not correspond to a flag.</span><span>
+</span><a name="line-45"></a><span class="hs-identifier">toFlags</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="System.Glib.Flags.html#Flags"><span class="hs-identifier hs-type">Flags</span></a><span> </span><a href="#local-6989586621679028895"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier hs-type">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679028895"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span>
+</span><a name="line-46"></a><a name="toFlags"><a href="System.Glib.Flags.html#toFlags"><span class="hs-identifier">toFlags</span></a></a><span> </span><a name="local-6989586621679028903"><a href="#local-6989586621679028903"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">catMaybes</span><span> </span><span class="hs-special">[</span><span> </span><span class="hs-keyword">if</span><span> </span><a href="#local-6989586621679028903"><span class="hs-identifier hs-var">n</span></a><span> </span><span class="hs-operator hs-var">.&amp;.</span><span> </span><span class="hs-identifier hs-var">fromEnum</span><span> </span><a href="#local-6989586621679028904"><span class="hs-identifier hs-var">flag</span></a><span> </span><span class="hs-operator hs-var">==</span><span> </span><span class="hs-identifier hs-var">fromEnum</span><span> </span><a href="#local-6989586621679028904"><span class="hs-identifier hs-var">flag</span></a><span>
+</span><a name="line-47"></a><span>                           </span><span class="hs-keyword">then</span><span> </span><span class="hs-identifier hs-var">Just</span><span> </span><a href="#local-6989586621679028904"><span class="hs-identifier hs-var">flag</span></a><span>
+</span><a name="line-48"></a><span>                           </span><span class="hs-keyword">else</span><span> </span><span class="hs-identifier hs-var">Nothing</span><span>
+</span><a name="line-49"></a><span>                      </span><span class="hs-glyph">|</span><span> </span><a name="local-6989586621679028904"><a href="#local-6989586621679028904"><span class="hs-identifier">flag</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-var">minBound</span><span> </span><span class="hs-glyph">..</span><span> </span><span class="hs-identifier hs-var">maxBound</span><span class="hs-special">]</span><span> </span><span class="hs-special">]</span><span>
+</span><a name="line-50"></a><span>
+</span><a name="line-51"></a><span class="hs-comment">-------------------------</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- QuickCheck test code</span><span>
+</span><a name="line-53"></a><span>
+</span><a name="line-54"></a><span class="hs-comment">{-
+import Test.QuickCheck
+import List (sort, nub)
+-- to run these tests you must copy EventMask and its Enum instance here
+-- and make it an instance of Ord, Eq and Show.
+
+prop_ToFlagsFromFlags :: Int -&gt; Property
+prop_ToFlagsFromFlags n =
+  (n &gt;= 1 &amp;&amp; n &lt;= 21)
+  ==&gt;
+  collect n $
+  let flag :: [EventMask]
+      flag = toFlags (2^n)
+   in 2^n == fromFlags flag
+
+prop_FromFlagsToFlags :: [EventMask] -&gt; Bool
+prop_FromFlagsToFlags flags =
+  (nub . sort) flags == toFlags (fromFlags flags)
+
+instance Arbitrary EventMask where
+  arbitrary     = sized $ \_ -&gt; do x &lt;- choose (1,21 :: Int)
+                                   return (toEnum $ 2^x)
+-}</span><span>
+</span><a name="line-77"></a></pre></body></html>
