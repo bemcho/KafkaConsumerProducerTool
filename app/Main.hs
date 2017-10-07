@@ -9,52 +9,8 @@ import Graphics.UI.Gtk.Gdk.Display
 import Graphics.UI.Gtk.Buttons.Button
 import Graphics.UI.Gtk.Gdk.EventM
 import Data.Kafka.KafkaProducer
+import Kafka.Types
 import qualified Data.ByteString.UTF8     as BU
-
--- | Change second argument inside of 'Action'.
-mapAction :: (String -> String) -> Action -> Action
-mapAction f (Send           x) = Send       (f x)
-
--- | Get second argument from 'Action'.
-getSndArg :: Action -> String
-getSndArg (Send           x) = x
--- | 'Value' holds textual representation of first argument reversed and
--- 'Action' to apply to it, which see.
-data Value = Value String (Maybe Action)
-
--- | Action to apply to first argument and textual representation of second
--- argument reversed (if relevant).
-data Action
-  = Send       String
-
--- | The deleteEvent signal is emitted if a user requests that a toplevel
--- window is closed. The default handler for this signal destroys the window.
--- Calling 'widgetHide' and returning 'True' on reception of this signal will
--- cause the window to be hidden instead, so that it can later be shown again
--- without reconstructing it.
--- deleteEvent :: WidgetClass self => Signal self (EventM EAny Bool)
-
--- | Render given 'Value'.
---renderValue :: Value -> String
---renderValue (Value x action) =
---  g x ++ f a ++ (if null y then "" else g y)
---  where
---    (a, y) =
---      case action of
---        Nothing                   -> ("", "")
---        Just (Addition       arg) -> ("+", arg)
---        Just (Subtraction    arg) -> ("–", arg)
---        Just (Multiplication arg) -> ("*", arg)
---        Just (Division       arg) -> ("÷", arg)
---    f "" = ""
---    f l  = " " ++ l ++ " "
---    g "" = "0"
---    g xs = reverse xs
-
--- | Make calculator's display show given 'Value'.
-updateDisplay :: Entry -> Value -> IO ()
-updateDisplay display value =
-  set display [ entryText := "Sent" ]
 
 -- | Create a button and attach handler to it that mutates calculator's
 -- state with given function.
@@ -63,7 +19,7 @@ mkButton  ::
   -> IO Button         -- ^ Resulting button object
 mkButton label  = do
   btn <- buttonNew
-  set btn [ buttonLabel := label ]
+  set btn [ buttonLabel := label]
   return btn
 
 -- | Emitted when the button has been activated (pressed and released).
@@ -73,24 +29,21 @@ mkButton label  = do
 -- mainQuit :: IO ()
 
 -- | Render given 'Value'.
-renderValue :: Value -> String
-renderValue (Value x action) =
-  f a
-  where
-    (a, y) =
-      case action of
-        Nothing         -> ("", "")
-        Just (Send arg) -> ("Sent", arg)
-    f l  = " " ++ l ++ " "
+renderValue :: (Either KafkaError ()) -> String
+renderValue err = do
+  case err of
+    Left  val -> "Kafka Said" ++  (show err)
+    Right val -> "Send to kafka Succeeded"
 
-sendToKafkaTopicFromUI :: Entry -> Entry -> Entry -> IO(Either KafkaError ())
-sendToKafkaTopicFromUI kafkaUrlEntry kafkaTopicEntry kafkaMessageEntry = do
+sendToKafkaTopicFromUI :: Entry -> Entry -> Entry -> Statusbar -> ContextId -> IO()
+sendToKafkaTopicFromUI kafkaUrlEntry kafkaTopicEntry kafkaMessageEntry statusBar statusBarId = do
+    statusbarPop statusBar statusBarId
     kUrl <- entryGetText kafkaUrlEntry
     kTopic <- entryGetText kafkaTopicEntry
     kMessage <- entryGetText kafkaMessageEntry
     err <- sendToKafkaTopic kUrl kTopic (BU.fromString kMessage)
-    forM_ err print
-    return $ Right ()
+    msgId <- statusbarPush statusBar statusBarId (renderValue err)
+    return ()
 
 main :: IO ()
 main = do
@@ -130,6 +83,13 @@ main = do
 
   sendButton <- mkButton "Send"
 
+  actionStatusBar <- statusbarNew
+  actionStatusBarFrame <- frameNew
+  frameSetLabel actionStatusBarFrame "Status:"
+  actionStatusBarId <- statusbarGetContextId actionStatusBar "Kafka"
+  statusbarPush actionStatusBar actionStatusBarId "Just started ..."
+  containerAdd actionStatusBarFrame actionStatusBar
+
   grid <- gridNew
   gridSetColumnHomogeneous grid True
   gridSetRowHomogeneous grid True  -- (2)
@@ -140,13 +100,14 @@ main = do
   attach 0 2 7 1 kafkaTopicFrame
   attach 0 3 7 5 kafkaMessageFrame           -- (4)
   attach 0 15 7 1 sendButton
+  attach 0 16 7 1 actionStatusBarFrame
 
   containerAdd window grid
   window `on` deleteEvent $ do -- handler to run on window destruction
       liftIO mainQuit
       return False
   sendButton `on` buttonPressEvent $ do
-      liftIO (sendToKafkaTopicFromUI kafkaBrokerUrl kafkaTopic kafkaMessage)
+      liftIO (sendToKafkaTopicFromUI kafkaBrokerUrl kafkaTopic kafkaMessage actionStatusBar actionStatusBarId)
       return True
   widgetShowAll window
   mainGUI

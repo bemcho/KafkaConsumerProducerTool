@@ -1,13 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Data.Kafka.KafkaProducer
- (sendToKafkaTopic, KafkaError)
+ (sendToKafkaTopic)
 where
 
 import           Control.Monad            (forM_)
 import           Data.ByteString.Internal (ByteString)
 import qualified Data.ByteString.UTF8     as BU
 import           Data.Monoid
+import           Data.Maybe
 import           Data.Time
 import           Kafka.Producer
 import           Text.Read
@@ -40,5 +41,9 @@ sendMessage :: KafkaProducer -> TopicName ->  ByteString -> IO (Either KafkaErro
 sendMessage prod topic message = do
     zonedTime <- getZonedTime
     err <- produceMessage prod (mkMessage topic (Just (formattedZonedTimeNow zonedTime)) (Just message))
-    forM_ err print
-    return $ Right ()
+    f err
+    where
+        f :: (Maybe KafkaError) -> IO (Either KafkaError ())
+        f er =case er of
+            (Just e) -> return $ Left e
+            Nothing -> return $ Right ()
