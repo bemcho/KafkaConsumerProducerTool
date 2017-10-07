@@ -31,6 +31,9 @@ UI tool for sending messages to Kafka topics written in Haskell
 
      stack exec KafkaConsumerProducerTool
 or
+
      stack install ->  will install it in (~/.local/bin) you need it added  in $PATH
-then:
-     KafkaConsumerProducerTool - will run from anywhere (no need to be in project dir)
+
+then
+
+    KafkaConsumerProducerTool - will run from anywhere (no need to be in project dir)
