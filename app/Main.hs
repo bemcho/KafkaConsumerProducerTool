@@ -42,7 +42,8 @@ sendToKafkaTopicFromUI kafkaUrlEntry kafkaTopicEntry kafkaMessageEntry statusBar
     kTopic <- entryGetText kafkaTopicEntry
     kMessage <- entryGetText kafkaMessageEntry
     err <- sendToKafkaTopic kUrl kTopic (BU.fromString kMessage)
-    msgId <- statusbarPush statusBar statusBarId (renderValue err)
+    timeNow <- timestamp
+    msgId <- statusbarPush statusBar statusBarId $ timeNow ++ " - " ++ (renderValue err)
     return ()
 
 main :: IO ()
@@ -87,7 +88,8 @@ main = do
   actionStatusBarFrame <- frameNew
   frameSetLabel actionStatusBarFrame "Status:"
   actionStatusBarId <- statusbarGetContextId actionStatusBar "Kafka"
-  statusbarPush actionStatusBar actionStatusBarId "Just started ..."
+  timeNow <- timestamp
+  statusbarPush actionStatusBar actionStatusBarId $ timeNow ++ " - " ++ "Just started ..."
   containerAdd actionStatusBarFrame actionStatusBar
 
   grid <- gridNew

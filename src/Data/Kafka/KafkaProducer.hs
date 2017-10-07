@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Data.Kafka.KafkaProducer
- (sendToKafkaTopic)
+ (sendToKafkaTopic,timestamp)
 where
 
 import           Control.Monad            (forM_)
@@ -14,8 +14,15 @@ import           Kafka.Producer
 import           Text.Read
 
 -- time utils
-formattedZonedTimeNow :: ZonedTime -> ByteString
-formattedZonedTimeNow zonedTime = (BU.fromString $ (formatTime defaultTimeLocale "%FT%T%z" zonedTime))
+
+
+timestamp:: IO(String)
+timestamp = do
+    zonedTime <- getZonedTime
+    return $ formattedZonedTimeNow zonedTime
+    where
+        formattedZonedTimeNow :: ZonedTime -> String
+        formattedZonedTimeNow zonedTime = (formatTime defaultTimeLocale "%FT%T%z" zonedTime)
 
 -- Global producer properties
 producerProps :: String -> ProducerProperties
@@ -39,8 +46,8 @@ sendToKafkaTopic brokerAddress kafkaTopic message = do
 
 sendMessage :: KafkaProducer -> TopicName ->  ByteString -> IO (Either KafkaError ())
 sendMessage prod topic message = do
-    zonedTime <- getZonedTime
-    err <- produceMessage prod (mkMessage topic (Just (formattedZonedTimeNow zonedTime)) (Just message))
+    zonedTime <- timestamp
+    err <- produceMessage prod (mkMessage topic (Just (BU.fromString zonedTime)) (Just message))
     f err
     where
         f :: (Maybe KafkaError) -> IO (Either KafkaError ())
