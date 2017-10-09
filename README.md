@@ -1,6 +1,9 @@
 # KafkaConsumerProducerTool
     -- For now only producer is implemented
-    -- No error handling e.g. will crash on broken url
+    -- If your kafka is down or broken url is entered 
+    for kafka broker Url the app will hang for 5 min.
+    as this is some request timeout i still can not configure
+    
 
 UI tool for sending messages to Kafka topics written in Haskell
 -- Installation stack & cabal

@@ -1,5 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-module Data.Kafka.KafkaConsumer  where
+module Data.Kafka.KafkaConsumer
+
+where
 
 import Control.Arrow  ((&&&))
 import Data.Monoid    ((<>))
@@ -12,11 +14,11 @@ consumerProps = brokersList [BrokerAddress "localhost:9092"]
              <> noAutoCommit
              <> setCallback (rebalanceCallback printingRebalanceCallback)
              <> setCallback (offsetCommitCallback printingOffsetCallback)
-             <> consumerLogLevel KafkaLogInfo
+             <> logLevel KafkaLogInfo
 
 -- Subscription to topics
 consumerSub :: Subscription
-consumerSub = topics [TopicName "product_recall_asn"]
+consumerSub = topics [TopicName "kafka-client-example-topic"]
            <> offsetReset Earliest
 
 -- Running an example
@@ -34,7 +36,7 @@ processMessages kafka = do
                    putStrLn $ "Message: " <> show msg1
                    err <- commitAllOffsets OffsetCommit kafka
                    putStrLn $ "Offsets: " <> maybe "Committed." show err
-          ) [0 :: Integer .. 100]
+          ) [0 :: Integer .. 10]
     return $ Right ()
 
 printingRebalanceCallback :: KafkaConsumer -> KafkaError -> [TopicPartition] -> IO ()
@@ -55,5 +57,3 @@ printingOffsetCallback :: KafkaConsumer -> KafkaError -> [TopicPartition] -> IO 
 printingOffsetCallback _ e ps = do
     print ("Offsets callback:" ++ show e)
     mapM_ (print . (tpTopicName &&& tpPartition &&& tpOffset)) ps
-
-

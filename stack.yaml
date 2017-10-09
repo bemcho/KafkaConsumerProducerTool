@@ -3,5 +3,6 @@ extra-package-dbs: []
 packages:
 - .
 extra-deps:
-- hw-kafka-client-2.0.1
+- hw-kafka-client-2.0.3
+- strings-1.1
 resolver: lts-9.6

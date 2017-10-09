@@ -60,7 +60,7 @@
     <orderEntry type="library" name="gtk2hs-buildtools-0.13.2.2" level="project" />
     <orderEntry type="library" name="hashable-1.2.6.1" level="project" />
     <orderEntry type="library" name="hashtables-1.2.2.0" level="project" />
-    <orderEntry type="library" name="hw-kafka-client-2.0.1" level="project" />
+    <orderEntry type="library" name="hw-kafka-client-2.0.3" level="project" />
     <orderEntry type="library" name="integer-logarithms-1.0.2" level="project" />
     <orderEntry type="library" name="mtl-2.2.1" level="project" />
     <orderEntry type="library" name="pango-0.13.3.1" level="project" />
@@ -87,5 +87,6 @@
     <orderEntry type="library" name="regex-base-0.93.2" level="project" />
     <orderEntry type="library" name="regex-compat-0.95.1" level="project" />
     <orderEntry type="library" name="regex-posix-0.95.2" level="project" />
+    <orderEntry type="library" name="strings-1.1" level="project" />
   </component>
 </module>
