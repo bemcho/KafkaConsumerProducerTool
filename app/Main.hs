@@ -13,6 +13,8 @@ import           Graphics.UI.Gtk.Gdk.Display
 import           Graphics.UI.Gtk.Gdk.EventM
 import           Graphics.UI.Gtk.Layout.Grid
 import           Kafka.Types
+import qualified Data.UUID                   as UUID
+import qualified Data.UUID.V1                as UUID.V1
 
 -- | Create a button and attach handler to it that mutates calculator's
 -- state with given function.
@@ -69,7 +71,7 @@ sendToKafkaTopicFromUI kafkaUrlEntry kafkaTopicEntry kafkaMessageEntry statusBar
         return (v1, res)
     report :: Bool -> String -> IO (String)
     report False msg = return msg
-    report True msg =  return ""
+    report True msg  = return ""
     validate :: IO String -> IO (Bool)
     validate entry = do
         eText <- entry
@@ -118,11 +120,13 @@ main = do
         , textViewAcceptsTab := True
         , textViewIndent := 4
         ]
+    zonedTime <- timestamp
+    uuid <- getUUIDAsString
     buffer <- textViewGetBuffer kafkaMessage
     set
         buffer
-        [ textBufferText :=
-          "{\n \tid : someId,\n\t key: somekey,\n \tpayload : \n\t{\n\t\tmessage : \"Helllooo kafkaaaa!Haskellll is awesome\"\n\t}\n}"
+        [ textBufferText := "{\n\tid : "++  uuid ++",\n\tkey : somekey,\n\ttime : " ++ zonedTime ++
+          ",\n\tpayload : \n\t{\n\t\tmessage : \"Helllooo kafkaaaa!Haskellll is awesome\"\n\t}\n}"
         ]
     containerAdd kafkaMessageFrame kafkaMessage
     sendButton <- mkButton "Send"
@@ -130,8 +134,8 @@ main = do
     actionStatusBarFrame <- frameNew
     frameSetLabel actionStatusBarFrame "Status:"
     actionStatusBarId <- statusbarGetContextId actionStatusBar "Kafka"
-    timeNow <- timestamp
-    statusbarPush actionStatusBar actionStatusBarId $ "[" ++ timeNow ++ "] - " ++ "Just started ..."
+    timeNow <- formattedTimeStamp
+    statusbarPush actionStatusBar actionStatusBarId $ timeNow ++ " - Just started ..."
     containerAdd actionStatusBarFrame actionStatusBar
     grid <- gridNew
     gridSetColumnHomogeneous grid True
@@ -167,3 +171,14 @@ getText b = do
     bEndIt <- textBufferGetIterAtLine b lcnt
     result <- textBufferGetText b bBeginIt bEndIt True
     return $ result
+
+getUUIDAsString :: IO String
+getUUIDAsString =do
+    uuid <- UUID.V1.nextUUID
+    return $ f uuid
+    where
+        f::Maybe UUID.UUID -> String
+        f u =
+            case u of
+              Just u' -> UUID.toString $  u'
+              Nothing  ->  "meh-meh-beh"
