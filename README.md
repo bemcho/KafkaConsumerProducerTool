@@ -41,3 +41,7 @@ or
 then
 
     KafkaConsumerProducerTool - will run from anywhere (no need to be in project dir)
+
+---
+
+![alt text](https://github.com/bemcho/KafkaConsumerProducerTool/KafkaConsumerProducerTool.png)
