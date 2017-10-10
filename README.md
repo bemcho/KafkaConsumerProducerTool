@@ -44,4 +44,6 @@ then
 
 ---
 
-![alt text](https://github.com/bemcho/KafkaConsumerProducerTool/KafkaConsumerProducerTool.png)
+<p align="center">
+  <img src="https://github.com/bemcho/KafkaConsumerProducerTool/KafkaConsumerProducerTool.png" width="600"/>
+</p>
