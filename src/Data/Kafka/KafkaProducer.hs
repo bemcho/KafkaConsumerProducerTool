@@ -40,9 +40,9 @@ producerProps brokerAddress =
          , ("socket.max.fails", "3")
          , ("message.timeout.ms", "0")
          , ("topic.metadata.refresh.interval.ms", "120000")
+         , ("log.connection.close", "False")
                -- retry failed sends as many times as possible
          , ("message.send.max.retries", "100000")
-         , ("compression.codec","snappy")
          ]) <>
     brokersList [BrokerAddress brokerAddress] <>
     logLevel KafkaLogDebug
