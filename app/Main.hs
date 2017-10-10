@@ -1,6 +1,5 @@
 module Main where
 
-import           Control.Concurrent.Async
 import           Control.Monad
 import           Control.Monad.IO.Class
 import qualified Data.ByteString.UTF8           as BU
@@ -26,15 +25,6 @@ mkButton label = do
     set btn [buttonLabel := label]
     return btn
 
--- | Emitted when the button has been activated (pressed and released).
--- buttonActivated :: ButtonClass self => Signal self (IO ())
--- | Exit the main event loop.
--- mainQuit :: IO ()
-formattedTimeStamp :: IO (String)
-formattedTimeStamp = do
-    timeNow <- timestamp
-    return $ "[" ++ timeNow ++ "]"
-
 -- | Render given 'Value'.
 renderValue :: Either KafkaError () -> String
 renderValue err = do
@@ -52,8 +42,7 @@ sendToKafkaTopicFromUI kafkaUrlEntry kafkaTopicEntry kafkaMessageEntry statusBar
             kUrl <- kafkaUrlEntry
             kTopic <- kafkaTopicEntry
             kMessage <- kafkaMessageEntry
-            asyncResult <- async (sendToKafkaTopic kUrl kTopic (BU.fromString kMessage))
-            err <- wait asyncResult
+            err <- sendToKafkaTopic kUrl kTopic $ BU.fromString kMessage
             timeNow <- formattedTimeStamp
             statusbarPop statusBar statusBarId
             msgId <- statusbarPush statusBar statusBarId $ timeNow ++ " - " ++ (renderValue err)
