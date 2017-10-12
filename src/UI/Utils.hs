@@ -6,12 +6,23 @@ module UI.Utils
     , KafkaError
     , stringToByteStr
     , byteStringToString
+    , validate
+    , report
+    , process
+    , updateStatusBar
+    , timestamp
+    , formattedTimeStamp
+    , debugMessage
     ) where
 
 import qualified Data.ByteString.UTF8           as BU
+import           Data.Time
 import qualified Data.UUID                      as UUID
 import qualified Data.UUID.V1                   as UUID.V1
-import           Graphics.UI.Gtk                (AttrOp ((:=)), TextBuffer, set,
+import           Graphics.UI.Gtk                (AttrOp ((:=)), ContextId,
+                                                 MessageId, Statusbar,
+                                                 TextBuffer, set, statusbarPop,
+                                                 statusbarPush,
                                                  textBufferGetIterAtLine,
                                                  textBufferGetLineCount,
                                                  textBufferGetText)
@@ -51,9 +62,51 @@ getUUIDAsString = do
     f :: Maybe UUID.UUID -> String
     f u =
         case u of
-            Just u' -> UUID.toString $ u'
+            Just u' -> UUID.toString u'
             Nothing -> "meh-meh-beh"
 
 stringToByteStr = BU.fromString
 
 byteStringToString = BU.toString
+
+process :: IO String -> String -> IO (Bool, String, String)
+process inputValue errMsg = do
+    value <- inputValue
+    v1 <- validate inputValue
+    errorMsg <- report v1 errMsg
+    return (v1, errorMsg, value)
+
+report :: Bool -> String -> IO String
+report False msg = return msg
+report True msg  = return ""
+
+validate :: IO String -> IO Bool
+validate inputValue = do
+    eText <- inputValue
+    return (not $ null eText)
+
+updateStatusBar :: Statusbar -> ContextId -> String -> IO MessageId
+updateStatusBar statusBar statusBarId msg = do
+    timeNow <- formattedTimeStamp
+    statusbarPop statusBar statusBarId
+    statusbarPush statusBar statusBarId $ timeNow ++ msg
+
+-- time utils
+timestamp :: IO String
+timestamp = do
+    zonedTime <- getZonedTime
+    return $ formattedZonedTimeNow zonedTime
+  where
+    formattedZonedTimeNow :: ZonedTime -> String
+    formattedZonedTimeNow = formatTime defaultTimeLocale "%FT%T%z"
+
+formattedTimeStamp :: IO String
+formattedTimeStamp = do
+    timeNow <- timestamp
+    return $ "[" ++ timeNow ++ "]"
+
+debugMessage :: String -> IO()
+debugMessage message = do
+    beginTime <- formattedTimeStamp
+    putStrLn $ beginTime ++ message
+    return ()

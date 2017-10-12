@@ -10,38 +10,21 @@ import           Graphics.UI.Gtk.Layout.Grid
 import           UI.Utils
 
 sendToKafkaTopicFromUI :: IO String -> IO String -> IO String -> Statusbar -> ContextId -> IO ()
-sendToKafkaTopicFromUI kafkaUrlEntry kafkaTopicEntry kafkaMessageEntry statusBar statusBarId = do
-    v1 <- process kafkaUrlEntry "- Kafka Url can not be empty!"
-    v2 <- process kafkaTopicEntry " - Kafka Topic can not be empty!"
-    v3 <- process kafkaMessageEntry " - Kafka Message can not be empty!"
-    if fst v1 && fst v2 && fst v3
+sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageInputString statusBar statusBarId = do
+    (v1, err1, kUrl) <- process kafkaUrlInputString "- Kafka Url can not be empty!"
+    (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
+    (v3, err3, kMessage) <- process kafkaMessageInputString " - Kafka Message can not be empty!"
+    if v1 && v2 && v3
         then do
-            kUrl <- kafkaUrlEntry
-            kTopic <- kafkaTopicEntry
-            kMessage <- kafkaMessageEntry
-            err <- sendToKafkaTopic kUrl kTopic $ stringToByteStr kMessage
-            timeNow <- formattedTimeStamp
-            statusbarPop statusBar statusBarId
-            msgId <- statusbarPush statusBar statusBarId $ timeNow ++ " - " ++ renderValue err
+            kTopicKey <- timestamp
+            debugMessage $ " - Start sending - message ... \n" ++  kMessage
+            err <- sendToKafkaTopic kUrl kTopic (stringToByteStr kTopicKey) $ stringToByteStr kMessage
+            debugMessage " - End sending - message ... "
+            msgId <- updateStatusBar statusBar statusBarId $ " - " ++ renderValue err
             return ()
         else do
-            timeNow <- formattedTimeStamp
-            statusbarPop statusBar statusBarId
-            msgId <- statusbarPush statusBar statusBarId $ timeNow ++ snd v1 ++ snd v2 ++ snd v3
+            msgId <- updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3
             return ()
-  where
-    process :: IO String -> String -> IO (Bool, String)
-    process ent msg = do
-        v1 <- validate ent
-        res <- report v1 msg
-        return (v1, res)
-    report :: Bool -> String -> IO String
-    report False msg = return msg
-    report True msg  = return ""
-    validate :: IO String -> IO Bool
-    validate entry = do
-        eText <- entry
-        return $ not $ null eText
 
 initProducer :: IO Window
 initProducer = do
