@@ -8,21 +8,21 @@ import           Graphics.UI.Gtk             hiding (Action, backspace)
 import           Graphics.UI.Gtk.Layout.Grid
 import           UI.Utils
 
-sendToKafkaTopicFromUI :: IO String -> IO String -> IO String -> Statusbar -> ContextId -> IO ()
-sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageInputString statusBar statusBarId = do
+sendToKafkaTopicFromUI :: IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> IO ()
+sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKeyInputString kafkaMessageInputString statusBar statusBarId = do
     (v1, err1, kUrl) <- process kafkaUrlInputString "- Kafka Url can not be empty!"
     (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
-    (v3, err3, kMessage) <- process kafkaMessageInputString " - Kafka Message can not be empty!"
-    if v1 && v2 && v3
+    (v3, err3, kMessageKey) <- process kafkaMessageKeyInputString " - Kafka Message Key can not be empty!"
+    (v4, err4, kMessage) <- process kafkaMessageInputString " - Kafka Message can not be empty!"
+    if v1 && v2 && v3 && v4
         then do
-            kTopicKey <- timestamp
             debugMessage $ " - Start sending - message ... \n" ++  kMessage
-            err <- sendToKafkaTopic kUrl kTopic (stringToByteStr kTopicKey) $ stringToByteStr kMessage
+            err <- sendToKafkaTopic kUrl kTopic (stringToByteStr kMessageKey) $ stringToByteStr kMessage
             debugMessage " - End sending - message ... "
             msgId <- updateStatusBar statusBar statusBarId $ " - " ++ renderValue err
             return ()
         else do
-            msgId <- updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3
+            msgId <- updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3 ++ err4
             return ()
 
 initProducer :: IO Window
@@ -56,6 +56,19 @@ initProducer = do
         , entryText := "test_kafka_topic"
         ]
     containerAdd kafkaTopicFrame kafkaTopic
+
+    zonedTime <- timestamp
+    kafkaMessageKeyFrame <- frameNew
+    frameSetLabel kafkaMessageKeyFrame "Kafka Message Key:"
+    kafkaMessageKey <- entryNew
+    set
+        kafkaMessageKey
+        [ entryEditable := True
+        , entryXalign := 0 -- makes contents right-aligned
+        , entryText := zonedTime
+        ]
+    containerAdd kafkaMessageKeyFrame kafkaMessageKey
+
     kafkaMessageFrame <- frameNew
     frameSetLabel kafkaMessageFrame "Kafka Message:"
     kafkaMessage <- textViewNew
@@ -67,7 +80,7 @@ initProducer = do
         , textViewAcceptsTab := True
         , textViewIndent := 4
         ]
-    zonedTime <- timestamp
+
     uuid <- getUUIDAsString
     buffer <- textViewGetBuffer kafkaMessage
     set
@@ -91,9 +104,10 @@ initProducer = do
     let attach x y w h item = gridAttach grid item x y w h -- (3)
     attach 0 1 7 1 kafkaBrokerUrlFrame
     attach 0 2 7 1 kafkaTopicFrame
-    attach 0 3 7 10 kafkaMessageFrame -- (4)
-    attach 0 15 7 1 sendButton
-    attach 0 16 7 1 actionStatusBarFrame
+    attach 0 3 7 1 kafkaMessageKeyFrame
+    attach 0 4 7 10 kafkaMessageFrame -- (4)
+    attach 0 14 7 1 sendButton
+    attach 0 15 7 1 actionStatusBarFrame
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
      do
@@ -104,6 +118,7 @@ initProducer = do
             (sendToKafkaTopicFromUI
                  (entryGetText kafkaBrokerUrl)
                  (entryGetText kafkaTopic)
+                 (entryGetText kafkaMessageKey)
                  (getTextFromTextBuffer buffer)
                  actionStatusBar
                  actionStatusBarId)
