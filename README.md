@@ -43,7 +43,4 @@ then
     KafkaConsumerProducerTool - will run from anywhere (no need to be in project dir)
 
 ---
-
-<p align="center">
-  <img src="https://github.com/bemcho/KafkaConsumerProducerTool/KafkaConsumerProducerTool.png" width="600"/>
-</p>
+![My image](https://github.com/bemcho/KafkaConsumerProducerTool/blob/master/KafkaConsumerProducerTool.png)
