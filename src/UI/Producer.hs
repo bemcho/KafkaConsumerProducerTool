@@ -30,7 +30,7 @@ initProducer = do
     window <- windowNew -- (2)
     set
         window
-        [ windowTitle := "Kafka Producer Consumer Tool"
+        [ windowTitle := "Kafka Producer Tool"
         , windowResizable := True
         , windowDefaultWidth := 800
         , windowDefaultHeight := 800
