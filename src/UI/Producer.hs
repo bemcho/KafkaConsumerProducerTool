@@ -5,7 +5,6 @@ module UI.Producer
 import           Control.Monad.IO.Class
 import           Data.Kafka.KafkaProducer
 import           Graphics.UI.Gtk             hiding (Action, backspace)
-import           Graphics.UI.Gtk.Gdk.EventM
 import           Graphics.UI.Gtk.Layout.Grid
 import           UI.Utils
 
