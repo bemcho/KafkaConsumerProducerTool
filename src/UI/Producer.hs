@@ -104,7 +104,7 @@ initProducer = do
             (sendToKafkaTopicFromUI
                  (entryGetText kafkaBrokerUrl)
                  (entryGetText kafkaTopic)
-                 (getText buffer)
+                 (getTextFromTextBuffer buffer)
                  actionStatusBar
                  actionStatusBarId)
         return False

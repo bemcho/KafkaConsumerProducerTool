@@ -1,7 +1,7 @@
 module UI.Utils
     ( mkButton
     , renderValue
-    , getText
+    , getTextFromTextBuffer
     , getUUIDAsString
     , KafkaError
     , stringToByteStr
@@ -46,13 +46,12 @@ renderValue err =
         Left val  -> "Kafka Said - " ++ show err
         Right val -> "Send to kafka Succeeded"
 
-getText :: TextBuffer -> IO String
-getText b = do
+getTextFromTextBuffer :: TextBuffer -> IO String
+getTextFromTextBuffer b = do
     lcnt <- textBufferGetLineCount b
     bBeginIt <- textBufferGetIterAtLine b 0
     bEndIt <- textBufferGetIterAtLine b lcnt
-    result <- textBufferGetText b bBeginIt bEndIt True
-    return result
+    textBufferGetText b bBeginIt bEndIt True
 
 getUUIDAsString :: IO String
 getUUIDAsString = do
