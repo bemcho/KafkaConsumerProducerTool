@@ -9,22 +9,22 @@ import           Graphics.UI.Gtk.Layout.Grid
 import           UI.Utils
 
 startReadingFromKafkaTopicFromUI ::
-       IO String -> IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> IO ()
-startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaConsumerGroupIdInputString kafkaOffsetStartInputString kafkaOffsetEndInputString statusBar statusBarId = do
+       IO String -> IO String -> IO String -> IO Double ->IO Double -> Statusbar -> ContextId -> IO ()
+startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaConsumerGroupIdInputString kOffsetStart kOffsetEnd statusBar statusBarId = do
     (v1, err1, kUrl) <- process kafkaUrlInputString "- Kafka Url can not be empty!"
     (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
     (v3, err3, kConsumerGroupId) <- process kafkaConsumerGroupIdInputString " - Kafka Consumer Group Id can not be empty!"
-    (v4, err4, kOffsetStart) <- process kafkaOffsetStartInputString " - Kafka Offset Start can not be empty!"
-    (v5, err5, kOffsetEnd) <- process kafkaOffsetEndInputString " - Kafka Offset End can not be empty!"
-    if v1 && v2 && v3 && v4 && v5
+    offsetStart <- kOffsetStart
+    offsetEnd <- kOffsetEnd
+    if v1 && v2 && v3
         then do
             debugMessage $ " - Start reading - message from \n" ++ kTopic
             err <-
-                readFromTopic kUrl kTopic kConsumerGroupId (read kOffsetStart :: Integer) (read kOffsetEnd :: Integer)
+                readFromTopic kUrl kTopic kConsumerGroupId   (round  offsetStart::Integer) (round offsetEnd::Integer)
             --msgId <- updateStatusBar statusBar statusBarId $ " - " ++ renderValue err
             return ()
         else do
-            msgId <- updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3 ++ err4 ++ err5
+            msgId <- updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3
             return ()
 
 initConsumer :: IO Window
@@ -33,7 +33,7 @@ initConsumer = do
     set
         window
         [ windowTitle := "Kafka Consumer Tool"
-        , windowResizable := True
+        , windowResizable := False
         , windowDefaultWidth := 400
         , windowDefaultHeight := 400
         , containerBorderWidth := 10
@@ -48,6 +48,7 @@ initConsumer = do
         , entryText := "localhost:9092"
         ]
     containerAdd kafkaBrokerUrlFrame kafkaBrokerUrl
+
     kafkaTopicFrame <- frameNew
     frameSetLabel kafkaTopicFrame "Kafka Target Topic:"
     kafkaTopic <- entryNew
@@ -58,6 +59,7 @@ initConsumer = do
         , entryText := "test_kafka_topic"
         ]
     containerAdd kafkaTopicFrame kafkaTopic
+
     kafkaConsumerGroupIdFrame <- frameNew
     frameSetLabel kafkaConsumerGroupIdFrame "Consumer Group Id:"
     kafkaConsumerGroupId <- entryNew
@@ -68,26 +70,19 @@ initConsumer = do
         , entryText := "rdkafka_consumer_group"
         ]
     containerAdd kafkaConsumerGroupIdFrame kafkaConsumerGroupId
+
     kafkaOffsetStartFrame <- frameNew
     frameSetLabel kafkaOffsetStartFrame "Kafka Topic Offset Start:"
-    kafkaOffsetStart <- entryNew
-    set
-        kafkaOffsetStart
-        [ entryEditable := True
-        , entryXalign := 0 -- makes contents right-aligned
-        , entryText := "0"
-        ]
+    kafkaOffsetStart <- spinButtonNewWithRange 0 10000 1.0
+    spinButtonSetValue kafkaOffsetStart 0.0
     containerAdd kafkaOffsetStartFrame kafkaOffsetStart
+
     kafkaOffsetEndFrame <- frameNew
     frameSetLabel kafkaOffsetEndFrame "Kafka Topic Offset End:"
-    kafkaOffsetEnd <- entryNew
-    set
-        kafkaOffsetEnd
-        [ entryEditable := True
-        , entryXalign := 0 -- makes contents right-aligned
-        , entryText := "100"
-        ]
+    kafkaOffsetEnd <- spinButtonNewWithRange 0 10000 1.0
+    spinButtonSetValue kafkaOffsetEnd 25.0
     containerAdd kafkaOffsetEndFrame kafkaOffsetEnd
+
     startButton <- mkButton "Start"
     actionStatusBar <- statusbarNew
     actionStatusBarFrame <- frameNew
@@ -96,9 +91,10 @@ initConsumer = do
     timeNow <- formattedTimeStamp
     statusbarPush actionStatusBar actionStatusBarId $ timeNow ++ " - Just started ..."
     containerAdd actionStatusBarFrame actionStatusBar
+
     grid <- gridNew
     gridSetColumnHomogeneous grid False
-    gridSetRowHomogeneous grid True -- (2)
+    gridSetRowHomogeneous grid False -- (2)
     gridSetRowSpacing grid 10
     let attach x y w h item = gridAttach grid item x y w h -- (3)
     attach 0 1 7 1 kafkaBrokerUrlFrame
@@ -119,8 +115,8 @@ initConsumer = do
                  (entryGetText kafkaBrokerUrl)
                  (entryGetText kafkaTopic)
                  (entryGetText kafkaConsumerGroupId)
-                 (entryGetText kafkaOffsetStart)
-                 (entryGetText kafkaOffsetEnd)
+                 (spinButtonGetValue kafkaOffsetStart)
+                 (spinButtonGetValue kafkaOffsetEnd)
                  actionStatusBar
                  actionStatusBarId)
         return False
