@@ -72,13 +72,13 @@ initConsumer = do
     containerAdd kafkaConsumerGroupIdFrame kafkaConsumerGroupId
 
     kafkaOffsetStartFrame <- frameNew
-    frameSetLabel kafkaOffsetStartFrame "Kafka Topic Offset Start:"
+    frameSetLabel kafkaOffsetStartFrame "Offset Start:"
     kafkaOffsetStart <- spinButtonNewWithRange 0 10000 1.0
     spinButtonSetValue kafkaOffsetStart 0.0
     containerAdd kafkaOffsetStartFrame kafkaOffsetStart
 
     kafkaOffsetEndFrame <- frameNew
-    frameSetLabel kafkaOffsetEndFrame "Kafka Topic Offset End:"
+    frameSetLabel kafkaOffsetEndFrame "Offset End:"
     kafkaOffsetEnd <- spinButtonNewWithRange 0 10000 1.0
     spinButtonSetValue kafkaOffsetEnd 25.0
     containerAdd kafkaOffsetEndFrame kafkaOffsetEnd
@@ -115,8 +115,8 @@ initConsumer = do
                  (entryGetText kafkaBrokerUrl)
                  (entryGetText kafkaTopic)
                  (entryGetText kafkaConsumerGroupId)
-                 (spinButtonGetValue kafkaOffsetStart)
-                 (spinButtonGetValue kafkaOffsetEnd)
+                 (getSpinButtonValue kafkaOffsetStart)
+                 (getSpinButtonValue kafkaOffsetEnd)
                  actionStatusBar
                  actionStatusBarId)
         return False

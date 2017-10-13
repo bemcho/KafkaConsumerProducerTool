@@ -34,8 +34,8 @@ processMessages :: KafkaConsumer -> Integer -> Integer -> IO (Either KafkaError 
 processMessages kafka offsetStart offsetEnd = do
     mapM_
         (\_ -> do
-             msg1 <- pollMessage kafka (Timeout 5000)
-             putStrLn $ "Message: " <> show msg1
+             msg1 <- pollMessage kafka (Timeout 1000)
+             putStrLn $ "Message: " <> show msg1 <> "\nOffsetStart: " <> (show offsetStart) <> "\nOffset End: " <> show offsetEnd
              --err <- commitAllOffsets OffsetCommit kafka
              --putStrLn $ "Offsets: " <> maybe "Committed." show err)
         )[offsetStart .. offsetEnd]

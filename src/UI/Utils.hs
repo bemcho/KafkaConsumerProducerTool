@@ -13,6 +13,7 @@ module UI.Utils
     , timestamp
     , formattedTimeStamp
     , debugMessage
+    , getSpinButtonValue
     ) where
 
 import qualified Data.ByteString.UTF8           as BU
@@ -26,6 +27,7 @@ import           Graphics.UI.Gtk                (AttrOp ((:=)), ContextId,
                                                  textBufferGetIterAtLine,
                                                  textBufferGetLineCount,
                                                  textBufferGetText)
+import           Graphics.UI.Gtk.Entry.SpinButton
 import           Graphics.UI.Gtk.Buttons.Button
 import           Kafka.Types
 
@@ -109,3 +111,8 @@ debugMessage message = do
     beginTime <- formattedTimeStamp
     putStrLn $ beginTime ++ message
     return ()
+
+getSpinButtonValue :: SpinButton -> IO Double
+getSpinButtonValue btn = do
+     spinButtonUpdate btn
+     spinButtonGetValue btn
