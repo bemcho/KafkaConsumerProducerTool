@@ -5,12 +5,11 @@ module UI.Consumer
 import           Control.Concurrent
 import           Control.Monad.IO.Class
 import           Data.Kafka.KafkaConsumer
-import           Graphics.UI.Gtk                          hiding (Action,
-                                                           backspace)
+import           Graphics.UI.Gtk          hiding (Action, backspace)
 import           UI.Utils
 
-startReadingFromKafkaTopicFromUI :: IO String -> IO String -> IO String -> Statusbar -> ContextId -> IO ()
-startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaConsumerGroupIdInputString statusBar statusBarId = do
+startReadingFromKafkaTopicFromUI :: IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> IO ()
+startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaConsumerGroupIdInputString statusBar statusBarId button = do
     (v1, err1, kUrl) <- process kafkaUrlInputString "- Kafka Url can not be empty!"
     (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
     (v3, err3, kConsumerGroupId) <-
@@ -19,10 +18,12 @@ startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafka
         then do
             debugMessage $ " - Start reading - message from: " ++ kTopic
             err <- readFromTopic kUrl kTopic kConsumerGroupId
-            msgId <- updateStatusBar statusBar statusBarId $ " - " ++ renderConsumerError err
+            postGUISync (updateStatusBar statusBar statusBarId $ " - " ++ renderConsumerError err)
+            postGUISync (widgetSetSensitive button True)
             return ()
         else do
-            msgId <- updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3
+            postGUISync (updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3)
+            postGUISync (widgetSetSensitive button True)
             return ()
 
 initConsumer :: IO Window
@@ -66,7 +67,7 @@ initConsumer = do
         , entryText := "rdkafka_consumer_group"
         ]
     containerAdd kafkaConsumerGroupIdFrame kafkaConsumerGroupId
-    startButton <- mkButton "Read"
+    startButton <- mkButton "Consume Messages"
     actionStatusBar <- statusbarNew
     actionStatusBarFrame <- frameNew
     frameSetLabel actionStatusBarFrame "Status:"
@@ -86,15 +87,17 @@ initConsumer = do
     attach 0 5 7 1 actionStatusBarFrame
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
-        liftIO mainQuit >> return False
+        liftIO mainQuit >>
+        return False
     startButton `on` buttonActivated $ do
-        forkIO $
-            postGUIAsync
-                (startReadingFromKafkaTopicFromUI
-                     (entryGetText kafkaBrokerUrl)
-                     (entryGetText kafkaTopic)
-                     (entryGetText kafkaConsumerGroupId)
-                     actionStatusBar
-                     actionStatusBarId)
+        widgetSetSensitive startButton False
+        forkIO
+            (startReadingFromKafkaTopicFromUI
+                 (entryGetText kafkaBrokerUrl)
+                 (entryGetText kafkaTopic)
+                 (entryGetText kafkaConsumerGroupId)
+                 actionStatusBar
+                 actionStatusBarId
+                 startButton)
         return ()
     return window

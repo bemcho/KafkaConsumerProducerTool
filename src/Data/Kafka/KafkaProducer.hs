@@ -23,7 +23,7 @@ producerProps brokerAddress =
              , ("message.send.max.retries", "100000")
              ]) <>
     brokersList [BrokerAddress brokerAddress] <>
-    logLevel KafkaLogDebug
+    logLevel KafkaLogInfo
 
 -- Topic to send messages to
 targetTopic :: String -> TopicName

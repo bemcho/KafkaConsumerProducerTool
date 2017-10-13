@@ -1,6 +1,5 @@
 module Main where
 
-import           Control.Concurrent.Async
 import           Control.Monad
 import           Graphics.UI.Gtk hiding (Action, backspace)
 import           UI.Consumer
