@@ -1,7 +1,6 @@
 # KafkaConsumerProducerTool
-    -- For now only producer is implemented
     -- If your kafka is down or broken url is entered 
-    for kafka broker Url the app will hang for 5 min.
+    for kafka broker Url the producer will hang for 5 min.
     as this is some request timeout i still can not configure
     
 
