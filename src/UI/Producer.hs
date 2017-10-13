@@ -2,10 +2,10 @@ module UI.Producer
     ( initProducer
     ) where
 
+import           Control.Concurrent
 import           Control.Monad.IO.Class
 import           Data.Kafka.KafkaProducer
 import           Graphics.UI.Gtk             hiding (Action, backspace)
-import           Graphics.UI.Gtk.Layout.Grid
 import           UI.Utils
 
 sendToKafkaTopicFromUI :: IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> IO ()
@@ -16,10 +16,10 @@ sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKey
     (v4, err4, kMessage) <- process kafkaMessageInputString " - Kafka Message can not be empty!"
     if v1 && v2 && v3 && v4
         then do
-            debugMessage $ " - Start sending - message ... \n" ++  kMessage
+            debugMessage $ " - Start sending - message ... \n" ++ kMessage
             err <- sendToKafkaTopic kUrl kTopic (stringToByteStr kMessageKey) $ stringToByteStr kMessage
             debugMessage " - End sending - message ... "
-            msgId <- updateStatusBar statusBar statusBarId $ " - " ++ renderValue err
+            msgId <- updateStatusBar statusBar statusBarId $ " - " ++ renderProducerError err
             return ()
         else do
             msgId <- updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3 ++ err4
@@ -56,7 +56,6 @@ initProducer = do
         , entryText := "test_kafka_topic"
         ]
     containerAdd kafkaTopicFrame kafkaTopic
-
     zonedTime <- timestamp
     kafkaMessageKeyFrame <- frameNew
     frameSetLabel kafkaMessageKeyFrame "Kafka Message Key:"
@@ -68,7 +67,6 @@ initProducer = do
         , entryText := zonedTime
         ]
     containerAdd kafkaMessageKeyFrame kafkaMessageKey
-
     kafkaMessageFrame <- frameNew
     frameSetLabel kafkaMessageFrame "Kafka Message:"
     kafkaMessage <- textViewNew
@@ -80,7 +78,6 @@ initProducer = do
         , textViewAcceptsTab := True
         , textViewIndent := 4
         ]
-
     uuid <- getUUIDAsString
     buffer <- textViewGetBuffer kafkaMessage
     set
@@ -110,17 +107,16 @@ initProducer = do
     attach 0 15 7 1 actionStatusBarFrame
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
-     do
-        liftIO mainQuit
-        return False
-    sendButton `on` buttonPressEvent $ do
-        liftIO
-            (sendToKafkaTopicFromUI
-                 (entryGetText kafkaBrokerUrl)
-                 (entryGetText kafkaTopic)
-                 (entryGetText kafkaMessageKey)
-                 (getTextFromTextBuffer buffer)
-                 actionStatusBar
-                 actionStatusBarId)
-        return False
+        liftIO mainQuit >> return False
+    sendButton `on` buttonActivated $ do
+        forkIO $
+            postGUIAsync
+                (sendToKafkaTopicFromUI
+                     (entryGetText kafkaBrokerUrl)
+                     (entryGetText kafkaTopic)
+                     (entryGetText kafkaMessageKey)
+                     (getTextFromTextBuffer buffer)
+                     actionStatusBar
+                     actionStatusBarId)
+        return ()
     return window

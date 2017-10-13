@@ -2,6 +2,7 @@
 
 module Data.Kafka.KafkaConsumer where
 
+import qualified Data.ByteString            as BS
 import           Control.Arrow  ((&&&))
 import           Data.Monoid    ((<>))
 import           Kafka.Consumer
@@ -16,30 +17,39 @@ consumerProps brokerAddress consumerGroupId =
 
 -- Subscription to topics
 consumerSub :: String -> Subscription
-consumerSub topicName = topics [TopicName topicName] <> offsetReset Earliest
+consumerSub topicName = topics [TopicName topicName] <> offsetReset Latest
 
 -- Running an example
-readFromTopic :: String -> String -> String -> Integer -> Integer -> IO ()
-readFromTopic brokerAddress topicName consumerGroupId offsetStart offsetEnd = do
+readFromTopic :: String -> String -> String -> IO (Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)))
+readFromTopic brokerAddress topicName consumerGroupId  = do
     let consumerProperties = (consumerProps brokerAddress consumerGroupId)
     let consumerTopic = consumerSub topicName
     print $ cpLogLevel consumerProperties
-    res <- runConsumer consumerProperties consumerTopic processMessagesWithinOffset
-    print res
-  where
-    processMessagesWithinOffset consumer = processMessages consumer offsetStart offsetEnd
+    runConsumer consumerProperties consumerTopic processMessages
 
 -------------------------------------------------------------------
-processMessages :: KafkaConsumer -> Integer -> Integer -> IO (Either KafkaError ())
-processMessages kafka offsetStart offsetEnd = do
-    mapM_
-        (\_ -> do
-             msg1 <- pollMessage kafka (Timeout 1000)
-             putStrLn $ "Message: " <> show msg1 <> "\nOffsetStart: " <> (show offsetStart) <> "\nOffset End: " <> show offsetEnd
-             --err <- commitAllOffsets OffsetCommit kafka
-             --putStrLn $ "Offsets: " <> maybe "Committed." show err)
-        )[offsetStart .. offsetEnd]
-    return $ Right ()
+processMessages :: KafkaConsumer ->  IO (Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)))
+processMessages kafka  = do
+    msg1 <- pollMessage kafka (Timeout 1000)
+    putStrLn $ "Message: " ++ show msg1
+    if check msg1
+        then do
+            return msg1
+        else do
+            err <- commitAllOffsets OffsetCommit kafka
+            res <- f err
+            return msg1
+    where
+    f :: Maybe KafkaError -> IO (Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)))
+    f er =
+        case er of
+            Just e  -> return $ Left e
+            Nothing -> processMessages kafka
+    check :: Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)) -> Bool
+    check msg =
+        case msg of
+            Left e -> True
+            Right e -> False
 
 printingRebalanceCallback :: KafkaConsumer -> KafkaError -> [TopicPartition] -> IO ()
 printingRebalanceCallback k e ps =

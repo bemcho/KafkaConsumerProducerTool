@@ -1,6 +1,7 @@
 module UI.Utils
     ( mkButton
-    , renderValue
+    , renderProducerError
+    , renderConsumerError
     , getTextFromTextBuffer
     , getUUIDAsString
     , KafkaError
@@ -16,19 +17,20 @@ module UI.Utils
     , getSpinButtonValue
     ) where
 
-import qualified Data.ByteString.UTF8           as BU
+import qualified Data.ByteString.UTF8             as BU
 import           Data.Time
-import qualified Data.UUID                      as UUID
-import qualified Data.UUID.V1                   as UUID.V1
-import           Graphics.UI.Gtk                (AttrOp ((:=)), ContextId,
-                                                 MessageId, Statusbar,
-                                                 TextBuffer, set, statusbarPop,
-                                                 statusbarPush,
-                                                 textBufferGetIterAtLine,
-                                                 textBufferGetLineCount,
-                                                 textBufferGetText)
-import           Graphics.UI.Gtk.Entry.SpinButton
+import qualified Data.UUID                        as UUID
+import qualified Data.UUID.V1                     as UUID.V1
+import           Graphics.UI.Gtk                  (AttrOp ((:=)), ContextId,
+                                                   MessageId, Statusbar,
+                                                   TextBuffer, set,
+                                                   statusbarPop, statusbarPush,
+                                                   textBufferGetIterAtLine,
+                                                   textBufferGetLineCount,
+                                                   textBufferGetText)
 import           Graphics.UI.Gtk.Buttons.Button
+import           Graphics.UI.Gtk.Entry.SpinButton
+import           Kafka.Consumer.Types
 import           Kafka.Types
 
 -- | Create a button and attach handler to it that mutates calculator's
@@ -42,11 +44,17 @@ mkButton label = do
     return btn
 
 -- | Render given 'Value'.
-renderValue :: Either KafkaError () -> String
-renderValue err =
+renderProducerError :: Either KafkaError () -> String
+renderProducerError err =
     case err of
         Left val  -> "Kafka Said - " ++ show err
-        Right val -> "Send to kafka Succeeded"
+        Right val -> "Send Succeeded"
+
+renderConsumerError :: Either KafkaError (ConsumerRecord (Maybe BU.ByteString) (Maybe BU.ByteString)) -> String
+renderConsumerError err =
+    case err of
+        Left val  -> "Kafka Said - " ++ show err
+        Right val -> "Read Succeeded"
 
 getTextFromTextBuffer :: TextBuffer -> IO String
 getTextFromTextBuffer b = do
@@ -106,7 +114,7 @@ formattedTimeStamp = do
     timeNow <- timestamp
     return $ "[" ++ timeNow ++ "]"
 
-debugMessage :: String -> IO()
+debugMessage :: String -> IO ()
 debugMessage message = do
     beginTime <- formattedTimeStamp
     putStrLn $ beginTime ++ message
@@ -114,5 +122,5 @@ debugMessage message = do
 
 getSpinButtonValue :: SpinButton -> IO Double
 getSpinButtonValue btn = do
-     spinButtonUpdate btn
-     spinButtonGetValue btn
+    spinButtonUpdate btn
+    spinButtonGetValue btn
