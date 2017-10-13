@@ -8,7 +8,8 @@ import           Data.Kafka.KafkaProducer
 import           Graphics.UI.Gtk          hiding (Action, backspace)
 import           UI.Utils
 
-sendToKafkaTopicFromUI :: IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> Spinner -> IO ()
+sendToKafkaTopicFromUI ::
+       IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> Spinner -> IO ()
 sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKeyInputString kafkaMessageInputString statusBar statusBarId button spinner = do
     (v1, err1, kUrl) <- process kafkaUrlInputString "- Kafka Url can not be empty!"
     (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
@@ -21,12 +22,12 @@ sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKey
             debugMessage " - End sending - message ... "
             postGUISync (updateStatusBar statusBar statusBarId $ " - " ++ renderProducerError err)
             postGUISync (widgetSetSensitive button True)
-            postGUISync(spinnerStop spinner)
+            postGUISync (spinnerStop spinner)
             return ()
         else do
             postGUISync (updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3 ++ err4)
             postGUISync (widgetSetSensitive button True)
-            postGUISync(spinnerStop spinner)
+            postGUISync (spinnerStop spinner)
             return ()
 
 initProducer :: IO Window

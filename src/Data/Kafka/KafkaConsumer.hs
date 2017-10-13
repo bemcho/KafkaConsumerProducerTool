@@ -2,15 +2,20 @@
 
 module Data.Kafka.KafkaConsumer where
 
-import           Control.Arrow   ((&&&))
-import qualified Data.ByteString as BS
-import           Data.Monoid     ((<>))
+import           Control.Arrow        ((&&&))
+import qualified Data.ByteString      as BS
+import qualified Data.ByteString.UTF8 as BS
+import qualified Data.Map             as M
+import           Data.Monoid          ((<>))
 import           Kafka.Consumer
 
 -- Global consumer properties
 consumerProps :: String -> String -> ConsumerProperties
 consumerProps brokerAddress consumerGroupId =
-    brokersList [BrokerAddress brokerAddress] <> groupId (ConsumerGroupId consumerGroupId) <> noAutoCommit <>
+    extraProps (M.fromList [("client.id", "rdkafka-haskell-consumer-tool")]) <>
+    brokersList [BrokerAddress brokerAddress] <>
+    groupId (ConsumerGroupId consumerGroupId) <>
+    noAutoCommit <>
     setCallback (rebalanceCallback printingRebalanceCallback) <>
     setCallback (offsetCommitCallback printingOffsetCallback) <>
     logLevel KafkaLogInfo
@@ -33,7 +38,7 @@ readFromTopic brokerAddress topicName consumerGroupId = do
 processMessages :: KafkaConsumer -> IO (Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)))
 processMessages kafka = do
     msg1 <- pollMessage kafka (Timeout 5000)
-    putStrLn $ "Message: " ++ show msg1
+    printRecord msg1
     if check msg1
         then do
             return msg1
@@ -45,13 +50,35 @@ processMessages kafka = do
     f :: Maybe KafkaError -> IO (Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)))
     f er =
         case er of
-            Just e  -> return $ Left e
+            Just e -> return $ Left e
             Nothing -> processMessages kafka
     check :: Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)) -> Bool
     check msg =
         case msg of
-            Left e  -> True
+            Left e -> True
             Right e -> False
+    printRecord :: Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)) -> IO ()
+    printRecord msg =
+        case msg of
+            Left e -> print e
+            Right e -> do
+                putStrLn
+                    "\nMessage Begin: ---------------------------------------------------------------------------------------------------------------"
+                print (crTopic e)
+                print (crPartition e)
+                print (crOffset e)
+                print (crTimestamp e)
+                putStr "Key: "
+                putStrLn  (maybeToString $ crKey e)
+                putStrLn "Value: "
+                putStrLn  (maybeToString $ crValue e)
+                putStrLn
+                    "Message End: ---------------------------------------------------------------------------------------------------------------\n"
+    maybeToString :: Maybe BS.ByteString -> String
+    maybeToString m =
+        case m of
+            Just m' -> BS.toString m'
+            Nothing -> "Nothing"
 
 printingRebalanceCallback :: KafkaConsumer -> KafkaError -> [TopicPartition] -> IO ()
 printingRebalanceCallback k e ps =
