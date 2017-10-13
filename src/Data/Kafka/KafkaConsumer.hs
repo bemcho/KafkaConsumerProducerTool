@@ -17,7 +17,7 @@ consumerProps brokerAddress consumerGroupId =
 
 -- Subscription to topics
 consumerSub :: String -> Subscription
-consumerSub topicName = topics [TopicName topicName] <> offsetReset Latest
+consumerSub topicName = topics [TopicName topicName] <> offsetReset Earliest
 
 -- Running an example
 readFromTopic ::
@@ -26,15 +26,17 @@ readFromTopic brokerAddress topicName consumerGroupId = do
     let consumerProperties = consumerProps brokerAddress consumerGroupId
     let consumerTopic = consumerSub topicName
     print $ cpLogLevel consumerProperties
+    print $ cpProps consumerProperties
     runConsumer consumerProperties consumerTopic processMessages
 
 -------------------------------------------------------------------
 processMessages :: KafkaConsumer -> IO (Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)))
 processMessages kafka = do
-    msg1 <- pollMessage kafka (Timeout 1000)
+    msg1 <- pollMessage kafka (Timeout 5000)
     putStrLn $ "Message: " ++ show msg1
     if check msg1
-        then return msg1
+        then do
+            return msg1
         else do
             err <- commitAllOffsets OffsetCommit kafka
             res <- f err

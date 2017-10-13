@@ -17,7 +17,7 @@ startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafka
         process kafkaConsumerGroupIdInputString " - Kafka Consumer Group Id can not be empty!"
     if v1 && v2 && v3
         then do
-            debugMessage $ " - Start reading - message from \n" ++ kTopic
+            debugMessage $ " - Start reading - message from: " ++ kTopic
             err <- readFromTopic kUrl kTopic kConsumerGroupId
             msgId <- updateStatusBar statusBar statusBarId $ " - " ++ renderConsumerError err
             return ()
