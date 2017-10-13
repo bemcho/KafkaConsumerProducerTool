@@ -8,8 +8,8 @@ import           Data.Kafka.KafkaConsumer
 import           Graphics.UI.Gtk          hiding (Action, backspace)
 import           UI.Utils
 
-startReadingFromKafkaTopicFromUI :: IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> IO ()
-startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaConsumerGroupIdInputString statusBar statusBarId button = do
+startReadingFromKafkaTopicFromUI :: IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> Spinner -> IO ()
+startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaConsumerGroupIdInputString statusBar statusBarId button spinner = do
     (v1, err1, kUrl) <- process kafkaUrlInputString "- Kafka Url can not be empty!"
     (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
     (v3, err3, kConsumerGroupId) <-
@@ -20,10 +20,12 @@ startReadingFromKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafka
             err <- readFromTopic kUrl kTopic kConsumerGroupId
             postGUISync (updateStatusBar statusBar statusBarId $ " - " ++ renderConsumerError err)
             postGUISync (widgetSetSensitive button True)
+            postGUISync (spinnerStop spinner)
             return ()
         else do
             postGUISync (updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3)
             postGUISync (widgetSetSensitive button True)
+            postGUISync (spinnerStop spinner)
             return ()
 
 initConsumer :: IO Window
@@ -75,6 +77,7 @@ initConsumer = do
     timeNow <- formattedTimeStamp
     statusbarPush actionStatusBar actionStatusBarId $ timeNow ++ " - Just started ..."
     containerAdd actionStatusBarFrame actionStatusBar
+    spinner <- spinnerNew
     grid <- gridNew
     gridSetColumnHomogeneous grid True
     gridSetRowHomogeneous grid False -- (2)
@@ -85,12 +88,14 @@ initConsumer = do
     attach 0 3 7 1 kafkaConsumerGroupIdFrame
     attach 0 4 7 1 startButton
     attach 0 5 7 1 actionStatusBarFrame
+    attach 0 6 7 1 spinner
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
         liftIO mainQuit >>
         return False
     startButton `on` buttonActivated $ do
         widgetSetSensitive startButton False
+        spinnerStart spinner
         forkIO
             (startReadingFromKafkaTopicFromUI
                  (entryGetText kafkaBrokerUrl)
@@ -98,6 +103,7 @@ initConsumer = do
                  (entryGetText kafkaConsumerGroupId)
                  actionStatusBar
                  actionStatusBarId
-                 startButton)
+                 startButton
+                 spinner)
         return ()
     return window

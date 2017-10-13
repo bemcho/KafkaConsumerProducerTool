@@ -8,8 +8,8 @@ import           Data.Kafka.KafkaProducer
 import           Graphics.UI.Gtk          hiding (Action, backspace)
 import           UI.Utils
 
-sendToKafkaTopicFromUI :: IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> IO ()
-sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKeyInputString kafkaMessageInputString statusBar statusBarId button = do
+sendToKafkaTopicFromUI :: IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> Spinner -> IO ()
+sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKeyInputString kafkaMessageInputString statusBar statusBarId button spinner = do
     (v1, err1, kUrl) <- process kafkaUrlInputString "- Kafka Url can not be empty!"
     (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
     (v3, err3, kMessageKey) <- process kafkaMessageKeyInputString " - Kafka Message Key can not be empty!"
@@ -21,10 +21,12 @@ sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKey
             debugMessage " - End sending - message ... "
             postGUISync (updateStatusBar statusBar statusBarId $ " - " ++ renderProducerError err)
             postGUISync (widgetSetSensitive button True)
+            postGUISync(spinnerStop spinner)
             return ()
         else do
             postGUISync (updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3 ++ err4)
             postGUISync (widgetSetSensitive button True)
+            postGUISync(spinnerStop spinner)
             return ()
 
 initProducer :: IO Window
@@ -96,6 +98,7 @@ initProducer = do
     timeNow <- formattedTimeStamp
     statusbarPush actionStatusBar actionStatusBarId $ timeNow ++ " - Just started ..."
     containerAdd actionStatusBarFrame actionStatusBar
+    spinner <- spinnerNew
     grid <- gridNew
     gridSetColumnHomogeneous grid True
     gridSetRowHomogeneous grid True -- (2)
@@ -107,12 +110,14 @@ initProducer = do
     attach 0 4 7 10 kafkaMessageFrame -- (4)
     attach 0 14 7 1 sendButton
     attach 0 15 7 1 actionStatusBarFrame
+    attach 0 16 7 1 spinner
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
         liftIO mainQuit >>
         return False
     sendButton `on` buttonActivated $ do
         widgetSetSensitive sendButton False
+        spinnerStart spinner
         forkIO
             (sendToKafkaTopicFromUI
                  (entryGetText kafkaBrokerUrl)
@@ -121,6 +126,7 @@ initProducer = do
                  (getTextFromTextBuffer buffer)
                  actionStatusBar
                  actionStatusBarId
-                 sendButton)
+                 sendButton
+                 spinner)
         return ()
     return window
