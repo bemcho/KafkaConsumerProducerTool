@@ -108,10 +108,10 @@ initProducer = do
     attach 0 1 7 1 kafkaBrokerUrlFrame
     attach 0 2 7 1 kafkaTopicFrame
     attach 0 3 7 1 kafkaMessageKeyFrame
-    attach 0 4 7 10 kafkaMessageFrame -- (4)
-    attach 0 14 7 1 sendButton
-    attach 0 15 7 1 actionStatusBarFrame
-    attach 0 16 7 1 spinner
+    attach 0 4 7 8 kafkaMessageFrame -- (4)
+    attach 0 12 7 1 sendButton
+    attach 0 13 7 1 actionStatusBarFrame
+    attach 0 14 7 1 spinner
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
         liftIO mainQuit >>
