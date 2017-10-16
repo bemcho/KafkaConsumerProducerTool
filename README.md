@@ -24,7 +24,7 @@ UI tool for sending messages to Kafka topics written in Haskell
 -- Build
 
      cd to cloned dir
-     stack init
+    
      stack setup
      stack solver --update-config
      stack install
