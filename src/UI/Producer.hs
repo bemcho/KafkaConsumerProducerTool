@@ -88,7 +88,7 @@ initProducer = do
     set
         buffer
         [ textBufferText := "{\n\t\"id\" : \"" ++ uuid ++ "\",\n\t\"key\" : \"somekey\",\n\t\"time\" : \"" ++ zonedTime ++
-          "\",\n\t\"type\":\"typeValue\",\"channel\":\"channelValue\",\"storeId\":\"111111\",\"tenant\":\"REWE\",\"payloadId\":\"asnID\",\n\t\"payload\" : \n\t{\n\t\"tmessage\" : \"Helllooo kafkaaaa!Haskellll is awesome\"\n\t}\n}"
+          "\",\n\t\"type\":\"typeValue\",\n\t\"channel\":\"channelValue\",\n\t\"storeId\":\"111111\",\n\t\"tenant\":\"REWE\",\n\t\"payloadId\":\"asnID\",\n\t\"payload\" : \n\t{\n\t\t\"message\" : \"Helllooo kafkaaaa!Haskellll is awesome\"\n\t}\n}"
         ]
 
     scrwin <- scrolledWindowNew Nothing Nothing
