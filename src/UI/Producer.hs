@@ -7,7 +7,6 @@ import           Control.Monad.IO.Class
 import           Data.Kafka.KafkaProducer
 import           Graphics.UI.Gtk          hiding (Action, backspace)
 import           UI.Utils
-import           Graphics.UI.Gtk.Scrolling.ScrolledWindow
 
 sendToKafkaTopicFromUI ::
        IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> Spinner -> IO ()
@@ -88,11 +87,13 @@ initProducer = do
     buffer <- textViewGetBuffer kafkaMessage
     set
         buffer
-        [ textBufferText := "{\n\tid : " ++ uuid ++ ",\n\tkey : somekey,\n\ttime : " ++ zonedTime ++
-          ",\n\tpayload : \n\t{\n\t\tmessage : \"Helllooo kafkaaaa!Haskellll is awesome\"\n\t}\n}"
+        [ textBufferText := "{\n\t\"id\" : \"" ++ uuid ++ "\",\n\t\"key\" : \"somekey\",\n\t\"time\" : \"" ++ zonedTime ++
+          "\",\n\t\"type\":\"typeValue\",\"channel\":\"channelValue\",\"storeId\":\"111111\",\"tenant\":\"REWE\",\"payloadId\":\"asnID\",\n\t\"payload\" : \n\t{\n\t\"tmessage\" : \"Helllooo kafkaaaa!Haskellll is awesome\"\n\t}\n}"
         ]
-    containerAdd kafkaMessageFrame kafkaMessage
 
+    scrwin <- scrolledWindowNew Nothing Nothing
+    scrolledWindowAddWithViewport scrwin kafkaMessage
+    containerAdd kafkaMessageFrame scrwin
     sendButton <- mkButton "Send"
     actionStatusBar <- statusbarNew
     actionStatusBarFrame <- frameNew
@@ -104,8 +105,9 @@ initProducer = do
     spinner <- spinnerNew
     grid <- gridNew
     gridSetColumnHomogeneous grid True
-    gridSetRowHomogeneous grid False -- (2)
-    gridSetRowSpacing grid 10
+    gridSetRowHomogeneous grid True -- (2)
+    gridSetRowSpacing grid 5
+
     let attach x y w h item = gridAttach grid item x y w h -- (3)
     attach 0 1 7 1 kafkaBrokerUrlFrame
     attach 0 2 7 1 kafkaTopicFrame
@@ -113,7 +115,7 @@ initProducer = do
     attach 0 4 7 1 spinner -- (4)
     attach 0 5 7 1 sendButton
     attach 0 6 7 1 actionStatusBarFrame
-    attach 0 7 7 20 kafkaMessageFrame
+    attach 0 7 7 10 kafkaMessageFrame
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
         liftIO mainQuit >>
