@@ -7,6 +7,7 @@ import           Control.Monad.IO.Class
 import           Data.Kafka.KafkaProducer
 import           Graphics.UI.Gtk          hiding (Action, backspace)
 import           UI.Utils
+import           Graphics.UI.Gtk.Scrolling.ScrolledWindow
 
 sendToKafkaTopicFromUI ::
        IO String -> IO String -> IO String -> IO String -> Statusbar -> ContextId -> Button -> Spinner -> IO ()
@@ -91,6 +92,7 @@ initProducer = do
           ",\n\tpayload : \n\t{\n\t\tmessage : \"Helllooo kafkaaaa!Haskellll is awesome\"\n\t}\n}"
         ]
     containerAdd kafkaMessageFrame kafkaMessage
+
     sendButton <- mkButton "Send"
     actionStatusBar <- statusbarNew
     actionStatusBarFrame <- frameNew
@@ -102,16 +104,16 @@ initProducer = do
     spinner <- spinnerNew
     grid <- gridNew
     gridSetColumnHomogeneous grid True
-    gridSetRowHomogeneous grid True -- (2)
+    gridSetRowHomogeneous grid False -- (2)
     gridSetRowSpacing grid 10
     let attach x y w h item = gridAttach grid item x y w h -- (3)
     attach 0 1 7 1 kafkaBrokerUrlFrame
     attach 0 2 7 1 kafkaTopicFrame
     attach 0 3 7 1 kafkaMessageKeyFrame
-    attach 0 4 7 8 kafkaMessageFrame -- (4)
-    attach 0 12 7 1 sendButton
-    attach 0 13 7 1 actionStatusBarFrame
-    attach 0 14 7 1 spinner
+    attach 0 4 7 1 spinner -- (4)
+    attach 0 5 7 1 sendButton
+    attach 0 6 7 1 actionStatusBarFrame
+    attach 0 7 7 20 kafkaMessageFrame
     containerAdd window grid
     window `on` deleteEvent $ -- handler to run on window destruction
         liftIO mainQuit >>
