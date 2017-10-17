@@ -33,16 +33,18 @@ UI tool for sending messages to Kafka topics written in Haskell
         sudo make install
         
         brew install gtk+3
-        
-        stack install gtk2hs-buildtools
-        stack install c2hs
-            
 
--- Build
 
-     cd to cloned dir
+-- Initial Build
+
+    cd KafkaConsumerProducerTool
+    stack setup
+    stack install gtk2hs-buildtools
+    stack install c2hs
+    stack build
     
-     stack setup
+-- Dev workflow    
+
      stack solver --update-config
      ./build.sh
 
