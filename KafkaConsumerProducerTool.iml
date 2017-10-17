@@ -101,5 +101,11 @@
     <orderEntry type="library" name="uuid-types-1.0.3" level="project" />
     <orderEntry type="library" name="vector-0.12.0.1" level="project" />
     <orderEntry type="library" name="void-0.7.2" level="project" />
+    <orderEntry type="library" name="base16-bytestring-0.1.1.6" level="project" />
+    <orderEntry type="library" name="base64-bytestring-1.0.0.1" level="project" />
+    <orderEntry type="library" name="errors-2.2.2" level="project" />
+    <orderEntry type="library" name="safe-0.3.15" level="project" />
+    <orderEntry type="library" name="text-conversions-0.3.0" level="project" />
+    <orderEntry type="library" name="unexceptionalio-0.3.0" level="project" />
   </component>
 </module>

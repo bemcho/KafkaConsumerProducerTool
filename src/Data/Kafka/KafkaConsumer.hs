@@ -8,6 +8,9 @@ import qualified Data.ByteString.UTF8 as BS
 import qualified Data.Map             as M
 import           Data.Monoid          ((<>))
 import           Kafka.Consumer
+import qualified Data.Text            as T
+import qualified Data.Text.Conversions            as T
+import qualified Data.Text.IO            as T
 
 -- Global consumer properties
 consumerProps :: String -> String -> ConsumerProperties
@@ -69,9 +72,9 @@ processMessages kafka = do
                 print (crOffset e)
                 print (crTimestamp e)
                 putStr "Key: "
-                putStrLn  (maybeToString $ crKey e)
+                T.putStrLn  (maybeToText $ crKey e)
                 putStrLn "Value: "
-                putStrLn  (maybeToString $ crValue e)
+                T.putStrLn  (maybeToText $ crValue e)
                 putStrLn
                     "Message End: ---------------------------------------------------------------------------------------------------------------\n"
     maybeToString :: Maybe BS.ByteString -> String
@@ -79,6 +82,11 @@ processMessages kafka = do
         case m of
             Just m' -> BS.toString m'
             Nothing -> "Nothing"
+    maybeToText :: Maybe BS.ByteString -> T.Text
+    maybeToText m =
+        case m of
+            Just m' -> T.pack $ BS.toString m'
+            Nothing -> T.pack $ "Nothing"
 
 printingRebalanceCallback :: KafkaConsumer -> KafkaError -> [TopicPartition] -> IO ()
 printingRebalanceCallback k e ps =
