@@ -20,6 +20,23 @@ UI tool for sending messages to Kafka topics written in Haskell
 
     Needed by Haskell build tools
     https://wiki.haskell.org/Gtk2Hs/Installation
+    
+-- Mac OS X
+        
+        https://docs.haskellstack.org/en/stable/README/
+        curl -sSL https://get.haskellstack.org/ | sh
+        
+        git clone https://github.com/edenhill/librdkafka
+        cd librdkafka
+        ./configure.sh
+        make
+        sudo make install
+        
+        brew install gtk+3
+        
+        stack install gtk2hs-buildtools
+        stack install c2hs
+            
 
 -- Build
 
@@ -27,7 +44,6 @@ UI tool for sending messages to Kafka topics written in Haskell
     
      stack setup
      stack solver --update-config
-     stack install
      ./build.sh
 
 -- Run
