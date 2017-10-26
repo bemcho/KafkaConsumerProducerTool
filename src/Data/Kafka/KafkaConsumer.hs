@@ -42,7 +42,7 @@ processMessages :: KafkaConsumer -> IO (Either KafkaError (ConsumerRecord (Maybe
 processMessages kafka = do
     msg1 <- pollMessage kafka (Timeout 5000)
     printRecord msg1
-    if check msg1
+    if error msg1
         then do
             return msg1
         else do
@@ -55,8 +55,8 @@ processMessages kafka = do
         case er of
             Just e -> return $ Left e
             Nothing -> processMessages kafka
-    check :: Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)) -> Bool
-    check msg =
+    error :: Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)) -> Bool
+    error msg =
         case msg of
             Left e -> True
             Right e -> False
