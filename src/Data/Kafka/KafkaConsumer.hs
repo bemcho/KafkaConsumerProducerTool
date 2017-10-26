@@ -47,20 +47,17 @@ processMessages kafka = do
             return msg1
         else do
             err <- commitAllOffsets OffsetCommit kafka
-            res <- f err
+            res <- recursiveProcessMessages err
             return msg1
   where
-    f :: Maybe KafkaError -> IO (Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)))
-    f er =
+    recursiveProcessMessages er =
         case er of
             Just e -> return $ Left e
             Nothing -> processMessages kafka
-    error :: Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)) -> Bool
     error msg =
         case msg of
             Left e -> True
             Right e -> False
-    printRecord :: Either KafkaError (ConsumerRecord (Maybe BS.ByteString) (Maybe BS.ByteString)) -> IO ()
     printRecord msg =
         case msg of
             Left e -> print e
@@ -77,12 +74,10 @@ processMessages kafka = do
                 T.putStrLn  (maybeToText $ crValue e)
                 putStrLn
                     "Message End: ---------------------------------------------------------------------------------------------------------------\n"
-    maybeToString :: Maybe BS.ByteString -> String
     maybeToString m =
         case m of
             Just m' -> BS.toString m'
             Nothing -> "Nothing"
-    maybeToText :: Maybe BS.ByteString -> T.Text
     maybeToText m =
         case m of
             Just m' -> T.pack $ BS.toString m'

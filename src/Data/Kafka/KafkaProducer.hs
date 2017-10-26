@@ -41,10 +41,9 @@ sendToKafkaTopic brokerAddress kafkaTopic key message = runProducer (producerPro
 sendMessage :: KafkaProducer -> TopicName -> ByteString -> ByteString -> IO (Either KafkaError ())
 sendMessage prod topic key message = do
     err <- produceMessage prod (mkMessage topic (Just key) (Just message))
-    f err
+    handleResult err
   where
-    f :: Maybe KafkaError -> IO (Either KafkaError ())
-    f er =
+    handleResult er =
         case er of
             Just e  -> return $ Left e
             Nothing -> return $ Right ()
