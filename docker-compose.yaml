@@ -1,0 +1,11 @@
+kafka:
+    image: spotify/kafka
+    ports:
+      - "9092:9092"
+      - "2181:2181"
+    hostname: localhost
+    expose:
+      - "9092"
+      - "2181"
+    environment:
+      TOPICS: test_kafka_topic

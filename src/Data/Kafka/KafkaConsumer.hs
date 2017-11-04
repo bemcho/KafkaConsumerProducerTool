@@ -7,10 +7,9 @@ import qualified Data.ByteString      as BS
 import qualified Data.ByteString.UTF8 as BS
 import qualified Data.Map             as M
 import           Data.Monoid          ((<>))
-import           Kafka.Consumer
 import qualified Data.Text            as T
-import qualified Data.Text.Conversions            as T
-import qualified Data.Text.IO            as T
+import qualified Data.Text.IO         as T
+import           Kafka.Consumer
 
 -- Global consumer properties
 consumerProps :: String -> String -> ConsumerProperties
@@ -42,7 +41,7 @@ processMessages :: KafkaConsumer -> IO (Either KafkaError (ConsumerRecord (Maybe
 processMessages kafka = do
     msg1 <- pollMessage kafka (Timeout 5000)
     printRecord msg1
-    if error msg1
+    if checkError msg1
         then do
             return msg1
         else do
@@ -52,11 +51,11 @@ processMessages kafka = do
   where
     recursiveProcessMessages er =
         case er of
-            Just e -> return $ Left e
+            Just e  -> return $ Left e
             Nothing -> processMessages kafka
-    error msg =
+    checkError msg =
         case msg of
-            Left e -> True
+            Left e  -> True
             Right e -> False
     printRecord msg =
         case msg of
@@ -69,9 +68,9 @@ processMessages kafka = do
                 print (crOffset e)
                 print (crTimestamp e)
                 putStr "Key: "
-                T.putStrLn  (maybeToText $ crKey e)
+                T.putStrLn (maybeToText $ crKey e)
                 putStrLn "Value: "
-                T.putStrLn  (maybeToText $ crValue e)
+                T.putStrLn (maybeToText $ crValue e)
                 putStrLn
                     "Message End: ---------------------------------------------------------------------------------------------------------------\n"
     maybeToString m =

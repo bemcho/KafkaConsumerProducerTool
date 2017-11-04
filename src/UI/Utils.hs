@@ -74,8 +74,10 @@ getUUIDAsString = do
             Just u' -> UUID.toString u'
             Nothing -> "meh-meh-beh"
 
+stringToByteStr :: String -> BU.ByteString
 stringToByteStr = BU.fromString
 
+byteStringToString :: BU.ByteString -> String
 byteStringToString = BU.toString
 
 process :: IO String -> String -> IO (Bool, String, String)
