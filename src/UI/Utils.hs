@@ -106,12 +106,15 @@ updateStatusBar statusBar statusBarId msg = do
 timestamp :: IO String
 timestamp = do
     zonedTime <- getZonedTime
-    return $ insertSemicolon $ formattedZonedTimeNow zonedTime
+    return $ insertColon $ formattedZonedTimeNow zonedTime
   where
     formattedZonedTimeNow :: ZonedTime -> String
     formattedZonedTimeNow = formatTime defaultTimeLocale $ iso8601DateFormat (Just"%T%z")
 
-    insertSemicolon str = take ((-) (length str) 2) str ++ ":" ++ drop ((-) (length str) 2) str
+    insertColon str = take ((-) (length str) 2) str ++ (colonOrEmptyStr $ getCharAt str 3 ) ++ drop ((-) (length str) 2) str
+    getCharAt tt n = (tt !! ((-) (length tt) n))
+    colonOrEmptyStr ':' = ""
+    colonOrEmptyStr _ = ":"
 
 formattedTimeStamp :: IO String
 formattedTimeStamp = do
