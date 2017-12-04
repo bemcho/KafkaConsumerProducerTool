@@ -1,5 +1,11 @@
 # KafkaConsumerProducerTool
-    -- If your kafka is down or broken url is entered 
+
+-- Release v1.0
+
+    [Use release v1.0](https://github.com/bemcho/KafkaConsumerProducerTool/releases/tag/1.0)
+    
+-- If your kafka is down or broken url is entered 
+
     for kafka broker Url the producer will hang for 5 min.
     as this is some request timeout i still can not configure
     
