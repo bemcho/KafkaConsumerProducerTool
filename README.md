@@ -2,7 +2,7 @@
 
 -- Release v1.0
 
-    [Use release v1.0](https://github.com/bemcho/KafkaConsumerProducerTool/releases/tag/1.0)
+    https://github.com/bemcho/KafkaConsumerProducerTool/releases/tag/1.0
     
 -- If your kafka is down or broken url is entered 
 
