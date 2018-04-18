@@ -8,5 +8,5 @@ extra-deps:
 - strings-1.1
 - gio-0.13.4.0
 
-resolver: nightly-2017-12-01
+resolver: lts-11.5
 allow-newer: true
