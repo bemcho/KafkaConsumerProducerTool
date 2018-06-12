@@ -15,7 +15,7 @@ sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKey
     (v2, err2, kTopic) <- process kafkaTopicInputString " - Kafka Topic can not be empty!"
     (v3, err3, kMessageKey) <- process kafkaMessageKeyInputString " - Kafka Message Key can not be empty!"
     (v4, err4, kMessage) <- process kafkaMessageInputString " - Kafka Message can not be empty!"
-    if v1 && v2 && v3 && v4
+    if v1 && v2 && v3
         then do
             debugMessage $ " - Start sending - message ... \n" ++ kMessage
             err <- sendToKafkaTopic kUrl kTopic (stringToByteStr kMessageKey) $ stringToByteStr kMessage
@@ -25,7 +25,7 @@ sendToKafkaTopicFromUI kafkaUrlInputString kafkaTopicInputString kafkaMessageKey
             postGUISync (spinnerStop spinner)
             return ()
         else do
-            postGUISync (updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3 ++ err4)
+            postGUISync (updateStatusBar statusBar statusBarId $ err1 ++ err2 ++ err3)
             postGUISync (widgetSetSensitive button True)
             postGUISync (spinnerStop spinner)
             return ()
