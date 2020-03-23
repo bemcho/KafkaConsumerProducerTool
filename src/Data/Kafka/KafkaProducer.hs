@@ -5,7 +5,8 @@ module Data.Kafka.KafkaProducer
     ) where
 
 import           Data.ByteString.Internal (ByteString)
-import qualified Data.Map                 as M
+import qualified Data.Map             as M
+import qualified Data.Text            as T
 import           Data.Monoid
 import           Kafka.Producer
 
@@ -22,12 +23,12 @@ producerProps brokerAddress =
              , ("log.connection.close", "False")
              , ("message.send.max.retries", "100000")
              ]) <>
-    brokersList [BrokerAddress brokerAddress] <>
+    brokersList [BrokerAddress (T.pack brokerAddress)] <>
     logLevel KafkaLogInfo
 
 -- Topic to send messages to
-targetTopic :: String -> TopicName
-targetTopic = TopicName
+targetTopic :: T.Text -> TopicName
+targetTopic =  TopicName
 
 mkMessage :: TopicName -> Maybe ByteString -> Maybe ByteString -> ProducerRecord
 mkMessage topic k v = ProducerRecord {prTopic = topic, prPartition = UnassignedPartition, prKey = k, prValue = v}
@@ -36,7 +37,7 @@ mkMessage topic k v = ProducerRecord {prTopic = topic, prPartition = UnassignedP
 sendToKafkaTopic :: String -> String -> ByteString -> ByteString -> IO (Either KafkaError ())
 sendToKafkaTopic brokerAddress kafkaTopic key message = runProducer (producerProps brokerAddress) sendMsg
   where
-    sendMsg prod = sendMessage prod (targetTopic kafkaTopic) key message
+    sendMsg prod = sendMessage prod (targetTopic (T.pack kafkaTopic)) key message
 
 sendMessage :: KafkaProducer -> TopicName -> ByteString -> ByteString -> IO (Either KafkaError ())
 sendMessage prod topic key message = do

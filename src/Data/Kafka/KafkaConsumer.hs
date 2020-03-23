@@ -14,17 +14,16 @@ import           Kafka.Consumer
 -- Global consumer properties
 consumerProps :: String -> String -> ConsumerProperties
 consumerProps brokerAddress consumerGroupId =
-    extraProps (M.fromList [("client.id", "rdkafka-haskell-consumer-tool")]) <>
-    brokersList [BrokerAddress brokerAddress] <>
-    groupId (ConsumerGroupId consumerGroupId) <>
+    extraProps (M.fromList [(T.pack "client.id",T.pack "rdkafka-haskell-consumer-tool")]) <>
+    brokersList [BrokerAddress (T.pack brokerAddress)] <>
+    groupId (ConsumerGroupId (T.pack consumerGroupId)) <>
     noAutoCommit <>
-    setCallback (rebalanceCallback printingRebalanceCallback) <>
     setCallback (offsetCommitCallback printingOffsetCallback) <>
     logLevel KafkaLogInfo
 
 -- Subscription to topics
 consumerSub :: String -> Subscription
-consumerSub topicName = topics [TopicName topicName] <> offsetReset Earliest
+consumerSub topicName = topics [TopicName (T.pack topicName)] <> offsetReset Earliest
 
 -- Running an example
 readFromTopic ::
@@ -81,19 +80,6 @@ processMessages kafka = do
         case m of
             Just m' -> T.pack $ BS.toString m'
             Nothing -> T.pack $ "Nothing"
-
-printingRebalanceCallback :: KafkaConsumer -> KafkaError -> [TopicPartition] -> IO ()
-printingRebalanceCallback k e ps =
-    case e of
-        KafkaResponseError RdKafkaRespErrAssignPartitions -> do
-            putStr "[Rebalance] Assign partitions: "
-            mapM_ (print . (tpTopicName &&& tpPartition &&& tpOffset)) ps
-            assign k ps >>= print
-        KafkaResponseError RdKafkaRespErrRevokePartitions -> do
-            putStr "[Rebalance] Revoke partitions: "
-            mapM_ (print . (tpTopicName &&& tpPartition &&& tpOffset)) ps
-            assign k [] >>= print
-        x -> print "Rebalance: UNKNOWN (and unlikely!)" >> print x
 
 printingOffsetCallback :: KafkaConsumer -> KafkaError -> [TopicPartition] -> IO ()
 printingOffsetCallback _ e ps = do

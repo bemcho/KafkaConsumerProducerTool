@@ -1,5 +1,5 @@
 name:                KafkaConsumerProducerTool
-version:             0.2.0.0
+version:             0.3.0.0
 -- synopsis:
 -- description:
 homepage:            https://github.com/bemcho/KafkaConsumerProducerTool#readme
@@ -16,7 +16,7 @@ cabal-version:       >=1.24
 library
   hs-source-dirs:      src
   exposed-modules:     Data.Kafka.KafkaConsumer, Data.Kafka.KafkaProducer, UI.Utils, UI.Producer, UI.Consumer
-  build-depends:       base >= 4.9 && < 5,
+  build-depends:       base >= 4.13 && < 5,
                        gtk3,
                        hw-kafka-client,
                        bytestring ,

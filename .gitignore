@@ -8,3 +8,4 @@ dist-newstyle/
 .stack-work/
 .idea/
 out/
+/stack.yaml.lock
