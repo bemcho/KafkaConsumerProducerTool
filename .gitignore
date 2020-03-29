@@ -1,6 +1,7 @@
 *.Rout
 *.class
 *.o
+*.lkshw
 
 dist/
 gitignore/
