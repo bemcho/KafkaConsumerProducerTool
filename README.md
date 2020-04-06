@@ -50,8 +50,9 @@ UI tool for sending messages to Kafka topics written in Haskell
     stack build
     
 -- Dev workflow    
-
-     stack solver --update-config
+     solver command is removed in newest stack so this more likely won't work if you add deps have to mange them manualy
+     see: https://github.com/commercialhaskell/stack/pull/4670 , stack solver removed here
+     stack solver --update-config 
      ./build.sh
 
 -- Run
